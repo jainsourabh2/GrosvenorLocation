@@ -5,16 +5,55 @@
      <!--<script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization">
     </script> -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization"></script> 
+     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+     <script>
+     
+      $( function() {
+        var dateFormat = "YYYY/MM/DD",
+          from = $( "#from" )
+            .datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 1
+            })
+            .on( "change", function() {
+              to.datepicker( "option", "minDate", getDate( this ) );
+            }),
+          to = $( "#to" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1
+          })
+          .on( "change", function() {
+            from.datepicker( "option", "maxDate", getDate( this ) );
+          });
+     
+        function getDate( element ) {
+          var date;
+          try {
+            date = $.datepicker.parseDate( dateFormat, element.value );
+          } catch( error ) {
+            date = null;
+          }
+ 
+          return date;
+    }
+  } );
+     
+     </script>
+     
      
      <style>
-     
      
      #map {
        height: 90%;
        width: 80%;
        display:inline-block;
        float:right;
+       margin-top : 10px;
       }
       #stations{
           display:inline-block;
@@ -26,7 +65,7 @@
       #stationlist{
         overflow-y: scroll;
         overflow-x: scroll;
-        height: 80%;
+        height: 90%;
         float:left;
       }
      
@@ -34,15 +73,23 @@
        display:inline-block;
        float:left;
      }
+     
+     #calendar{
+         float:right;
+     }
+     
+
    </style>
   </head>
-    <h2>Maps</h2>
+   
     <div id ="stations">
     <div id="stationlist">
+         <h3>Station Names</h3>
         <% if (stationnames.length > 0) { 
             for(var i = 0; i < stationnames.length; i ++)
             { %>
             <div>
+               
                 <input type='checkbox'  id='<%= stationnames[i] %>' />
                 <label><%= stationnames[i] %></label>
             </div>
@@ -53,7 +100,12 @@
        <input type="button" id = "submit" value="Track" />
     </div>
     </div>
-    
+    <div id="calendar">
+        <label for="from">From</label>
+        <input type="text" id="from" name="from">
+        <label for="to">To</label>
+        <input type="text" id="to" name="to">
+     </div>
     <div id="map"></div>
     
   </html>
@@ -186,7 +238,7 @@
                    var  marker = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                        icon: 'train.png',
                         contentString: dataarray[o].location
                       });
                       
@@ -270,12 +322,27 @@
   
   $('#submit').click(function(e){
     var name = $('input[type="checkbox"]:checked')[0].id;
+    var fromdate = $('#from')[0].value;
+    var todate = $('#to')[0].value;
+    
+    var d = new Date(fromdate);
+    var dd= d.getDate();
+    var mm= d.getMonth()+1;
+    var yy= d.getFullYear();
+    var newfromdate = yy+"/"+mm+"/"+dd;
+    
+     var d = new Date(todate);
+    var dd= d.getDate();
+    var mm= d.getMonth()+1;
+    var yy= d.getFullYear();
+    var newtodate = yy+"/"+mm+"/"+dd;
+    
    // name = name.innerHTML;
     //Make ajax call and get restaurant and station position and plot on map
      $.ajax(
             {
                 url: "getPosition",
-                data: {"station" : name},
+                data: {"station" : name , "fromdate" : newfromdate, "todate" : newtodate},
                 success: function(pos)
                    {
                  
@@ -286,5 +353,6 @@
                    }
           });   
   });
+ 
          
     </script>
