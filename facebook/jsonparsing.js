@@ -165,12 +165,41 @@ try{
 			output = output + scheduledpublishedtime + constants.fieldDelimter;
 
 			var createdtime = (parsedJSON.feed.data[d].created_time != undefined ? parsedJSON.feed.data[d].created_time : null);
-
+			var day = null;
+			var hour = 0;
+			var timeframe = null;
+			
 			if(createdtime != null || createdtime != undefined)
 			{
-			 createdtime = new Date(Date.parse(createdtime)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
-			}			
+				 createdtime = new Date(Date.parse(createdtime)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+				 var dt = new Date(createdtime);
+				 //Get Day, Get Hours in 24H format, Get TimeFrame - Morning/Afternoon/Evening
+				 //var intday = dt.getDay();
+				 var weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+				 day = weekdays[dt.getDay()];
+				 
+				 hour = dt.getHours();
+				 
+				 if(0 < hour && hour < 12 )
+				 {
+				 	timeframe = "Morning";
+				 }
+				 else if( 12 < hour && hour < 18)
+				{
+					timeframe = "Afternoon";
+				}
+				else if(18 < hour && hour < 24)
+				{
+					timeframe = "Evening";
+				}
+			 
+			}
+			
 			output = output + createdtime + constants.fieldDelimter;
+			
+			output = output + hour + constants.fieldDelimter;
+			output = output + day + constants.fieldDelimter;
+			output = output + timeframe + constants.fieldDelimter;
 			
 			output = output.substr(0,output.length-1);
 			//output = output + "\n";
