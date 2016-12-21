@@ -1,9 +1,9 @@
 #!/bin/sh
 
 
-startdate=`/bin/date --date="1 weeks ago" +%y-%m-%d`
+startdate=`/bin/date --date="52 weeks ago" +%Y-%m-%d`
 #echo $startdate
-currentdate=`/bin/date +%y-%m-%d`
+currentdate=`/bin/date +%Y-%m-%d`
 
 #echo $currentdate 
 #mainfolder=/data/backup
@@ -12,20 +12,19 @@ currentdate=`/bin/date +%y-%m-%d`
 foldate="$startdate"
 until [ "$foldate" == "$currentdate" ]
 do
-    echo $foldate
- #  mkdir $mainfolder/$foldate/system1
-  # mv $mainftp/*$foldate* $mainfolder/$foldate/system1
- foldate=`/bin/date --date="$foldate 1 day" +%y-%m-%d`
-
+  echo $foldate
 #check if folder exists in hadoop
      hadoop fs -test -d /grosvenor/facebook/facebooktopic/$foldate
      if [ $? != 0 ]
      then
-echo "yes"
-          hadoop fs -mkdir /grosvenor/facebook/facebooktopic/$foldate
-     echo "created directory in hadoop"
-         pig -param date=$foldate hdfs:/grosvenor/facebook/facebooktopic/migration.pig 
+          #hadoop fs -mkdir /grosvenor/facebook/facebooktopic/$foldate
+          #echo "created directory in hadoop"
+          pig -param date=$foldate   hdfs:/grosvenor/facebook/facebooktopic/migration.pig
+     else
+          hadoop fs -rmr /grosvenor/facebook/facebooktopic/$foldate
+          pig -param date=$foldate   hdfs:/grosvenor/facebook/facebooktopic/migration.pig
+    
      fi
-
+foldate=`/bin/date --date="$foldate 1 day" +%Y-%m-%d`
 
 done
