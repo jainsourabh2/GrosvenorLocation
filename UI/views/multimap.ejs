@@ -1,0 +1,706 @@
+
+<html>
+  <head>
+     <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+     <!--<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization">
+    </script> -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization"></script> 
+     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+     <script>
+     
+     function InitializeDate() {
+        var date = new Date();
+        var dd = date.getDate();             
+        var mm = date.getMonth() + 1;
+        var yyyy = date.getFullYear();
+    
+        var ToDate = mm + '/' + dd + '/' + yyyy;
+        var FromDate = (mm - 3) + '/' +  dd + '/' + yyyy;
+        
+        $('#to').datepicker('setDate', ToDate);
+        $('#from').datepicker('setDate', FromDate);
+    }
+     
+      $( function() {
+        var dateFormat = "YYYY/MM/DD",
+          from = $( "#from" )
+            .datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 1
+            })
+            .on( "change", function() {
+              to.datepicker( "option", "minDate", getDate( this ) );
+            }),
+          to = $( "#to" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1
+          })
+          .on( "change", function() {
+            from.datepicker( "option", "maxDate", getDate( this ) );
+          });
+     
+        function getDate( element ) {
+          var date;
+          try {
+            date = $.datepicker.parseDate( dateFormat, element.value );
+          } catch( error ) {
+            date = null;
+          }
+ 
+          return date;
+    }
+  } );
+     
+     </script>
+     
+     
+     <style>
+     
+     #firstmap {
+       height: 86%;
+       width: 39%;
+       display:inline-block;
+       float:left;
+       margin-top : 20px;
+      
+      }
+       #secondmap {
+       height: 86%;
+       width: 40%;
+       display:inline-block;
+       float:right;
+       margin-top : 20px;
+       
+      }
+      #stations{
+          display:inline-block;
+          width:20%;
+          float:left;
+          
+      }
+      
+      #stationlist{
+        overflow-y: scroll;
+        overflow-x: scroll;
+        height: 90%;
+        float:left;
+      }
+     
+     #submit{
+       display:inline-block;
+       float:left;
+     }
+     
+     #calendar{
+         float:right;
+         width:40%;
+         display:inline-block;
+         height: 6%;
+     }
+     #slider{
+           width:40%;
+         display:inline-block;
+         height: 6%;
+     }
+      #leftfilter{
+          float:left;
+          height:5%;
+           width:39%;
+         display:inline-block;
+     }
+      #rightfilter{
+           float:right;
+           height:5%;
+           width: 40%;
+         display:inline-block;
+     }
+
+   </style>
+  </head>
+   
+    <div id ="stations">
+    <div id="stationlist">
+         <h3>Station Names</h3>
+        <% if (stationnames.length > 0) { 
+            for(var i = 0; i < stationnames.length; i ++)
+            { %>
+            <div>
+               
+                <input type='checkbox'  id='<%= stationnames[i] %>' />
+                <label><%= stationnames[i] %></label>
+            </div>
+        <%    }
+            }%>
+        </div>
+      <div>
+       <input type="button" id = "submit" value="Track" />
+    </div>
+    </div>
+    <div id= "slider">
+        </div>
+    <div id="calendar">
+        <label for="from">From</label>
+        <input type="text" id="from" name="from">
+        <label for="to">To</label>
+        <input type="text" id="to" name="to">
+     </div>
+     <div id= "leftfilter">
+          <!-- <select id="leftfilterwd">
+              <option value="select">Select Weekday</option>  
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select> -->
+            
+            <input type= 'radio' name='lfWeekday'  value="Monday" id="lfMonday"/> Mon |
+            <input type= 'radio' name='lfWeekday'  value="Tuesday" id="lfTuesday"/> Tues |
+            <input type= 'radio' name='lfWeekday'  value="Wednesday" id="lfWednesday"/> Wed |
+            <input type= 'radio' name='lfWeekday'  value="Thursday" id="lfThursday"/> Thur |
+            <input type= 'radio' name='lfWeekday'  value="Friday" id="lfFriday"/> Fri |
+            <input type= 'radio' name='lfWeekday'  value="Saturday" id="lfSaturday"/> Sat |
+            <input type= 'radio' name='lfWeekday'  value="Sunday" id="lfSunday"/> Sun |
+            <input type= 'radio' name='lfWeekday'  value="select" id="lfNone" checked /> None
+            <br/>
+            
+            <!-- <select id="leftfiltertf">
+              <option value="select">Select TimeFrame</option>  
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+              <option value="Midnight">Midnight</option>
+              
+            </select> -->
+            <input type= 'radio' name='lfTimeframe'  value="Morning" id="lfMorning"/> Mor |
+            <input type= 'radio' name='lfTimeframe'  value="Afternoon" id="lfAfternoon"/> Aft |
+            <input type= 'radio' name='lfTimeframe'  value="Evening" id="lfEvening"/> Eve |
+            <input type= 'radio' name='lfTimeframe'  value="Night" id = "lfNight"/> Night |
+             <input type= 'radio' name='lfTimeframe'  value="MidNight" id="lfMidNight"/> MidNight |
+              <input type= 'radio' name='lfTimeframe'  value="select" id="lf" checked/> None
+        </div>
+        <div id= "rightfilter">
+            <!-- <select id="rightfilterwd">
+              <option value="select">Select Weekday</option>  
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select> -->
+            
+            <!-- <select id="rightfiltertf">
+              <option value="select">Select TimeFrame</option>  
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+              <option value="Midnight">Midnight</option> -->
+              
+              <input type= 'radio' name='rfWeekday'  value="Monday" id="rfMonday"/> Mon |
+            <input type= 'radio' name='rfWeekday'  value="Tuesday" id="rfTuesday"/> Tues |
+            <input type= 'radio' name='rfWeekday'  value="Wednesday" id="rfWednesday"/> Wed |
+            <input type= 'radio' name='rfWeekday'  value="Thursday" id="rfThursday"/> Thur |
+            <input type= 'radio' name='rfWeekday'  value="Friday" id="rfFriday"/> Fri |
+            <input type= 'radio' name='rfWeekday'  value="Saturday" id="rfSaturday"/> Sat |
+            <input type= 'radio' name='rfWeekday'  value="Sunday" id="rfSunday"/> Sun |
+            <input type= 'radio' name='rfWeekday'  value="select" id="rfNone" checked /> None
+            <br/>
+              
+             <input type= 'radio' name='rfTimeframe'  value="Morning" id="rfMorning"/> Mor |
+            <input type= 'radio' name='rfTimeframe'  value="Afternoon" id="rfAfternoon"/> Aft |
+            <input type= 'radio' name='rfTimeframe'  value="Evening" id="rfEvening"/> Eve |
+            <input type= 'radio' name='rfTimeframe'  value="Night" id = "rfNight"/> Night |
+             <input type= 'radio' name='rfTimeframe'  value="MidNight" id="rfMidNight"/> MidNight |
+              <input type= 'radio' name='rfTimeframe'  value="select" id="rf" checked/> None
+             
+        </div>
+    <div id="firstmap"></div>
+    <div id="secondmap"></div>
+  </html>
+   
+<script>
+
+     $(document).ready(function(){
+         
+         $.ajax(
+            {
+                url: "callmaps",
+                success: function(pos)
+                   {
+                  //var visiblehtml = "<img alt='Positive tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/green-dot.png'> - Positive Tweets <img alt='Negative tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/red-dot.png'> - Negative Tweets";
+                  //var arr = pos.data;
+                  //var station = pos.stationnames;
+                   var arr = [];
+                   var lat = 51.5073509;
+                   var long = -0.1277583;
+                   initfirstMap(arr,lat,long); 
+                   initsecondtMap(arr,lat,long);
+                   }
+          });    
+         
+         InitializeDate();
+         
+        });
+        
+          var firstmap;
+          var secondmap;
+            
+          function initfirstMap(dataarray,lat,long) {
+          
+          var firstmapstyle = [
+                    {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+                    {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+                    {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+                     {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+                    {
+                        featureType: "transit.station",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+                    {
+                      featureType: 'administrative.locality',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'poi',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'geometry',
+                      stylers: [{color: '#263c3f'}]
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#6b9a76'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry',
+                      stylers: [{color: '#38414e'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry.stroke',
+                      stylers: [{color: '#212a37'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#9ca5b3'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry',
+                      stylers: [{color: '#746855'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry.stroke',
+                      stylers: [{color: '#1f2835'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#f3d19c'}]
+                    },
+                    {
+                      featureType: 'transit',
+                      elementType: 'geometry',
+                      stylers: [{color: '#2f3948'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'geometry',
+                      stylers: [{color: '#17263c'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#515c6d'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.stroke',
+                      stylers: [{color: '#17263c'}]
+                    }
+                  ];
+                  
+                  
+           var firstmap = new google.maps.Map(document.getElementById('firstmap'), {
+              zoom: 16,
+              //center: {lat: 51.5073509, lng: -0.1277583},
+              center: {lat: lat, lng: long},
+              styles: firstmapstyle
+            });
+            
+            var transitLayer = new google.maps.TransitLayer();
+              transitLayer.setMap(firstmap);
+            
+            var infowindow = new google.maps.InfoWindow({maxWidth: 200});
+
+            for(var o in dataarray)
+            {
+            
+                if(dataarray[o].type == "station")
+                {
+                   var  firstmapmarker = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: firstmap,
+                        icon: 'train.png',
+                        contentString: dataarray[o].location
+                      });
+                      
+                      firstmapmarker.addListener('click', function() {
+                           infowindow.setContent(this.contentString);
+                           infowindow.open(firstmap, this);
+                           firstmap.setCenter(this.getPosition());
+                        });
+                }
+                else if(dataarray[o].type == "restaurant")
+                {
+                    if( 0  < dataarray[o].postcount && dataarray[o].postcount < 30)
+                    {
+                         var  frestmarkerlow = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: firstmap,
+                        icon: 'lowrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      frestmarkerlow.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(firstmap, this);
+                           firstmap.setCenter(this.getPosition());
+                      });
+                    }
+                    else if(30 < dataarray[o].postcount &&  dataarray[o].postcount < 70)
+                    {
+                        var  frestmarkermed = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: firstmap,
+                        icon: 'medrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      frestmarkermed.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(firstmap, this);
+                           firstmap.setCenter(this.getPosition());
+                      });
+                    }
+                    else
+                    {
+                    var  frestmarkerhigh = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: firstmap,
+                        icon: 'highrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      frestmarkerhigh.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(firstmap, this);
+                           firstmap.setCenter(this.getPosition());
+                      });
+                    }
+                     /* restmarker.addListener('click', function() {
+                        
+                        //Make ajax call and query via drill bit to get the info 
+                        var restname = this.contentString;
+                        var mark = this;
+                        
+                         $.ajax(
+                            {
+                                url: "getPostsCount",
+                                data: {"restname" : restname},
+                                success: function(pos)
+                                   {
+                                      // restmarker.contentString = " Number of Posts : " + pos.count;
+                                       infowindow.setContent(mark.contentString + " (Number of Posts :" + pos + ")");
+                                       infowindow.open(map, mark);
+                                        map.setCenter(mark.getPosition());
+                                   }
+                          });  
+                            
+                           
+                        });*/
+                }
+            }
+          }
+          
+          function initsecondtMap(dataarray,lat,long) {
+                      
+           var secondmap = new google.maps.Map(document.getElementById('secondmap'), {
+              zoom: 14,
+              //center: {lat: 51.5073509, lng: -0.1277583},
+              center: {lat: lat, lng: long},
+              styles: [
+                    {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+                    {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+                    {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+                    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+                    {
+                        featureType: "transit.station",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+                    {
+                      featureType: 'administrative.locality',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'poi',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'geometry',
+                      stylers: [{color: '#263c3f'}]
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#6b9a76'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry',
+                      stylers: [{color: '#38414e'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry.stroke',
+                      stylers: [{color: '#212a37'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#9ca5b3'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry',
+                      stylers: [{color: '#746855'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry.stroke',
+                      stylers: [{color: '#1f2835'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#f3d19c'}]
+                    },
+                    {
+                      featureType: 'transit',
+                      elementType: 'geometry',
+                      stylers: [{color: '#2f3948'}]
+                    },
+                    {
+                      featureType: 'transit.station',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'geometry',
+                      stylers: [{color: '#17263c'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#515c6d'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.stroke',
+                      stylers: [{color: '#17263c'}]
+                    }
+                  ]
+            });
+            
+            var transitLayer = new google.maps.TransitLayer();
+              transitLayer.setMap(secondmap);
+            
+            var infowindow = new google.maps.InfoWindow({maxWidth: 200});
+
+            for(var o in dataarray)
+            {
+            
+                if(dataarray[o].type == "station")
+                {
+                   var  marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: secondmap,
+                        icon: 'train.png',
+                        contentString: dataarray[o].location
+                      });
+                      
+                      marker.addListener('click', function() {
+                           infowindow.setContent(this.contentString);
+                           infowindow.open(secondmap, this);
+                           secondmap.setCenter(this.getPosition());
+                        });
+                }
+                else if(dataarray[o].type == "restaurant")
+                {
+                    if( 0  < dataarray[o].postcount && dataarray[o].postcount < 30)
+                    {
+                         var  restmarkerlow = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: secondmap,
+                        icon: 'lowrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      restmarkerlow.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(secondmap,this);
+                           secondmap.setCenter(this.getPosition());
+                      });
+                    }
+                    else if(30 < dataarray[o].postcount &&  dataarray[o].postcount < 70)
+                    {
+                        var  restmarkermed = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: secondmap,
+                        icon: 'medrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      restmarkermed.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(secondmap, this);
+                           secondmap.setCenter(this.getPosition());
+                      });
+                    }
+                    else
+                    {
+                    var  restmarkerhigh = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: secondmap,
+                        icon: 'highrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      restmarkerhigh.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(secondmap, this);
+                           secondmap.setCenter(this.getPosition());
+                      });
+                    }
+                }
+            }
+          }
+  
+  
+  $('#submit').click(function(e){
+    var name = $('input[type="checkbox"]:checked')[0].id;
+    var fromdate = $('#from')[0].value;
+    var todate = $('#to')[0].value;
+    
+    var d = new Date(fromdate);
+    var dd= d.getDate();
+    var mm= d.getMonth()+1;
+    var yy= d.getFullYear();
+    var newfromdate = yy+"/"+mm+"/"+dd;
+    
+     var d = new Date(todate);
+    var dd= d.getDate();
+    var mm= d.getMonth()+1;
+    var yy= d.getFullYear();
+    var newtodate = yy+"/"+mm+"/"+dd;
+    var firstmapwd = "";
+    var firstmaptf ="";
+    var secondmapwd = "";
+    var secondmaptf = "";
+    
+    var lfvalues = $("#leftfilter > input[type=radio]:checked");
+    var rfvalues = $("#rightfilter > input[type=radio]:checked");
+    
+    if(lfvalues.length > 0)
+    {
+         firstmapwd =  lfvalues[0].value;
+         firstmaptf =  lfvalues[1].value;
+       
+    }
+    
+    if(rfvalues.length > 0)
+    {
+           secondmapwd =  rfvalues[0].value;
+           secondmaptf =  rfvalues[1].value;
+        
+    }
+   /* var firstmapwd = $("#leftfilterwd")[0].value;
+    var firstmaptf = $("#leftfiltertf")[0].value;
+    
+    var secondmapwd = $("#rightfilterwd")[0].value;
+    var secondmaptf = $("#rightfiltertf")[0].value; */
+    
+   // name = name.innerHTML;
+    //Make ajax call and get restaurant and station position and plot on map
+     $.ajax(
+            {
+                url: "getPosition",
+                data: {"station" : name , "fromdate" : newfromdate, "todate" : newtodate,"weekday" : firstmapwd, "timeframe" : firstmaptf},
+                success: function(pos)
+                   {
+                 
+                  var arr = pos.totalcountarray;
+                  //var station = pos.stationnames;
+                   initfirstMap(arr,arr[arr.length - 1].lat,arr[arr.length - 1].lng); 
+                   
+                   }
+          });   
+          
+            $.ajax(
+            {
+                url: "getPosition",
+                data: {"station" : name , "fromdate" : newfromdate, "todate" : newtodate,"weekday" : secondmapwd, "timeframe" : secondmaptf},
+                success: function(pos)
+                   {
+                 
+                  var arr = pos.totalcountarray;
+                  //var station = pos.stationnames;
+                   initsecondtMap(arr,arr[arr.length - 1].lat,arr[arr.length - 1].lng); 
+                   
+                   }
+          }); 
+  });
+ 
+         
+    </script>
