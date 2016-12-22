@@ -1,6 +1,4 @@
 #!/bin/sh
-
-
 startdate=`/bin/date --date="52 weeks ago" +%Y-%m-%d`
 #echo $startdate
 currentdate=`/bin/date +%Y-%m-%d`
