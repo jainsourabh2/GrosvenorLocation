@@ -145,7 +145,7 @@
      $(document).ready(function(){
           
             map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 13,
+              zoom: 12,
                center: {lat: 51.5073509, lng: -0.1277583},
              // center: {lat: lat, lng: long},
               styles: [
@@ -269,13 +269,40 @@
              for (var i = 0; i < markers.length; i++) {
                   markers[i].setMap(null);
             }
-            map.setCenter(new google.maps.LatLng(lat, long));
             
+	    map.setCenter(new google.maps.LatLng(lat, long));
             var transitLayer = new google.maps.TransitLayer();
               transitLayer.setMap(map);
             
             var infowindow = new google.maps.InfoWindow({maxWidth: 200});
+		var redcircle ={
+   			 	path: google.maps.SymbolPath.CIRCLE,
+    				fillColor: 'red',
+    				fillOpacity: .8,
+    				scale: 6.5,
+    				strokeColor: 'red',
+    				strokeWeight: 1
+			   };
 
+		var bluecircle ={
+   			 	path: google.maps.SymbolPath.CIRCLE,
+    				fillColor: 'blue',
+    				fillOpacity: .8,
+    				scale: 6.5,
+    				strokeColor: 'blue',
+    				strokeWeight: 1
+			   };
+
+		var greencircle ={
+   			 	path: google.maps.SymbolPath.CIRCLE,
+    				fillColor: 'green',
+    				fillOpacity: .8,
+    				scale: 6.5,
+    				strokeColor: 'green',
+    				strokeWeight: 1
+			   };
+
+	
             for(var o in dataarray)
             {
             
@@ -298,12 +325,14 @@
                 }
                 else if(dataarray[o].type == "restaurant")
                 {
+		
                     if( 0  < dataarray[o].postcount && dataarray[o].postcount < 30)
                     {
                          var  restmarkerlow = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'lowrestaurants.png',
+                        //icon: 'lowrestaurants.png',
+			icon: redcircle,
                         contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
                       });
                       
@@ -316,10 +345,12 @@
                     }
                     else if(30 < dataarray[o].postcount &&  dataarray[o].postcount < 70)
                     {
+			
                         var  restmarkermed = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'medrestaurants.png',
+                        //icon: 'medrestaurants.png',
+			icon: bluecircle,
                         contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
                       });
                       
@@ -332,10 +363,12 @@
                     }
                     else
                     {
+
                     var  restmarkerhigh = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'highrestaurants.png',
+                       // icon: 'highrestaurants.png',
+			icon: greencircle,
                         contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
                       });
                       
@@ -451,3 +484,5 @@
  }
          
     </script>
+
+
