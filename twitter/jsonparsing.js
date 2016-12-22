@@ -31,6 +31,7 @@ const jsonParsing = {};
 	}
 	var output="";
 	var val;
+	var evalVal;
 	for(var i=0;i<idList.length;i++){
 		val = 'parsedJSON.'+idList[i];
 		try{
@@ -48,7 +49,7 @@ const jsonParsing = {};
 		}catch(ex){
 			evalVal = '';
 		}
-		if(evalVal == undefined || evalVal == null) {
+		if(evalVal === undefined || evalVal === null) {
 			output = output + 'null' + constants.fieldDelimter;
 		}else{
 			output = output + evalVal + constants.fieldDelimter;

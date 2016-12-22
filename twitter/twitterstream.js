@@ -43,6 +43,7 @@ connection.query('SELECT twitterid FROM twitterlist WHERE twitterid IS NOT null'
 });
 
 function startstreaming(){
+	var payloads;
 	//Location boundary coordinate for London (-0.5103, 51.2868, 0.3340, 51.6923)
 	client.stream('statuses/filter', {follow: twitterIdList,locations:'-0.5103, 51.2868, 0.3340, 51.6923',track:'Grosvenor,Mayfair,Belgravia'}, function(stream) {
 	//client.stream('statuses/filter', {follow: twitterIdList}, function(stream) {
