@@ -66,3 +66,71 @@ ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-09') location '/grosv
 ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-10') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-10';
 ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-11') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-11';
 ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-12') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-12';
+
+
+
+CREATE EXTERNAL TABLE facebookdata (
+id       bigint,
+about     string,
+bio                     string,    
+business                string ,   
+category                string  ,  
+categorylist            string,    
+coverid                 string,    
+coveroffsetx            int   ,
+coveroffsety            int   ,
+coversource             string,
+description             string,
+engagementcount         int   ,
+socialsentence          string,
+fancount                int   ,
+hrs_mon_open            string, 
+hrs_mon_close           string, 
+hrs_tue_open            string,
+hrs_tue_close           string,
+hrs_wed_open            string,
+hrs_wed_close           string,
+hrs_thur_open           string,
+hrs_thur_close          string,
+hrs_fri_open            string,
+hrs_fri_close           string,
+hrs_sat_open            string,
+hrs_sat_close           string,
+hrs_sun_open            string,
+hrs_sun_close           string,
+isalwaysopen            string,
+isverified              string,
+ispermanentlyclosed     string,
+isunclaimed             string,
+link                    string,
+locationcity            string,
+locationcountry         string,
+locationlatt            string,
+locationlong            string,
+locationstreet          string,
+locationzip             string,
+name                    string,
+star_rating             int,
+placetype               string,
+pricerange              string,
+ratingcount             int   ,
+username                string,
+verification_status     string,
+website                 string,
+message                 string,
+sentimentscore          int   ,
+picture                 string,
+videosource             string,
+feedlink                string,
+action                  string,
+messagetag              string,
+publishedtime           string,
+createdtime             string,
+hours                   int   ,
+weekday                 string,
+timeframe               string
+)
+PARTITIONED BY (fb_date string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/facebook/facebooktopic/';
