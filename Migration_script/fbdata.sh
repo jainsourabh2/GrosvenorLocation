@@ -2,8 +2,9 @@
 
 
 #startdate=`/bin/date --date="1 weeks ago" +%Y-%m-%d`
-startdate=`/bin/date --date="2 month ago" +%Y-%m-%d`
-startmonth=`/bin/date --date="2 month ago" +%Y-%m`
+#start from 2016-01
+startdate=`/bin/date --date="11 month ago" +%Y-%m-%d`
+startmonth=`/bin/date --date="11 month ago" +%Y-%m`
 #echo $startdate $startmonth
 
 currentdate=`/bin/date +%Y-%m-%d`
@@ -14,7 +15,9 @@ echo $currentdate $currentmonth
 foldate="$startdate"
 folmonth="$startmonth"
 echo $foldate  $folmonth
-until [ "$foldate" == "$currentdate" ]
+echo $foldate $currentdate
+#until [ "$foldate" == "$currentdate" ]
+while [ $(date -d "$foldate" +%Y%m%d) -le $(date -d "$currentdate" +%Y%m%d) ]
 do
 #  echo $foldate
 #check if folder exists in hadoop
@@ -37,4 +40,5 @@ do
 foldate=`/bin/date --date="$foldate 1 month" +%Y-%m-%d`
 folmonth=`/bin/date --date="$foldate" +%Y-%m`
 echo $foldate  $folmonth
+echo $foldate $currentdate
 done
