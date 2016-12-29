@@ -1,44 +1,31 @@
 #!/bin/sh
 
-
-#startdate=`/bin/date --date="1 weeks ago" +%Y-%m-%d`
-#start from 2016-01
-startdate=`/bin/date --date="11 month ago" +%Y-%m-%d`
-startmonth=`/bin/date --date="11 month ago" +%Y-%m`
-#echo $startdate $startmonth
-
-currentdate=`/bin/date +%Y-%m-%d`
-currentmonth=`/bin/date +%Y-%m`
-
-echo $currentdate $currentmonth
+startdate=`/bin/date  +2016-11-01`
+currentdate=`/bin/date  +2016-11-30`
 
 foldate="$startdate"
-folmonth="$startmonth"
-echo $foldate  $folmonth
+
 echo $foldate $currentdate
-#until [ "$foldate" == "$currentdate" ]
+
 while [ $(date -d "$foldate" +%Y%m%d) -le $(date -d "$currentdate" +%Y%m%d) ]
 do
-#  echo $foldate
+
 #check if folder exists in hadoop
-     hadoop fs -test -d /grosvenor/facebook/facebooktopic/$folmonth
+     hadoop fs -test -d /grosvenor/facebook/facebooktopic/$foldate
      if [ $? != 0 ]
      then
-          echo "created directory in hadoop"
-          pig -param date=$folmonth   hdfs:/grosvenor/facebook/facebooktopic/migration.pig
+          echo "create $foldate directory in hadoop"
+          pig -param date=$foldate  /opt/nodeprojects/facebooksearch/shellscript/pigscript.pig
      else
-          hadoop fs -rmr /grosvenor/facebook/facebooktopic/$folmonth
-          pig -param date=$folmonth   hdfs:/grosvenor/facebook/facebooktopic/migration.pig
+          hadoop fs -rmr /grosvenor/facebook/facebooktopic/$foldate
+          pig -param date=$foldate  /opt/nodeprojects/facebooksearch/shellscript/pigscript.pig
     
      fi
      #merge the files
-     hadoop fs -cat /grosvenor/facebook/facebooktopic/$folmonth/part-m-* | hadoop fs -put -  /grosvenor/facebook/facebooktopic/$folmonth/fb_$folmonth.txt
+     hadoop fs -cat /grosvenor/facebook/facebooktopic/$foldate/part-m-* | hadoop fs -put -  /grosvenor/facebook/facebooktopic/$foldate/fb_$foldate.txt
 
      #purge the files
-     hadoop fs -rm /grosvenor/facebook/facebooktopic/$folmonth/part-m-*
-
-foldate=`/bin/date --date="$foldate 1 month" +%Y-%m-%d`
-folmonth=`/bin/date --date="$foldate" +%Y-%m`
-echo $foldate  $folmonth
-echo $foldate $currentdate
+     hadoop fs -rm /grosvenor/facebook/facebooktopic/$foldate/part-m-*
+     hadoop fs -rm /grosvenor/facebook/facebooktopic/$foldate/_*
+foldate=`/bin/date --date="$foldate 1 day" +%Y-%m-%d`
 done
