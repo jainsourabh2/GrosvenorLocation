@@ -1,3 +1,3 @@
 */2 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/checkRestartTwitterStream.sh >> /var/log/GrosvenorLocation/shellRestartTwitterStream.log
-30 00 * * * /opt/nodeprojects/GrosvenorLocation/scripts/mergeHadoopFiles.sh >> /var/log/GrosvenorLocation/shell/mergeHadoopFiles.log
+*/1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFiles.sh >> /var/log/GrosvenorLocation/shellmoveFiles.log
 30 23 * * * /home/GvAdmin/Hive_Partition.sh >> /var/log/hivepartitionscreation.log
