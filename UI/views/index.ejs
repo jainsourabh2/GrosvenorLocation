@@ -10,7 +10,22 @@
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization"></script> 
      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
      <script>
+     var arr = [];
+     var arrwithhours = [];
      
+      function InitializeDate() {
+        var date = new Date();
+        var dd = date.getDate();             
+        var mm = date.getMonth() + 1;
+        var yyyy = date.getFullYear();
+    
+        var ToDate = mm + '/' + dd + '/' + yyyy;
+        var FromDate = (mm - 3) + '/' +  dd + '/' + yyyy;
+        
+        $('#to').datepicker('setDate', ToDate);
+        $('#from').datepicker('setDate', FromDate);
+    }
+    
       $( function() {
         var dateFormat = "YYYY/MM/DD",
           from = $( "#from" )
@@ -78,6 +93,15 @@
          float:right;
      }
      
+     #slider{
+           width:40%;
+         display:inline-block;
+         height: 6%;
+     }
+     
+     #slider1{
+         width:70%;
+     }
 
    </style>
   </head>
@@ -100,6 +124,10 @@
        <input type="button" id = "submit" value="Track" />
     </div>
     </div>
+        <div id= "slider">
+        0 <input id="slider1" type="range" min="0" max="24" step="1" value="0" onChange="updateMapHourly(this.value)"/> 24
+        <input type="button" value="Play" id="play"  />
+        </div>
     <div id="calendar">
         <label for="from">From</label>
         <input type="text" id="from" name="from">
@@ -111,42 +139,33 @@
   </html>
    
 <script>
-
+    var markers = [];
+    var map;
+    
      $(document).ready(function(){
-         
-         $.ajax(
-            {
-                url: "callmaps",
-                success: function(pos)
-                   {
-                  //var visiblehtml = "<img alt='Positive tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/green-dot.png'> - Positive Tweets <img alt='Negative tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/red-dot.png'> - Negative Tweets";
-                  var arr = pos.data;
-                  //var station = pos.stationnames;
-                   arr = [];
-                   var lat = 51.5073509;
-                   var long = -0.1277583;
-                   initMap(arr,lat,long); 
-                   
-                   }
-          });    
-         
-        });
-        
-          var map;
-           // var datarray = [{"lat":"51.5012326","lng":"-0.1622335"}];
-            
-            //initMap(datarray);
-            
-          function initMap(dataarray,lat,long) {
-                      
+          
             map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 16,
-              //center: {lat: 51.5073509, lng: -0.1277583},
-              center: {lat: lat, lng: long},
+              zoom: 12,
+               center: {lat: 51.5073509, lng: -0.1277583},
+             // center: {lat: lat, lng: long},
               styles: [
                     {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
                     {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
                     {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+                    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+                    {
+                        featureType: "transit.station",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
                     {
                       featureType: 'administrative.locality',
                       elementType: 'labels.text.fill',
@@ -224,12 +243,66 @@
                     }
                   ]
             });
+          
+         $.ajax(
+            {
+                url: "callmaps",
+                success: function(pos)
+                   {
+                  //var visiblehtml = "<img alt='Positive tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/green-dot.png'> - Positive Tweets <img alt='Negative tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/red-dot.png'> - Negative Tweets";
+                  var arr = pos.data;
+                  //var station = pos.stationnames;
+                   arr = [];
+                   var lat = 51.5073509;
+                   var long = -0.1277583;
+                   initMap(arr,lat,long); 
+                   
+                   }
+          });    
+         InitializeDate();
+         
+        });
+        
             
+          function initMap(dataarray,lat,long) {
+            
+             for (var i = 0; i < markers.length; i++) {
+                  markers[i].setMap(null);
+            }
+            
+	    map.setCenter(new google.maps.LatLng(lat, long));
             var transitLayer = new google.maps.TransitLayer();
               transitLayer.setMap(map);
             
             var infowindow = new google.maps.InfoWindow({maxWidth: 200});
+		var redcircle ={
+   			 	path: google.maps.SymbolPath.CIRCLE,
+    				fillColor: 'red',
+    				fillOpacity: .8,
+    				scale: 6.5,
+    				strokeColor: 'red',
+    				strokeWeight: 1
+			   };
 
+		var bluecircle ={
+   			 	path: google.maps.SymbolPath.CIRCLE,
+    				fillColor: 'blue',
+    				fillOpacity: .8,
+    				scale: 6.5,
+    				strokeColor: 'blue',
+    				strokeWeight: 1
+			   };
+
+		var greencircle ={
+   			 	path: google.maps.SymbolPath.CIRCLE,
+    				fillColor: 'green',
+    				fillOpacity: .8,
+    				scale: 6.5,
+    				strokeColor: 'green',
+    				strokeWeight: 1
+			   };
+
+	
             for(var o in dataarray)
             {
             
@@ -247,15 +320,19 @@
                            infowindow.open(map, this);
                            map.setCenter(this.getPosition());
                         });
+                        
+                        markers.push(marker);
                 }
                 else if(dataarray[o].type == "restaurant")
                 {
+		
                     if( 0  < dataarray[o].postcount && dataarray[o].postcount < 30)
                     {
                          var  restmarkerlow = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'lowrestaurants.png',
+                        //icon: 'lowrestaurants.png',
+			icon: redcircle,
                         contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
                       });
                       
@@ -264,13 +341,16 @@
                            infowindow.open(map, this);
                            map.setCenter(this.getPosition());
                       });
+                       markers.push(restmarkerlow);
                     }
                     else if(30 < dataarray[o].postcount &&  dataarray[o].postcount < 70)
                     {
+			
                         var  restmarkermed = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'medrestaurants.png',
+                        //icon: 'medrestaurants.png',
+			icon: bluecircle,
                         contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
                       });
                       
@@ -279,13 +359,16 @@
                            infowindow.open(map, this);
                            map.setCenter(this.getPosition());
                       });
+                       markers.push(restmarkermed);
                     }
                     else
                     {
+
                     var  restmarkerhigh = new google.maps.Marker({
                         position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
                         map: map,
-                        icon: 'highrestaurants.png',
+                       // icon: 'highrestaurants.png',
+			icon: greencircle,
                         contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
                       });
                       
@@ -294,6 +377,8 @@
                            infowindow.open(map, this);
                            map.setCenter(this.getPosition());
                       });
+                      
+                       markers.push(restmarkerhigh);
                     }
                      /* restmarker.addListener('click', function() {
                         
@@ -346,13 +431,58 @@
                 success: function(pos)
                    {
                  
-                  var arr = pos;
+                   arr = pos.totalcountarray;
+                   arrwithhours = pos.dataarray;
                   //var station = pos.stationnames;
                    initMap(arr,arr[arr.length - 1].lat,arr[arr.length - 1].lng); 
                    
                    }
           });   
   });
+  
+  $("#play").click(function(e){
+      var k = 0;
+      function looptimer()
+      {
+        setTimeout(function(){
+            if(k < 25)
+              {
+                  $("#slider1").val(k);
+                  k++;
+                  //Update map by filtering array with hours
+                  
+                  plotHourlyMap(k);
+                  looptimer();
+                  
+              }
+              else
+              {
+                 $("#slider1").val("0"); 
+                 plotHourlyMap("0");
+              }
+          
+        },1000);  
+           
+      }
+      
+      looptimer();
+  });
+  
+  function plotHourlyMap(k)
+  {
+      var newarr = $.grep(arrwithhours, function(v) {
+                         return v.hour == k;
+                    });
+       newarr.push(arr[arr.length - 1]);
+       initMap(newarr,newarr[newarr.length - 1].lat,newarr[newarr.length - 1].lng);  
+  }
  
+ function updateMapHourly(val)
+ {
+    // alert(val);
+    plotHourlyMap(val);
+ }
          
     </script>
+
+

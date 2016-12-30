@@ -5,7 +5,7 @@ const mysql      = require('mysql');
 var fs = require('fs');
 var jsonparsing = require('./jsonparsing');
 var completedata = ""; 
- graph.setAccessToken(constants.access_token);
+ 
  
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -17,9 +17,19 @@ var completedata = "";
  connection.connect();
  graph.setVersion("2.8");
  
+ if(process.argv.length < 3)
+ {
+     console.log("Provide arguments to script eg:  node facebookgraphapi.js 2016-12-26");
+     process.exit(1);
+ }
+
+var dt =  new Date(process.argv[2]);
+ var fromDate = dt.toISOString();
+ var toDate = dt.getFullYear() + "-" + (parseInt(dt.getMonth()) + 1 )+ "-" + (parseInt(dt.getDate()) + 1);
+ toDate = new Date(toDate).toISOString(); 
  
  
- connection.query("SELECT * FROM facebooklist",function(ferr,frows,ffields)
+ connection.query("SELECT * FROM facebooklist order by name asc",function(ferr,frows,ffields)
     {
         if(frows.length > 0)
         {
@@ -36,14 +46,19 @@ var completedata = "";
                     
                     if(ep == null)
                     {
-                      params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since(01-01-2016){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
+                     // params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since(01-01-2016){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
+
+ params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.until("+ toDate+").since("+ fromDate +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
                     }
                     else
                     {
-                         params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since("+ ep +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
+                         params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.until("+ toDate+").since("+ fromDate +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
+
+    // params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since("+ ep +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
                     }
                     
-                    
+                    graph.setAccessToken(constants.access_token[Math.floor(Math.random()*constants.access_token.length)]);
+
                     graph.get(frows[n].id.toString(), params,  function(err, res) {
                       //console.log(res); // { picture: "http://profile.ak.fbcdn.net/..." } 
                       if(err)
@@ -79,6 +94,22 @@ var completedata = "";
         			}
         		});
                           getDetails(n + 1);
+                      }
+                    });
+                }
+		else
+                {
+                    //Close SQL connection
+                    connection.end(function(err) {
+                      // The connection is terminated now 
+                      if(err)
+                      {
+                          console.log("Error in sql closure.");
+                      }
+                      else
+                      {
+                          console.log("Connection closed");
+                          process.exit(0);
                       }
                     });
                 }

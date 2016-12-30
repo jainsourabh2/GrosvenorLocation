@@ -1,30 +1,31 @@
 #!/bin/sh
 
-
-startdate=`/bin/date --date="52 weeks ago" +%Y-%m-%d`
-#echo $startdate
-currentdate=`/bin/date +%Y-%m-%d`
-
-#echo $currentdate 
-#mainfolder=/data/backup
-#mainftp=/ftp/upload/ftpsystem1
+startdate=`/bin/date  +2016-11-01`
+currentdate=`/bin/date  +2016-11-30`
 
 foldate="$startdate"
-until [ "$foldate" == "$currentdate" ]
+
+echo $foldate $currentdate
+
+while [ $(date -d "$foldate" +%Y%m%d) -le $(date -d "$currentdate" +%Y%m%d) ]
 do
-  echo $foldate
+
 #check if folder exists in hadoop
      hadoop fs -test -d /grosvenor/facebook/facebooktopic/$foldate
      if [ $? != 0 ]
      then
-          #hadoop fs -mkdir /grosvenor/facebook/facebooktopic/$foldate
-          #echo "created directory in hadoop"
-          pig -param date=$foldate   hdfs:/grosvenor/facebook/facebooktopic/migration.pig
+          echo "create $foldate directory in hadoop"
+          pig -param date=$foldate  /opt/nodeprojects/facebooksearch/shellscript/pigscript.pig
      else
           hadoop fs -rmr /grosvenor/facebook/facebooktopic/$foldate
-          pig -param date=$foldate   hdfs:/grosvenor/facebook/facebooktopic/migration.pig
+          pig -param date=$foldate  /opt/nodeprojects/facebooksearch/shellscript/pigscript.pig
     
      fi
-foldate=`/bin/date --date="$foldate 1 day" +%Y-%m-%d`
+     #merge the files
+     hadoop fs -cat /grosvenor/facebook/facebooktopic/$foldate/part-m-* | hadoop fs -put -  /grosvenor/facebook/facebooktopic/$foldate/fb_$foldate.txt
 
+     #purge the files
+     hadoop fs -rm /grosvenor/facebook/facebooktopic/$foldate/part-m-*
+     hadoop fs -rm /grosvenor/facebook/facebooktopic/$foldate/_*
+foldate=`/bin/date --date="$foldate 1 day" +%Y-%m-%d`
 done

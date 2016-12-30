@@ -168,10 +168,11 @@ try{
 			var day = null;
 			var hour = 0;
 			var timeframe = null;
-			
+			var createddate = null;
 			if(createdtime != null || createdtime != undefined)
 			{
 				 createdtime = new Date(Date.parse(createdtime)).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+				createddate = createdtime.split(' ')[0];
 				 var dt = new Date(createdtime);
 				 //Get Day, Get Hours in 24H format, Get TimeFrame - Morning/Afternoon/Evening
 				 //var intday = dt.getDay();
@@ -180,23 +181,31 @@ try{
 				 
 				 hour = dt.getHours();
 				 
-				 if(0 < hour && hour < 12 )
+				 if(8 <= hour && hour < 12 )
 				 {
 				 	timeframe = "Morning";
 				 }
-				 else if( 12 < hour && hour < 18)
+				 else if( 12 <= hour && hour < 16)
 				{
 					timeframe = "Afternoon";
 				}
-				else if(18 < hour && hour < 24)
+				else if(16 <= hour && hour < 20)
 				{
 					timeframe = "Evening";
+				}
+				else if(20 <= hour && hour < 24)
+				{
+					timeframe = "Night";
+				}
+				else
+				{
+					timeframe = "MidNight"
 				}
 			 
 			}
 			
 			output = output + createdtime + constants.fieldDelimter;
-			
+			output = output + createddate + constants.fieldDelimter;
 			output = output + hour + constants.fieldDelimter;
 			output = output + day + constants.fieldDelimter;
 			output = output + timeframe + constants.fieldDelimter;
