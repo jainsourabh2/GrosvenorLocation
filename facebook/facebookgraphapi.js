@@ -5,7 +5,7 @@ const mysql      = require('mysql');
 var fs = require('fs');
 var jsonparsing = require('./jsonparsing');
 var completedata = ""; 
- 
+var moment = require('moment'); 
  
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -19,15 +19,12 @@ var completedata = "";
  
  if(process.argv.length < 3)
  {
-     console.log("Provide arguments to script eg:  node facebookgraphapi.js 2016-12-26");
+     console.log("Provide arguments to script eg:  node facebookgraphapi.js yyyy-mm-dd");
      process.exit(1);
  }
 
-var dt =  new Date(process.argv[2]);
- var fromDate = dt.toISOString();
- var toDate = dt.getFullYear() + "-" + (parseInt(dt.getMonth()) + 1 )+ "-" + (parseInt(dt.getDate()) + 1);
- toDate = new Date(toDate).toISOString(); 
- 
+var fromDate = moment(process.argv[2]).toISOString();
+var toDate = moment(process.argv[2]).add(1,'days').toISOString();
  
  connection.query("SELECT * FROM facebooklist order by name asc",function(ferr,frows,ffields)
     {
