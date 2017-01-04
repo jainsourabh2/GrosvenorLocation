@@ -1,7 +1,7 @@
 "use strict";
 
 const FB = require('fb');
-const config = require('../config/config');
+const config = require('./newconfig');
 const mysql      = require('mysql');
 const fs = require('fs');
 const parse = require('csv-parse');
@@ -22,8 +22,8 @@ const type = middlewareconstants.facebooksearchtype;
 const inputFile=middlewareconstants.facebooklocations;
 var csvData=[];
 
-FB.options({version: constants.facebook_api_version});
-FB.setAccessToken(constants.facebook_access);
+FB.options({version:"v2.8"});
+
 
 function IterateOver(list, iterator, callback) {
 
@@ -36,6 +36,7 @@ function IterateOver(list, iterator, callback) {
             callback();
     }
     for(var i = 0; i < list.length; i++) {
+        
         iterator(list[i], report);
     }
 }
@@ -46,15 +47,16 @@ fs.createReadStream(inputFile)
         csvData.push(csvrow);
     })
     .on('end',function() {
-        IterateOver(csvData, function(path, report) {
-            let search = "search?q="+type+"&type=place&center="+path[1]+","+path[2]+"&limit=500&distance=16000";
-            facebook(search,path)
-            .then(function() {
-                // log the details to the user
-                console.log('Completed '+search+' Processing');
-            });
-            report();
-        }, processComplete);
+        
+            IterateOver(csvData, function(path, report) {
+                let search = "search?q="+type+"&type=place&center="+path[1]+","+path[2]+"&limit=500&distance=16000";
+                facebook(search,path)
+                .then(function() {
+                    // log the details to the user
+                    console.log('Completed '+search+' Processing');
+                });
+                report();
+            }, processComplete);
     });
 
 function processComplete(){
@@ -64,6 +66,7 @@ function processComplete(){
 function facebook(searchQuery,location){
     let place = location;
     let deferred = Promise.defer();
+    FB.setAccessToken(constants.facebook_access[Math.floor(Math.random()*constants.facebook_access.length)]);
     FB.api(searchQuery,
         function (response) {
           if (response && !response.error) {
@@ -71,10 +74,9 @@ function facebook(searchQuery,location){
                 let name = response.data[i].name;
                 name = name.replace(/"/gi,'$').trim();
                 connection.query('INSERT INTO facebooklist (id,name,type,location,latitude,longitude,url) values("'+response.data[i].id+'","'+name+'","'+type+'","'+place[0]+'","'+place[1]+'","'+place[2]+'","www.facebook.com/'+response.data[i].id+'")', function(err, rows, fields) {
+                 
                     if (err){
-                        if(err.code!=="ER_DUP_ENTRY"){
-                            console.log(err);
-                        }
+                    console.log("Error in insert");
                     }
                 });
             }
