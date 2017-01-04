@@ -286,14 +286,21 @@ app.get('/getPosition',function(req,res){
     	
        function queryBuilder(querystr,fromdate,todate,weekday,timeframe)
        {
-           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_test`.`default`.`restaurants` WHERE name IN (" + querystr + ")";
+           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
            
            console.log("Weekday: " + weekday);
            console.log("Timeframe: " + timeframe);
            
            if(fromdate != "NaN/NaN/NaN" || todate != "NaN/NaN/NaN")
            {
-              query += " and CAST(createdtime as date) >  '" + fromdate + "' and  CAST(createdtime as date) < '" + todate + "' ";   
+             // query += " and CAST(createdtime as date) >  '" + fromdate + "' and  CAST(createdtime as date) < '" + todate + "' "; 
+ 		var frmdatearray = fromdate.split('/');
+               var frmdate = frmdatearray[0] + "-" + frmdatearray[1] + "-" + frmdatearray[2];
+               
+               var todatearray = todate.split('/');
+               var tdate = todatearray[0] + "-" + todatearray[1] + "-" + todatearray[2] ;
+
+              query += " and CAST(createdtime as date) >  '" + fromdate + "' and  CAST(createdtime as date) < '" + todate + "' and fb_date between '" +  frmdate +"' and '" + tdate + "'" ;     
            }
             if(timeframe != "select" && timeframe != undefined)
            {
