@@ -1,3 +1,5 @@
 */2 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/checkRestartTwitterStream.sh >> /var/log/GrosvenorLocation/shellRestartTwitterStream.log
 */1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFiles.sh >> /var/log/GrosvenorLocation/shellmoveFiles.log
 30 23 * * * /home/GvAdmin/Hive_Partition.sh >> /var/log/hivepartitionscreation.log
+00 23 * * * /opt/nodeprojects/GrosvenorLocation/facebooksearch/shellscript/mergecmd.sh >> /var/log/GrosvenorLocation/fbmergefiles.log                
+0 */4 * * * /opt/nodeprojects/GrosvenorLocation/facebooksearch/shellscript/daily_fbingest.sh >> /var/log/GrosvenorLocation/fbingestion.log
