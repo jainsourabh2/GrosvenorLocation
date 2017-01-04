@@ -125,7 +125,7 @@ app.get('/getPosition',function(req,res){
     var timeframe = req.query.timeframe;
     
     
-    var q = "SELECT * FROM stationrestnt WHERE stationname = '" + station + "'";
+    var q = "SELECT * FROM facebooklist WHERE location = '" + station + "'";
     console.log(q);
     var restaurantlist = [];
     
