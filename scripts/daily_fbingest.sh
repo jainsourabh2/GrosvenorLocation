@@ -3,7 +3,6 @@
 currenthour=`/bin/date +%H`
 echo $currenthour
 
-#At 12 in morning run
 if [ $currenthour == 0 ]
 then
 currentdate=`/bin/date --date="1 days ago" +%Y-%m-%d`
@@ -13,6 +12,8 @@ fi
 fdate="$currentdate"
 echo $fdate
 #check if folder exists in hadoop
+#delete hanged process if any
+ps -ef | grep facebookgraphapi.js | grep -v grep | awk '{print $2}' | xargs kill
 
 hadoop fs -test -d /grosvenor/facebook/facebooktopic/$fdate
 if [ $? != 0 ]
