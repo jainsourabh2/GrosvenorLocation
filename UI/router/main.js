@@ -323,41 +323,153 @@ app.get('/getPosition',function(req,res){
 });
 
 
-/*app.get('/getPostsCount',function(req,res){
-    var restname = req.query.restname;
-    console.log("Inside PostCount");
-    //Make req call to web api drill and pass query in body req.
-    //var data = {"count"  : 30};
-    
-    	
-    	var q = "SELECT count(1) as TotalCount FROM `hive_test`.`default`.`restaurants` WHERE name ='" + restname + "'";
-    	
-    	var reqoptions = {
+app.get("/api/getdata",function(req,res){
+    var dataset = req.query.dataset;
+    var startdate = req.query.startdate;
+    var enddate = req.query.enddate;
+    var type= req.query.type;
+    var station = req.query.station;
+     var restaurantlist = [];
+     
+     var reqobj = {"dataset" : dataset, "startdate" : startdate, "enddate" : enddate, "restaurantlist" : restaurantlist}
+     
+      var q = "SELECT  * FROM facebooklist WHERE location = '" + station + "' and type= '" + type + "'";
+      
+       connection.query(q,function(ferr,frows,ffields)
+       {
+        if(ferr)
+        {
+            console.log(ferr);
+        }
+        else
+        {
+            if(frows.length > 0)
+            {
+                function getNearRest(n)
+                {
+                   if(n < frows.length)
+                   {
+                       var resname = frows[n].name;
+                       restaurantlist.push(resname);
+                      // dataarray.push({"restname" : resname, "restlat" : restlat, "restlong" : restlong});
+                       getNearRest(n + 1);
+                   }
+                   else
+                   {
+                    //   getStationDetail(restaurantlist,stnlat,stnlong,station,fromdate,todate,weekday,timeframe);
+                      getAPIJSON(reqobj);
+                   }
+                }
+                getNearRest(0);
+            }
+        }
+       });
+        
+     function getAPIJSON(robj)
+     {
+         console.log("Obj : " + robj);
+         var dataobj = {};
+         var dataarray = [];
+         
+           var drillq = getDrillQuery(robj);
+           
+           console.log("Drill Q : " + drillq);
+        	var reqoptions = {
         	uri :url,
         	headers:{'Content-Type':'application/json'},
         	method : "POST",
-        	body: JSON.stringify({queryType : 'SQL', query : q})
+        	body: JSON.stringify({queryType : 'SQL', query : drillq})
     	    
     	};
+    	
+    	 request(reqoptions, function(err, response, data){
+        	//console.log(response + " " + err + " " + data);
+        	if(err)
+        	{
+        	    console.log("Err: " + err);
+        	}
+        	if (!err && response.statusCode ==200){
+        		console.log("Reached within query");
+        		console.log(data);
+			//console.log(data.length);
+			var obj = JSON.parse(data);
+			var jsonresp = {};
+			if(obj.rows.length > 0)
+			{
+        		  function buildJSONObj(p)
+        		    {
+        		        if(p < obj.rows.length)
+        		        {
+        				try
+            			   {
+                    		        
+                		        var totalcount = obj.rows[p].TotalCount;
+                		        var businessname = obj.rows[p].BusinessName;
+                		        var businesslong = obj.rows[p].Longitude;
+                		        var businesslat = obj.rows[p].Latitude;
+                		        console.log("Inside Drill Q :" + totalcount,businessname,businesslong,businesslat);
+                		      //  console.log(restname,restlat,restlong,postcount);
+                		       var cordinatearray = [];
+                		       cordinatearray.push(businesslat);
+                		       cordinatearray.push(businesslong);
+                		       
+                		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
+            			   
+            			       dataarray.push({"type" : "Feature",
+            			       "properties" : { "name" : businessname , "postcount" : totalcount} , 
+            			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+            			       
+            			   }
+        			catch(ex)
+        				{ console.log("Error while parsiing :" + ex);}
+
+                                buildJSONObj(p + 1);
+        		        }
+        		        else
+        		        {
+                           // console.log(station,stnlat,stnlong);
+                            dataobj.type = "FeatureCollection";
+                            dataobj.features = dataarray;
+                            console.log(JSON.stringify(dataobj));
+                            res.send(dataobj);        		            
+        		        }
+        		    }
+        		    
+        		    buildJSONObj(0);
+        		}
+			
+        	}
+    	 }); 
+     }
+        
     
-    request(reqoptions, function(err, response, data){
-	//console.log(response + " " + err + " " + data);
-	if(err)
-	{
-	    console.log("Err: " + err);
-	}
-	if (!err && response.statusCode ==200){
-		console.log("Reached");
-		console.log(data);
-		var obj = JSON.parse(data);
-		console.log("Res: " + obj.rows[0].TotalCount);
-		var count = obj.rows[0].TotalCount;
-		res.send(count);
-	}
+  
+})
+
+  function getDrillQuery(robj)
+    {
+        var Qobj = robj;
+        var dataset = Qobj.dataset;
+        var startdate = Qobj.startdate;
+        var enddate = Qobj.enddate;
+        var restaurantlist = Qobj.restaurantlist;
+        var querystring = "";
+        var reststring = "";
+        
+         for(var i = 0; i < restaurantlist.length; i++)
+        {
+	    var resname = restaurantlist[i].replace(/'/g,"''");
+            reststring += "'" + resname + "',";
+        }
+        reststring = reststring.substr(0, reststring.length - 1);
+        
+        //Logic to build drill query here
+         querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
+                        startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
         
         
-    });
-    
-}); */
+        return querystring;
+        
+    }
 
 }
