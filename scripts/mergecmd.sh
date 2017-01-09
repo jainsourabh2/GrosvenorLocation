@@ -1,8 +1,26 @@
-startdate=`/bin/date --date="1 days ago" +%Y-%m-%d`
-FB_BASE_PATH="/grosvenor/facebook/facebooktopic/$startdate"
-HDFS_CMD_MERGE="hdfs dfs -cat $FB_BASE_PATH/*.* | hdfs dfs -put - $FB_BASE_PATH/fb_$startdate.txt"
-HDFS_CMD_PURGE="hdfs dfs -rmr $FB_BASE_PATH/FacebookData.*"
-eval $HDFS_CMD_MERGE
-echo $
-eval $HDFS_CMD_PURGE
-echo $
+currenthour=`/bin/date +%H`                                                                                                                          
+echo $currenthour                                                                                                                                    
+if [ $currenthour -ge 00 ] && [ $currenthour -le 03 ]                                                                                                
+then                                                                                                                                                 
+currentdate=`/bin/date --date="1 days ago" +%Y-%m-%d`                                                                                                
+else                                                                                                                                                 
+currentdate=`/bin/date +%Y-%m-%d`                                                                                                                    
+fi                                                                                                                                                   
+startdate="$currentdate"                                                                                                                             
+echo "$startdate"                                                                                                                                    
+                                                                                                                                                     
+FB_BASE_PATH="/grosvenor/facebook/facebooktopic/$startdate"                                                                                          
+FILES=$(hdfs dfs -ls "/grosvenor/facebook/facebooktopic/$startdate/FacebookData.*" | awk '{print $8}' | grep -v "/grosvenor/facebook/facebooktopic/$s
+tartdate/FacebookData.*.tmp")                                                                                                                        
+for FILENAME in $FILES                                                                                                                               
+do                                                                                                                                                   
+echo "For file $FILENAME"                                                                                                                            
+HDFS_CMD_MERGE="hdfs dfs -cat $FILENAME | hdfs dfs -appendToFile - $FB_BASE_PATH/fb_$startdate.txt"                                                  
+HDFS_CMD_PURGE="hdfs dfs -rm $FILENAME"                                                                                                              
+echo "Merge command : $HDFS_CMD_MERGE"                                                                                                               
+eval $HDFS_CMD_MERGE                                                                                                                                 
+echo "MERGE DONE"                                                                                                                                    
+echo "Purge command : $HDFS_CMD_PURGE "                                                                                                              
+eval $HDFS_CMD_PURGE                                                                                                                                 
+echo "PURGE DONE"                                                                                                                                    
+done
