@@ -471,5 +471,59 @@ app.get("/api/getdata",function(req,res){
         return querystring;
         
     }
+	
+	app.get("/api/getstation",function(req,res){
+   
+   var param = req.query.dataset;
+   
+    var q = "SELECT distinct location,latitude,longitude FROM facebooklist";
+     var stnarray = [];
+     var dataobj = {};
+
+       connection.query(q,function(ferr,frows,ffields)
+       {
+        if(ferr)
+        {
+            console.log(ferr);
+        }
+        else
+        {
+            if(frows.length > 0)
+            {
+                function getallstation(n)
+                {  
+		
+                   if(n < frows.length)
+                   {
+                       
+                      // dataarray.push({"restname" : resname, "restlat" : restlat, "restlong" : restlong});
+                       var stationname = frows[n].location;
+                       var stnlat = frows[n].latitude;
+                       var stnlong = frows[n].longitude;
+                      
+			var stncoordinates = [];
+                      stncoordinates.push(stnlat);
+                      stncoordinates.push(stnlong);
+                      
+                       stnarray.push({"type" : "Feature",
+            			       "properties" : { "stationname" : stationname} , 
+            			       "geometry" : { "type" : "Point" , "coordinates" : stncoordinates}});
+                       getallstation(n + 1);
+                   }
+                   else
+                   {
+                             dataobj.type = "FeatureCollection";
+                            dataobj.features = stnarray;
+                            console.log(JSON.stringify(dataobj));
+                            res.send(dataobj);   
+                   }
+                }
+                getallstation(0);
+            }
+        }
+       });
+   
+});
+
 
 }
