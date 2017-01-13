@@ -32,7 +32,7 @@ app.get("/",function(req,res){
             {
                 for(var j =0; j < frows.length; j++)
                 {
-                    console.log(frows[j]);
+                    //console.log(frows[j]);
                  stationnames.push(frows[j].name);   
                 }
                 var data = {"stationnames" : stationnames }
@@ -57,7 +57,7 @@ app.get("/multimap",function(req,res){
             {
                 for(var j =0; j < frows.length; j++)
                 {
-                    console.log(frows[j]);
+                   // console.log(frows[j]);
                  stationnames.push(frows[j].name);   
                 }
                 var data = {"stationnames" : stationnames }
@@ -126,7 +126,7 @@ app.get('/getPosition',function(req,res){
     
     
     var q = "SELECT * FROM facebooklist WHERE location = '" + station + "'";
-    console.log(q);
+    //console.log(q);
     var restaurantlist = [];
     
     connection.query(q,function(ferr,frows,ffields)
@@ -153,7 +153,7 @@ app.get('/getPosition',function(req,res){
                        
                         var stnlat = frows[0].latitude;
                        var stnlong = frows[0].longitude;
-                       console.log(stnlat + "," + stnlong);
+                       //console.log(stnlat + "," + stnlong);
                        // console.log(restaurantlist);
                        getStationDetail(restaurantlist,stnlat,stnlong,station,fromdate,todate,weekday,timeframe);
                       
@@ -183,17 +183,19 @@ app.get('/getPosition',function(req,res){
 
        /* console.log("Query: " + querystr);
         
-        console.log("From Date: " + fromdate);
-        console.log("To Date: "+ todate);
-         console.log("Weekday: "+ weekday);
-          console.log("TimeFrame: "+ timeframe); */
+        //console.log("From Date: " + fromdate);
+       // console.log("To Date: "+ todate);
+         //console.log("Weekday: "+ weekday);
+         // console.log("TimeFrame: "+ timeframe); */
           
         var q  = "";
         
-        //Query Drill and get back name,lat,long,Total Post count, Rating of the rest from HDFS. Create array of object and send back to the client.
+        //Query Drill and get back name,lat,long,Total Post count, Rating of the rest from HDFS. Create array of object and send back to 
+
+the client.
         q = queryBuilder(querystr,fromdate,todate,weekday,timeframe);
         
-        console.log(q);
+       // console.log(q);
         
     	var reqoptions = {
         	uri :url,
@@ -211,7 +213,7 @@ app.get('/getPosition',function(req,res){
         	}
         	if (!err && response.statusCode ==200){
         		console.log("Reached within query");
-        		console.log(data);
+        		//console.log(data);
 			//console.log(data.length);
 			var obj = JSON.parse(data);
 
@@ -230,7 +232,7 @@ app.get('/getPosition',function(req,res){
             		        var postcount = obj.rows[p].TotalCount;
             		        var hours = obj.rows[p].Hours;
             		        
-            		        console.log(restname,restlat,restlong,postcount);
+            		       // console.log(restname,restlat,restlong,postcount);
             		        if(p > 0)
             		        {
             		            
@@ -253,12 +255,16 @@ app.get('/getPosition',function(req,res){
             		                        totalcount =  parseInt(dataarray[p - 1].postcount); 
             		                }
             		               
-            		                totalcountarray.push({"location": dataarray[p - 1].location,"lat" : dataarray[p - 1].lat,"lng" : dataarray[p - 1].lng,"postcount" :  totalcount,"type" : "restaurant"});
+            		                totalcountarray.push({"location": dataarray[p - 1].location,"lat" : dataarray[p - 1].lat,"lng" : 
+
+dataarray[p - 1].lng,"postcount" :  totalcount,"type" : "restaurant"});
             		                totalpostcounts = [];
             		            }
             		        }
             		        
-            		        dataarray.push({"location": restname, "lat" : restlat, "lng" : restlong,"postcount" : postcount ,"hour" : hours,"type" : "restaurant"});
+            		        dataarray.push({"location": restname, "lat" : restlat, "lng" : restlong,"postcount" : postcount ,"hour" : 
+
+hours,"type" : "restaurant"});
         			   }
         			catch(ex)
         				{ console.log("Error while parsiing :" + ex);}
@@ -267,7 +273,7 @@ app.get('/getPosition',function(req,res){
         		        }
         		        else
         		        {
-                            console.log(station,stnlat,stnlong);
+                            //console.log(station,stnlat,stnlong);
                             var stnname= station;
                            
                             totalcountarray.push({"location" : stnname, "lat" : stnlat,"lng" : stnlong, "type" : "station"});
@@ -286,9 +292,10 @@ app.get('/getPosition',function(req,res){
     	
        function queryBuilder(querystr,fromdate,todate,weekday,timeframe)
        {
-           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
+           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as 
+
+Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
            
-           console.log("Weekday: " + weekday);
            console.log("Timeframe: " + timeframe);
            
            if(fromdate != "NaN/NaN/NaN" || todate != "NaN/NaN/NaN")
@@ -300,7 +307,9 @@ app.get('/getPosition',function(req,res){
                var todatearray = todate.split('/');
                var tdate = todatearray[0] + "-" + todatearray[1] + "-" + todatearray[2] ;
 
-              query += " and createddate >  '" + fromdate + "' and  createddate < '" + todate + "' and fb_date between '" +  frmdate +"' and '" + tdate + "'" ;     
+              query += " and createddate >  '" + fromdate + "' and  createddate < '" + todate + "' and fb_date between '" +  frmdate +"' 
+
+and '" + tdate + "'" ;     
            }
             if(timeframe != "select" && timeframe != undefined)
            {
@@ -328,131 +337,224 @@ app.get("/api/getdata",function(req,res){
     var enddate = req.query.enddate;
     var type= req.query.type;
     var station = req.query.station;
+     var track = req.query.track;
      var restaurantlist = [];
+    
      
-     var reqobj = {"dataset" : dataset, "startdate" : startdate, "enddate" : enddate, "restaurantlist" : restaurantlist}
-     
-      var q = "SELECT  * FROM facebooklist WHERE location = '" + station + "' and type like '%" + type + "%'";
-      
-       connection.query(q,function(ferr,frows,ffields)
-       {
-        if(ferr)
-        {
-            console.log(ferr);
-        }
-        else
-        {
-            if(frows.length > 0)
-            {
-                function getNearRest(n)
-                {
-                   if(n < frows.length)
-                   {
-                       var resname = frows[n].name;
-                       restaurantlist.push(resname);
-                      // dataarray.push({"restname" : resname, "restlat" : restlat, "restlong" : restlong});
-                       getNearRest(n + 1);
-                   }
-                   else
-                   {
-                    //   getStationDetail(restaurantlist,stnlat,stnlong,station,fromdate,todate,weekday,timeframe);
-                      getAPIJSON(reqobj);
-                   }
-                }
-                getNearRest(0);
-            }
-        }
-       });
-        
-     function getAPIJSON(robj)
+     if(dataset == "facebook")
      {
-         console.log("Obj : " + robj);
+         var reqobj = {"dataset" : dataset, "startdate" : startdate, "enddate" : enddate, "restaurantlist" : restaurantlist}
+         
+          var q = "SELECT  * FROM facebooklist WHERE location = '" + station + "' and type= '" + type + "'";
+          
+           connection.query(q,function(ferr,frows,ffields)
+           {
+            if(ferr)
+            {
+                console.log(ferr);
+            }
+            else
+            {
+                if(frows.length > 0)
+                {
+                    function getNearRest(n)
+                    {
+                       if(n < frows.length)
+                       {
+                           var resname = frows[n].name;
+                           restaurantlist.push(resname);
+                          // dataarray.push({"restname" : resname, "restlat" : restlat, "restlong" : restlong});
+                           getNearRest(n + 1);
+                       }
+                       else
+                       {
+                        //   getStationDetail(restaurantlist,stnlat,stnlong,station,fromdate,todate,weekday,timeframe);
+                          getAPIJSON(reqobj);
+                       }
+                    }
+                    getNearRest(0);
+                }
+            }
+           });
+            
+         function getAPIJSON(robj)
+         {
+             console.log("Obj : " + robj);
+             var dataobj = {};
+             var dataarray = [];
+             
+               var drillq = getDrillQuery(robj);
+               
+               console.log("Drill Q : " + drillq);
+            	var reqoptions = {
+            	uri :url,
+            	headers:{'Content-Type':'application/json'},
+            	method : "POST",
+            	body: JSON.stringify({queryType : 'SQL', query : drillq})
+        	    
+        	};
+        	
+        	 request(reqoptions, function(err, response, data){
+            	//console.log(response + " " + err + " " + data);
+            	if(err)
+            	{
+            	    console.log("Err: " + err);
+            	}
+            	if (!err && response.statusCode ==200){
+            		console.log("Reached within query");
+            	 	console.log(data);
+    			//console.log(data.length);
+    			var obj = JSON.parse(data);
+    			var jsonresp = {};
+    			if(obj.rows.length > 0)
+    			{
+            		  function buildJSONObj(p)
+            		    {
+            		        if(p < obj.rows.length)
+            		        {
+            				try
+                			   {
+                        		        
+                    		        var totalcount = obj.rows[p].TotalCount;
+                    		        var businessname = obj.rows[p].BusinessName;
+                    		        var businesslong = obj.rows[p].Longitude;
+                    		        var businesslat = obj.rows[p].Latitude;
+                    		        
+                    		      //  console.log(restname,restlat,restlong,postcount);
+                    		       var cordinatearray = [];
+                    		       cordinatearray.push(businesslat);
+                    		       cordinatearray.push(businesslong);
+                    		       
+                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : 
+
+totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
+                			   
+                			       dataarray.push({"type" : "Feature",
+                			       "properties" : { "name" : businessname , "postcount" : totalcount} , 
+                			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                			       
+                			   }
+            			catch(ex)
+            				{ console.log("Error while parsiing :" + ex);}
+    
+                                    buildJSONObj(p + 1);
+            		        }
+            		        else
+            		        {
+                               // console.log(station,stnlat,stnlong);
+                                dataobj.type = "FeatureCollection";
+                                dataobj.features = dataarray;
+                                console.log(JSON.stringify(dataobj));
+                                res.send(dataobj);        		            
+            		        }
+            		    }
+            		    
+            		    buildJSONObj(0);
+            		}
+    			
+            	}
+        	 }); 
+        }
+        
+     }
+     else if(dataset == "twitter")
+     {
+         var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
+         var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
+         
+         var reqobj = {"dataset" : dataset, "startdate" : sdate, "enddate" : edate, "keywords" : track}
+         var q = getDrillQuery(reqobj);
          var dataobj = {};
          var dataarray = [];
-         
-           var drillq = getDrillQuery(robj);
-           
-           console.log("Drill Q : " + drillq);
-        	var reqoptions = {
-        	uri :url,
-        	headers:{'Content-Type':'application/json'},
-        	method : "POST",
-        	body: JSON.stringify({queryType : 'SQL', query : drillq})
-    	    
-    	};
-    	
-    	 request(reqoptions, function(err, response, data){
-        	//console.log(response + " " + err + " " + data);
-        	if(err)
-        	{
-        	    console.log("Err: " + err);
-        	}
-        	if (!err && response.statusCode ==200){
-        		console.log("Reached within query");
-        		console.log(data);
-			//console.log(data.length);
-			var obj = JSON.parse(data);
-			var jsonresp = {};
-			if(obj.rows.length > 0)
-			{
-        		  function buildJSONObj(p)
-        		    {
-        		        if(p < obj.rows.length)
-        		        {
-        				try
-            			   {
-                    		        
-                		        var totalcount = obj.rows[p].TotalCount;
-                		        var businessname = obj.rows[p].BusinessName;
-                		        var businesslong = obj.rows[p].Longitude;
-                		        var businesslat = obj.rows[p].Latitude;
-                		        console.log("Inside Drill Q :" + totalcount,businessname,businesslong,businesslat);
-                		      //  console.log(restname,restlat,restlong,postcount);
-                		       var cordinatearray = [];
-                		       cordinatearray.push(businesslat);
-                		       cordinatearray.push(businesslong);
-                		       
-                		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
-            			   
-            			       dataarray.push({"type" : "Feature",
-            			       "properties" : { "name" : businessname , "postcount" : totalcount} , 
-            			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
-            			       
-            			   }
-        			catch(ex)
-        				{ console.log("Error while parsiing :" + ex);}
+             
+         	var reqoptions = {
+            	uri :url,
+            	headers:{'Content-Type':'application/json'},
+            	method : "POST",
+            	body: JSON.stringify({queryType : 'SQL', query : q})
+        	    
+        	};
+        	
+        	 request(reqoptions, function(err, response, data){
+            	//console.log(response + " " + err + " " + data);
+            	if(err)
+            	{
+            	    console.log("Err: " + err);
+            	}
+            	if (!err && response.statusCode ==200){
+            	//	console.log("Reached within query");
+            	//	console.log(data);
+    			//console.log(data.length);
+    			var obj = JSON.parse(data);
+    				var jsonresp = {};
+    			if(obj.rows.length > 0)
+    			{
+            		  function buildJSONObj(p)
+            		    {
+            		        if(p < obj.rows.length)
+            		        {
+            				try
+                			   {
+                        		        
+                    		        var tweet = obj.rows[p].tweet;
+                    		        var created_at = new Date(obj.rows[p].creeated_at);
+					var created_at_string = created_at.toLocaleString().replace(',', '');
+                    		        var imageurl = obj.rows[p].userprofileimageurl;
+                    		        var username = obj.rows[p].userscreenname;
+                    		        var follcount = obj.rows[p].userfollowercount;
+                    		        console.log("Tweet at : " + created_at);
+                    		      //  console.log(restname,restlat,restlong,postcount);
+                    		       var cordinatearray = [];
+                    		       cordinatearray.push(0.0);
+                    		       cordinatearray.push(0.0);
+                    		       
+                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : 
 
-                                buildJSONObj(p + 1);
-        		        }
-        		        else
-        		        {
-                           // console.log(station,stnlat,stnlong);
-                            dataobj.type = "FeatureCollection";
-                            dataobj.features = dataarray;
-                            console.log(JSON.stringify(dataobj));
-                            res.send(dataobj);        		            
-        		        }
-        		    }
-        		    
-        		    buildJSONObj(0);
-        		}
-			
-        	}
-    	 }); 
-     }
-        
+totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
+                			   
+                			       dataarray.push({"type" : "Feature",
+                			       "properties" : { "p1" : tweet , "p2" : created_at_string , "p3" : username, "p4" : 
+
+imageurl, "p5" : follcount} , 
+                			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                			       
+                			   }
+            			catch(ex)
+            				{ console.log("Error while parsiing :" + ex);}
     
+                                    buildJSONObj(p + 1);
+            		        }
+            		        else
+            		        {
+                               // console.log(station,stnlat,stnlong);
+                                dataobj.type = "FeatureCollection";
+                                dataobj.features = dataarray;
+                                console.log(JSON.stringify(dataobj));
+                                res.send(dataobj);        		            
+            		        }
+            		    }
+            		    
+            		    buildJSONObj(0);
+            		}
+    			
+            	}
+        	 });
+     }
   
 })
 
-  function getDrillQuery(robj)
+function getDrillQuery(robj)
+{
+    var querystring = "";
+    
+    if(robj.dataset == "facebook")
     {
-        var Qobj = robj;
+         var Qobj = robj;
         var dataset = Qobj.dataset;
         var startdate = Qobj.startdate;
         var enddate = Qobj.enddate;
         var restaurantlist = Qobj.restaurantlist;
-        var querystring = "";
+        
         var reststring = "";
         
          for(var i = 0; i < restaurantlist.length; i++)
@@ -463,9 +565,48 @@ app.get("/api/getdata",function(req,res){
         reststring = reststring.substr(0, reststring.length - 1);
         
         //Logic to build drill query here
-         querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and createddate > '" + startdate + "' and createddate < '" + enddate + "' and fb_date  BETWEEN '" + 
-startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
+        querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM 
 
+`hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
+                        startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
+        
+    }
+    else if(robj.dataset == "twitter")
+    {
+        var startdate = robj.startdate;
+        var enddate = robj.enddate;
+        var track = robj.keywords.split(',');
+        
+        var query1 = "SELECT tweet,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM 
+
+`hive_test`.`default`.`twitterstream` where ";
+        var query2 = "";
+        var query3 = "";
+        
+        for(var t = 0; t < track.length ; t++)
+        {
+           query2 += "STRPOS(LOWER(tweet),'" + track[t] + "') +" ;
+        }
+        
+        query2 = query2.substr(0,query2.length - 1);
+        
+        // query2 = "STRPOS(LOWER(tweet),'grosvenor')"; //dynamic
+        if(startdate != undefined && enddate != undefined)
+        {
+            query3 = " > 0 and create_date between '" + startdate + "' and '"+ enddate + "' order  by creeated_at desc limit 10"; //based on single 
+
+date or range
+        }
+        else
+        {
+            query3 = " > 0 and create_date = '" + startdate + "' order  by creeated_at desc limit 10"; //based on single date or range
+        }
+         
+        
+         querystring = query1 + query2 + query3;
+    }
+       
+        
         return querystring;
         
     }
