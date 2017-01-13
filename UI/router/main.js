@@ -300,7 +300,7 @@ app.get('/getPosition',function(req,res){
                var todatearray = todate.split('/');
                var tdate = todatearray[0] + "-" + todatearray[1] + "-" + todatearray[2] ;
 
-              query += " and CAST(createdtime as date) >  '" + fromdate + "' and  CAST(createdtime as date) < '" + todate + "' and fb_date between '" +  frmdate +"' and '" + tdate + "'" ;     
+              query += " and createddate >  '" + fromdate + "' and  createddate < '" + todate + "' and fb_date between '" +  frmdate +"' and '" + tdate + "'" ;     
            }
             if(timeframe != "select" && timeframe != undefined)
            {
@@ -322,7 +322,6 @@ app.get('/getPosition',function(req,res){
     }
 });
 
-
 app.get("/api/getdata",function(req,res){
     var dataset = req.query.dataset;
     var startdate = req.query.startdate;
@@ -333,7 +332,7 @@ app.get("/api/getdata",function(req,res){
      
      var reqobj = {"dataset" : dataset, "startdate" : startdate, "enddate" : enddate, "restaurantlist" : restaurantlist}
      
-      var q = "SELECT  * FROM facebooklist WHERE location = '" + station + "' and type= '" + type + "'";
+      var q = "SELECT  * FROM facebooklist WHERE location = '" + station + "' and type like '%" + type + "%'";
       
        connection.query(q,function(ferr,frows,ffields)
        {
@@ -365,7 +364,7 @@ app.get("/api/getdata",function(req,res){
         }
        });
         
-    function getAPIJSON(robj)
+     function getAPIJSON(robj)
      {
          console.log("Obj : " + robj);
          var dataobj = {};
