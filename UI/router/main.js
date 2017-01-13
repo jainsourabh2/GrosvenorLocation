@@ -365,7 +365,7 @@ app.get("/api/getdata",function(req,res){
         }
        });
         
-     function getAPIJSON(robj)
+    function getAPIJSON(robj)
      {
          console.log("Obj : " + robj);
          var dataobj = {};
@@ -464,15 +464,14 @@ app.get("/api/getdata",function(req,res){
         reststring = reststring.substr(0, reststring.length - 1);
         
         //Logic to build drill query here
-         querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
-                        startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
-        
-        
+         querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and createddate > '" + startdate + "' and createddate < '" + enddate + "' and fb_date  BETWEEN '" + 
+startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
+
         return querystring;
         
     }
-	
-	app.get("/api/getstation",function(req,res){
+
+app.get("/api/getstation",function(req,res){
    
    var param = req.query.dataset;
    
@@ -524,6 +523,5 @@ app.get("/api/getdata",function(req,res){
        });
    
 });
-
 
 }
