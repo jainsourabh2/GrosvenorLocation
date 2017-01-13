@@ -190,9 +190,7 @@ app.get('/getPosition',function(req,res){
           
         var q  = "";
         
-        //Query Drill and get back name,lat,long,Total Post count, Rating of the rest from HDFS. Create array of object and send back to 
-
-the client.
+        //Query Drill and get back name,lat,long,Total Post count, Rating of the rest from HDFS. Create array of object and send back to the client.
         q = queryBuilder(querystr,fromdate,todate,weekday,timeframe);
         
        // console.log(q);
@@ -255,16 +253,12 @@ the client.
             		                        totalcount =  parseInt(dataarray[p - 1].postcount); 
             		                }
             		               
-            		                totalcountarray.push({"location": dataarray[p - 1].location,"lat" : dataarray[p - 1].lat,"lng" : 
-
-dataarray[p - 1].lng,"postcount" :  totalcount,"type" : "restaurant"});
+            		                totalcountarray.push({"location": dataarray[p - 1].location,"lat" : dataarray[p - 1].lat,"lng" : dataarray[p - 1].lng,"postcount" :  totalcount,"type" : "restaurant"});
             		                totalpostcounts = [];
             		            }
             		        }
             		        
-            		        dataarray.push({"location": restname, "lat" : restlat, "lng" : restlong,"postcount" : postcount ,"hour" : 
-
-hours,"type" : "restaurant"});
+            		        dataarray.push({"location": restname, "lat" : restlat, "lng" : restlong,"postcount" : postcount ,"hour" : hours,"type" : "restaurant"});
         			   }
         			catch(ex)
         				{ console.log("Error while parsiing :" + ex);}
@@ -292,9 +286,7 @@ hours,"type" : "restaurant"});
     	
        function queryBuilder(querystr,fromdate,todate,weekday,timeframe)
        {
-           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as 
-
-Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
+           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
            
            console.log("Timeframe: " + timeframe);
            
@@ -307,9 +299,7 @@ Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")
                var todatearray = todate.split('/');
                var tdate = todatearray[0] + "-" + todatearray[1] + "-" + todatearray[2] ;
 
-              query += " and createddate >  '" + fromdate + "' and  createddate < '" + todate + "' and fb_date between '" +  frmdate +"' 
-
-and '" + tdate + "'" ;     
+              query += " and createddate >  '" + fromdate + "' and  createddate < '" + todate + "' and fb_date between '" +  frmdate +"' and '" + tdate + "'" ;     
            }
             if(timeframe != "select" && timeframe != undefined)
            {
@@ -425,9 +415,7 @@ app.get("/api/getdata",function(req,res){
                     		       cordinatearray.push(businesslat);
                     		       cordinatearray.push(businesslong);
                     		       
-                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : 
-
-totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
+                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
                 			   
                 			       dataarray.push({"type" : "Feature",
                 			       "properties" : { "name" : businessname , "postcount" : totalcount} , 
@@ -502,20 +490,17 @@ totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
                     		        var imageurl = obj.rows[p].userprofileimageurl;
                     		        var username = obj.rows[p].userscreenname;
                     		        var follcount = obj.rows[p].userfollowercount;
+					var tweetid = obj.rows[p].tweet_id;
                     		        console.log("Tweet at : " + created_at);
                     		      //  console.log(restname,restlat,restlong,postcount);
                     		       var cordinatearray = [];
                     		       cordinatearray.push(0.0);
                     		       cordinatearray.push(0.0);
                     		       
-                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : 
-
-totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
+                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
                 			   
                 			       dataarray.push({"type" : "Feature",
-                			       "properties" : { "p1" : tweet , "p2" : created_at_string , "p3" : username, "p4" : 
-
-imageurl, "p5" : follcount} , 
+                			       "properties" : { "p1" : tweet , "p2" : created_at_string , "p3" : username, "p4" : imageurl, "p5" : follcount, "p6" : tweetid} , 
                 			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
                 			       
                 			   }
@@ -565,9 +550,7 @@ function getDrillQuery(robj)
         reststring = reststring.substr(0, reststring.length - 1);
         
         //Logic to build drill query here
-        querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM 
-
-`hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
+        querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
                         startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
         
     }
@@ -577,9 +560,7 @@ function getDrillQuery(robj)
         var enddate = robj.enddate;
         var track = robj.keywords.split(',');
         
-        var query1 = "SELECT tweet,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM 
-
-`hive_test`.`default`.`twitterstream` where ";
+        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_test`.`default`.`twitterstream` where ";
         var query2 = "";
         var query3 = "";
         
@@ -593,9 +574,7 @@ function getDrillQuery(robj)
         // query2 = "STRPOS(LOWER(tweet),'grosvenor')"; //dynamic
         if(startdate != undefined && enddate != undefined)
         {
-            query3 = " > 0 and create_date between '" + startdate + "' and '"+ enddate + "' order  by creeated_at desc limit 10"; //based on single 
-
-date or range
+            query3 = " > 0 and create_date between '" + startdate + "' and '"+ enddate + "' order  by creeated_at desc limit 10"; //based on single date or range
         }
         else
         {
