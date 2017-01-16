@@ -4,7 +4,9 @@
   "description": "",
   "main": "fetchtweetids.js",
   "dependencies": {
-    "twitter": "^1.4.0",
-    "fs":"0.0.1-security"
+    "fs": "0.0.1-security",
+    "google-search": "0.0.5",
+    "mysql": "^2.12.0",
+    "twitter": "^1.4.0"
   }
 }
