@@ -1,7 +1,4 @@
-/*
-https://code.google.com/p/gmaps-api-issues/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Type%20Status%20Introduced%20Fixed%20Summary%20Stars%20ApiType%20Internal&groupby=&sort=&id=8581
-http://stackoverflow.com/questions/32462853/google-places-api-popular-times
-*/
+
 "use strict";
 
 const Twitter 	= require('twitter');
@@ -15,6 +12,10 @@ const jsonparsing = require('./jsonparsing');
 const constants = config.constants;
 let twitterIdList = "";
 var tweetString;
+var categorisedtweetstring;
+var fs = require('fs');
+var Q = require('q');
+var abusivelist = [];
 
 const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -31,7 +32,32 @@ const client = new Twitter({
 	access_token_secret: constants.twitter_access_token_secret
 });
 
-connection.query('SELECT twitterid FROM twitterlist WHERE twitterid IS NOT null', function(err, rows, fields) {
+//async.series()
+function readFileFunc(filename)
+{
+	var deferred = Q.defer();
+	
+	fs.readFile(filename,'utf8',function(err,data){
+		if(err)
+		{
+			deferred.reject(new Error(err));	
+		}
+		else{
+			deferred.resolve(data);
+		}
+		
+	});
+
+return deferred.promise;
+	
+}
+
+ 
+readFileFunc('/opt/nodeprojects/GrosvenorLocation/config/abusivewords').then(function(data){
+   abusivelist = data.split('\n');
+	
+	
+	connection.query('SELECT twitterid FROM twitterlist WHERE twitterid IS NOT null', function(err, rows, fields) {
 	if (err){
 		throw err;
 	}
@@ -44,15 +70,25 @@ connection.query('SELECT twitterid FROM twitterlist WHERE twitterid IS NOT null'
 
 function startstreaming(){
 	var payloads;
+	var newpayloads;
 	//Location boundary coordinate for London (-0.5103, 51.2868, 0.3340, 51.6923)
 	client.stream('statuses/filter', {follow: twitterIdList,locations:'-0.5103, 51.2868, 0.3340, 51.6923',track:'Grosvenor,Mayfair,Belgravia'}, function(stream) {
 	//client.stream('statuses/filter', {follow: twitterIdList}, function(stream) {
 		stream.on('data', function(tweet) {
 			if(tweet.text){
-				tweetString = jsonparsing.getParsedString(JSON.stringify(tweet));
+				tweetString = jsonparsing.getParsedString(JSON.stringify(tweet),abusivelist,false);
+				categorisedtweetstring = jsonparsing.getParsedString(JSON.stringify(tweet),abusivelist,true);
 				if(tweetString!=''){
+					//console.log("Inside 1st topic");
 					payloads = [{	 topic: 'grosvenorkafkaflume', messages: tweetString, partition: 0 }];
 					producer.send(payloads, function (err, data) {
+						//console.log('Pushed Successfully');
+					});
+				}
+				if(categorisedtweetstring!==''){
+					newpayloads =  [{	 topic: 'twittercategoryflume', messages: categorisedtweetstring, partition: 0 }];
+						producer.send(newpayloads, function (err, data) {
+						console.log(data);
 						//console.log('Pushed Successfully');
 					});
 				}
@@ -64,15 +100,5 @@ function startstreaming(){
 		});
 	});
 }
-
-/*
-client.stream('statuses/filter', {locations: '18.89,72.77,19.27,72.98'}, function(stream) {
-	stream.on('data', function(tweet) {
-		console.log(tweet);
-	});
-
-	stream.on('error', function(error) {
-		console.log(error);
-	});
 });
-*/
+
