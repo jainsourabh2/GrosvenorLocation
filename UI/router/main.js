@@ -449,7 +449,10 @@ app.get("/api/getdata",function(req,res){
      {
          var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
          var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
-         
+         if(track == undefined)
+	 {
+	   track= "grosvenor,mayfair,belgravia";
+	 }
          var reqobj = {"dataset" : dataset, "startdate" : sdate, "enddate" : edate, "keywords" : track}
          var q = getDrillQuery(reqobj);
          var dataobj = {};
