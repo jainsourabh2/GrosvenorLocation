@@ -26,33 +26,26 @@ var moment = require('moment');
 var fromDate = moment(process.argv[2]).toISOString();
 var toDate = moment(process.argv[2]).add(1,'days').toISOString();
  
- connection.query("SELECT * FROM facebooklist order by name asc",function(ferr,frows,ffields)
+ connection.query("SELECT distinct id FROM facebooklist order by id asc",function(ferr,frows,ffields)
     {
         if(frows.length > 0)
         {
             console.log("Fetching data from mysql");
+	    console.log("Total ids : " + frows.length);
             function getDetails(n)
             {
                 
                 if(n < frows.length)
                 {
-                    var ep = frows[n].epoch;
+		console.log("Procesed : " + n + " request with id " + frows[n].id);
                     var date = new Date().toISOString();
                     var params = "";
                     completedata = "";
                     
-                    if(ep == null)
-                    {
-                     // params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since(01-01-2016){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
-
  params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.until("+ toDate+").since("+ fromDate +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
-                    }
-                    else
-                    {
-                         params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.until("+ toDate+").since("+ fromDate +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
 
     // params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since("+ ep +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
-                    }
+                    
                     
                     graph.setAccessToken(constants.access_token[Math.floor(Math.random()*constants.access_token.length)]);
 
