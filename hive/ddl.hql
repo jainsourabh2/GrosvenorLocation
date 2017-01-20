@@ -1,7 +1,8 @@
-CREATE EXTERNAL TABLE twitterstream
+CREATE EXTERNAL TABLE twittercategorystream
 ( Tweet_Id bigint,
 creeated_at timestamp,
 Tweet varchar(8000),
+Sentiment int,
 Source varchar(8000),
 InReplyToStatusId varchar(100),
 InReplyToUserId varchar(100),
@@ -45,27 +46,21 @@ Place_coordinate3 varchar(100),
 Place_coordinate4 varchar(100),
 Hashtags varchar(1000),
 user_mentions varchar(1000),
-Urls varchar(1000)
+Urls varchar(1000),
+Category int
 )
 PARTITIONED BY (create_date string)
 row format delimited fields terminated by "|"
-LOCATION '/grosvenor/twitter/grosvenorkafkaflume/';
+LOCATION '/grosvenor/twitter/twittercategoryflume/';
 
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-28') location '/grosvenor/twitter/grosvenorkafkaflume/16-11-28';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-29') location '/grosvenor/twitter/grosvenorkafkaflume/16-11-29';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-30') location '/grosvenor/twitter/grosvenorkafkaflume/16-11-30';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-01') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-01';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-02') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-02';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-03') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-03';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-04') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-04';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-05') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-05';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-06') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-06';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-07') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-07';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-08') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-08';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-09') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-09';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-10') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-10';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-11') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-11';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-12') location '/grosvenor/twitter/grosvenorkafkaflume/16-12-12';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-28') location '/grosvenor/twitter/twittercategoryflume/16-11-28';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-29') location '/grosvenor/twitter/twittercategoryflume/16-11-29';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-30') location '/grosvenor/twitter/twittercategoryflume/16-11-30';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-01') location '/grosvenor/twitter/twittercategoryflume/16-12-01';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-02') location '/grosvenor/twitter/twittercategoryflume/16-12-02';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-03') location '/grosvenor/twitter/twittercategoryflume/16-12-03';
+ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-04') location '/grosvenor/twitter/twittercategoryflume/16-12-04';
+
 
 
 
