@@ -563,7 +563,7 @@ function getDrillQuery(robj)
         var enddate = robj.enddate;
         var track = robj.keywords.split(',');
         
-        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_test`.`default`.`twitterstream` where ";
+        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_test`.`default`.`twittercategorystream` where ";
         var query2 = "";
         var query3 = "";
         
