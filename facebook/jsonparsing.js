@@ -8,10 +8,12 @@ const kafka  = require('kafka-node');
 var Producer 		= kafka.Producer;
 var kafkaClient 	= new kafka.Client('localhost:2181');
 var producer 		= new Producer(kafkaClient);
+var abusiveflag = false;
+
 	
 (function(jsonParsing){
 
-  jsonParsing.getParsedString = function(inputString){
+  jsonParsing.getParsedString = function(inputString,abusivelist){
 	
 	var idList = ["id","about","bio","business","category","category_list","cover.cover_id","cover.offset_x","cover.offset_y",
 	"cover.source","description","engagement.count","engagement.social_sentence",
@@ -118,6 +120,15 @@ try{
 				sentimentscore = sentiment(message);
 				message = message.substr(0,7000);
 				sentimentscore = sentimentscore.score;
+
+				 for(var al = 0; al < abusivelist.length ; al++)
+            			{
+            				if(message.split(' ').indexOf(abusivelist[al]) > -1)
+            				{
+            					abusiveflag = true;
+            					break;
+            				}
+            			}
 			}
 			output = output + message + constants.fieldDelimter;
 			output = output + sentimentscore + constants.fieldDelimter;
@@ -210,6 +221,16 @@ try{
 			output = output + day + constants.fieldDelimter;
 			output = output + timeframe + constants.fieldDelimter;
 			
+			if(abusiveflag)
+			{
+				output = output + "1" + constants.fieldDelimter;
+			}
+			else
+			{
+				output = output + "0" + constants.fieldDelimter;
+			}
+			abusiveflag = false;
+
 			output = output.substr(0,output.length-1);
 			//output = output + "\n";
 			
