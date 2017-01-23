@@ -6,7 +6,9 @@ var fs = require('fs');
 var jsonparsing = require('./jsonparsing');
 var completedata = ""; 
 var moment = require('moment'); 
- 
+ var Q = require("q");
+var abusivewordpath = "/opt/nodeprojects/GrosvenorLocation/config/abusivewords"; 
+
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
   port     : constants.mysql_port,
@@ -26,6 +28,28 @@ var moment = require('moment');
 var fromDate = moment(process.argv[2]).toISOString();
 var toDate = moment(process.argv[2]).add(1,'days').toISOString();
  
+function readAbusiveList(filename)
+ {
+     var defered = Q.defer();
+     
+     fs.readFile(filename,'utf-8',function(err,data){
+        if(err)
+        {
+            defered.reject(new Error(err));
+        }
+        else{
+            defered.resolve(data);
+        }
+        
+     });
+     
+    return defered.promise;
+ }
+
+readAbusiveList(abusivewordpath).then(function(data){
+
+ var abusivelist = data.split('\n');
+
  connection.query("SELECT distinct id FROM facebooklist order by id asc",function(ferr,frows,ffields)
     {
         if(frows.length > 0)
@@ -72,7 +96,7 @@ var toDate = moment(process.argv[2]).add(1,'days').toISOString();
                       else
                       {
                           //For Pages which does not have feeds spanned across pages.
-                          jsonparsing.getParsedString(JSON.stringify(completedata));     
+                          jsonparsing.getParsedString(JSON.stringify(completedata),abusivelist);     
  			connection.query('UPDATE facebooklist SET epoch = "'+ new Date().toISOString() +'" WHERE id = "'+ frows[n].id +'";', function(err, rows, fields) {
         			if (err) 
         			 {
@@ -132,7 +156,7 @@ var toDate = moment(process.argv[2]).add(1,'days').toISOString();
               }
               else
               {
-    			   jsonparsing.getParsedString(JSON.stringify(completedata));
+    			   jsonparsing.getParsedString(JSON.stringify(completedata),abusivelist);
     			      
     			
                   //Update sql table : epoch field with todays date time.
@@ -154,6 +178,6 @@ var toDate = moment(process.argv[2]).add(1,'days').toISOString();
   
         }
     });
-                      
+});                      
         
     
