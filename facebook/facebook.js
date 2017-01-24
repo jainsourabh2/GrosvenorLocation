@@ -1,7 +1,7 @@
 "use strict";
 
 const FB = require('fb');
-const config = require('./newconfig');
+const config = require('../config/config');
 const mysql      = require('mysql');
 const fs = require('fs');
 const parse = require('csv-parse');
@@ -66,7 +66,7 @@ function processComplete(){
 function facebook(searchQuery,location){
     let place = location;
     let deferred = Promise.defer();
-    FB.setAccessToken(constants.facebook_access[Math.floor(Math.random()*constants.facebook_access.length)]);
+    FB.setAccessToken(constants.access_token[Math.floor(Math.random()*constants.access_token.length)]);
     FB.api(searchQuery,
         function (response) {
           if (response && !response.error) {
