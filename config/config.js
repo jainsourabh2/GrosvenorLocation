@@ -11,18 +11,22 @@ module.exports.members=[
 
 module.exports.constants = {
 	mysql_username	: 'root',
-	mysql_password	: 'root',
+	mysql_password	: '',
 	mysql_database	: 'grosvenor',
 	mysql_host		: 'localhost',
-	twitter_consumer_key	: 'pKLFp7AepxzrYIwU6FC1Z6XvX',
-	twitter_consumer_secret	: 'Ae17UScu4e16pS7YKdfiIhMP3uOkFxHeV89an2eOXmPOigsLcQ',
-	twitter_access_token_key		: '2757166214-l3NzUoYCZeBvlRmspKzoWEcsWVqprS3V5FmkZRD',
-	twitter_access_token_secret		: 'r3GlgvVcXuOlAsyiuJxEXCAkM9lINzw9Plf73H5rvqgOs',
+	twitter_consumer_key	: '',
+	twitter_consumer_secret	: '',
+	twitter_access_token_key		: '',
+	twitter_access_token_secret		: '',
 	twitter_maxMembersFetchCount	: 1500,
 	facebook_access	: '',
 	facebook_api_version : 'v2.8',
-	google_search_key : 'AIzaSyAC-4pIQKEU8J53QmgH1NkPdUhaILJvSEs',
-	google_search_cx : '006310580493223584436:cr6c5x7pfks'
+        facebook_app_id :   "",
+	facebook_app_secret:  "",
+	google_search_key : '',
+	google_search_cx : '',
+	access_token: []
+
 };
 
 module.exports.middlewareconstants = {
