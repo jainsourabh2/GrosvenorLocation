@@ -1,5 +1,5 @@
 var graph = require('fbgraph');
-const config = require('./config');
+const config = require('../config/config');
 const constants = config.constants;
 const mysql      = require('mysql');
 var fs = require('fs');
