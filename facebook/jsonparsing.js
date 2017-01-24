@@ -1,6 +1,6 @@
 const sanitizeHtml = require('sanitize-html');
 var sentiment = require('sentiment');
-const config = require('./config');
+const config = require('../config/config');
 const constants = config.middlewareconstants;
 const jsonParsing = {};
 var fs = require('fs');
