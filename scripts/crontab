@@ -1,6 +1,6 @@
 */2 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/checkRestartTwitterStream.sh >> /var/log/GrosvenorLocation/shellRestartTwitterStream.log     
 */1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFiles.sh >>  /var/log/GrosvenorLocation/shellmoveFiles.log                               
 30 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/Hive_Partition.sh >> /var/log/GrosvenorLocation/shellhivepartition.log                       
-*/12 * * * * /opt/nodeprojects/GrosvenorLocation/facebooksearch/shellscript/mergecmd.sh >> /var/log/GrosvenorLocation/fbmergefiles.log               
-0 */4 * * * /opt/nodeprojects/GrosvenorLocation/facebooksearch/shellscript/daily_fbingest.sh >> /var/log/GrosvenorLocation/fbingestion/fbingestion_`d
+*/12 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/mergecmd.sh >> /var/log/GrosvenorLocation/fbmergefiles.log               
+0 */4 * * * /opt/nodeprojects/GrosvenorLocation/scripts/daily_fbingest.sh >> /var/log/GrosvenorLocation/fbingestion/fbingestion_`d
 ate +20\%y\%m\%d`.log
