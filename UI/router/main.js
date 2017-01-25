@@ -286,7 +286,7 @@ app.get('/getPosition',function(req,res){
     	
        function queryBuilder(querystr,fromdate,todate,weekday,timeframe)
        {
-           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_social_media`.`default`.`facebookdata` WHERE name IN (" + querystr + ") and categorize = 0 or categorize is null";
+           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_social_media`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
            
            console.log("Timeframe: " + timeframe);
            
@@ -555,7 +555,7 @@ function getDrillQuery(robj)
         
         //Logic to build drill query here
         querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_social_media`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
-                        startdate + "' and '" + enddate + "' and categorize = 0 or categorize is null group by name,locationlatt,locationlong";
+                        startdate + "' and '" + enddate + "'  group by name,locationlatt,locationlong";
         
     }
     else if(robj.dataset == "twitter")
