@@ -121,9 +121,11 @@ action                  string,
 messagetag              string,
 publishedtime           string,
 createdtime             string,
+createddate             string,
 hours                   int   ,
 weekday                 string,
-timeframe               string
+timeframe               string,
+categorize              int
 )
 PARTITIONED BY (fb_date string)
 ROW FORMAT DELIMITED
