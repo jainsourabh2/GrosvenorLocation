@@ -286,7 +286,7 @@ app.get('/getPosition',function(req,res){
     	
        function queryBuilder(querystr,fromdate,todate,weekday,timeframe)
        {
-           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_test`.`default`.`facebookdata` WHERE name IN (" + querystr + ")";
+           var query = "SELECT count(1) as TotalCount, name as RestaurantName,locationlatt as Latitude,locationlong as Longitude,hours as Hours FROM `hive_social_media`.`default`.`facebookdata` WHERE name IN (" + querystr + ") and categorize = 0 or categorize is null";
            
            console.log("Timeframe: " + timeframe);
            
@@ -449,10 +449,11 @@ app.get("/api/getdata",function(req,res){
      {
          var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
          var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
-         if(track == undefined)
-	 {
-	   track= "grosvenor,mayfair,belgravia";
-	 }
+         
+	if(track == undefined)
+	{
+	  track = "grosvenor,mayfair,belgravia";
+	}
          var reqobj = {"dataset" : dataset, "startdate" : sdate, "enddate" : edate, "keywords" : track}
          var q = getDrillQuery(reqobj);
          var dataobj = {};
@@ -553,8 +554,8 @@ function getDrillQuery(robj)
         reststring = reststring.substr(0, reststring.length - 1);
         
         //Logic to build drill query here
-        querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_test`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
-                        startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
+        querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_social_media`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
+                        startdate + "' and '" + enddate + "' and categorize = 0 or categorize is null group by name,locationlatt,locationlong";
         
     }
     else if(robj.dataset == "twitter")
@@ -563,10 +564,10 @@ function getDrillQuery(robj)
         var enddate = robj.enddate;
         var track = robj.keywords.split(',');
         
-        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_test`.`default`.`twittercategorystream` where ";
+        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_social_media`.`default`.`twittercategorystream` where ";
         var query2 = "";
         var query3 = "";
-        
+        var query4 = "";
         for(var t = 0; t < track.length ; t++)
         {
            query2 += "STRPOS(LOWER(tweet),'" + track[t] + "') +" ;
@@ -577,15 +578,16 @@ function getDrillQuery(robj)
         // query2 = "STRPOS(LOWER(tweet),'grosvenor')"; //dynamic
         if(startdate != undefined && enddate != undefined)
         {
-            query3 = " > 0 and create_date between '" + startdate + "' and '"+ enddate + "' order  by creeated_at desc limit 10"; //based on single date or range
+            query3 = " > 0 and create_date between '" + startdate + "' and '"+ enddate + "' "; //based on single date or range
         }
         else
         {
-            query3 = " > 0 and create_date = '" + startdate + "' order  by creeated_at desc limit 10"; //based on single date or range
+            query3 = " > 0 and create_date = '" + startdate + "' "; //based on single date or range
         }
          
-        
-         querystring = query1 + query2 + query3;
+        query4 = " and category = 0 order  by creeated_at desc limit 10";
+
+         querystring = query1 + query2 + query3 + query4;
     }
        
         
