@@ -11,7 +11,7 @@ do
         transferPath=$basePath$transferFolder;
         hdfsFilePath=$transferPath"/"$fileName;
         localBasePath="/opt/nodeprojects/GrosvenorLocation/scripts/moving/"
-        localBasePathTxt=localBasePath"*.txt"
+        localBasePathTxt=$localBasePath"*.txt"
         localFilePath=$localBasePath$fileName
         HDFS_COPY_HDFS_LOCAL="hdfs dfs -copyToLocal $filePath $localBasePath;"
         eval $HDFS_COPY_HDFS_LOCAL
