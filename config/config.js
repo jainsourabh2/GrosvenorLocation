@@ -10,10 +10,10 @@ module.exports.members=[
 ];
 
 module.exports.constants = {
-	mysql_username	: 'root',
+	mysql_username	: '',
 	mysql_password	: '',
-	mysql_database	: 'grosvenor',
-	mysql_host		: 'localhost',
+	mysql_database	: '',
+	mysql_host		: '',
 	twitter_consumer_key	: '',
 	twitter_consumer_secret	: '',
 	twitter_access_token_key		: '',
@@ -21,12 +21,13 @@ module.exports.constants = {
 	twitter_maxMembersFetchCount	: 1500,
 	facebook_access	: '',
 	facebook_api_version : 'v2.8',
-        facebook_app_id :   "",
-	facebook_app_secret:  "",
 	google_search_key : '',
 	google_search_cx : '',
-	access_token: []
-
+	access_token: [],
+	logDir	: '/var/log/grosvenor/',
+	environment : 'development',
+	null : null,
+	undefined : undefined
 };
 
 module.exports.middlewareconstants = {
@@ -34,3 +35,71 @@ module.exports.middlewareconstants = {
 	facebooklocations : 'locations.csv',
 	facebooksearchtype	: 'Restaurant'
 };
+
+module.exports.postcodes=[
+'W1G'
+];
+
+/*
+module.exports.postcodes=[
+'W1G',
+'W1X',
+'W1E',
+'W1B',
+'W1U',
+'W1S',
+'W1M',
+'W1D',
+'W1K',
+'W1A',
+'W1C',
+'W1H',
+'W1P',
+'W1N',
+'W1R',
+'W1V',
+'W1F',
+'W1T',
+'W1J',
+'W1Y',
+'W1W',
+'SW1E',
+'SW1X',
+'SW1H',
+'SW1Y',
+'SW1A',
+'SW1V',
+'SW1P',
+'SW1W'
+];
+*/
+
+module.exports.localbusiness=[
+'RETAIL'
+];
+
+/*
+module.exports.localbusiness=[
+'RETAIL',
+'SHOP',
+'FASHION',
+'FOOD',
+'BAR',
+'CAFÉ',
+'PUB',
+'RESTAURANT',
+'BEAUTY',
+'HAIR',
+'ART',
+'GALLERY',
+'FLORIST',
+'BOUTIQUE',
+'DESIGNER',
+'ANTIQUE',
+'CAR',
+'MOTOR',
+'HEALTH',
+'SPORT',
+'YACHT'
+];
+*/

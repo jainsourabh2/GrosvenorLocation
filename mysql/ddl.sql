@@ -8,7 +8,11 @@ create table facebooklist
   latitude float,
   longitude float,
   url varchar(200),
-  epoch bigint
+  epoch bigint,
+  twitterhandle varchar(100),
+  fblatitude double,
+  fblongitude double,
+  fbpostcode varchar(20)
 );
 
 create table twitterlist
