@@ -555,7 +555,7 @@ function getDrillQuery(robj)
         
         //Logic to build drill query here
         querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_social_media`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
-                        startdate + "' and '" + enddate + "'  group by name,locationlatt,locationlong";
+                        startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
         
     }
     else if(robj.dataset == "twitter")
