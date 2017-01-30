@@ -7,6 +7,7 @@ var fs = require("fs");
 const mysql = require('mysql');
 var request = require("request");
 var url = "http://10.80.2.4:8047/query.json";
+var moment = require('moment');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -325,62 +326,36 @@ app.get("/api/getdata",function(req,res){
     var dataset = req.query.dataset;
     var startdate = req.query.startdate;
     var enddate = req.query.enddate;
-    var type= req.query.type;
-    var station = req.query.station;
+    var areatype= req.query.areatype;
+    //var station = req.query.station;
      var track = req.query.track;
+     var boundingarea = req.query.boundingarea;
      var restaurantlist = [];
     
      
      if(dataset == "facebook")
      {
-         var reqobj = {"dataset" : dataset, "startdate" : startdate, "enddate" : enddate, "restaurantlist" : restaurantlist}
+         var todaydate = new Date().toLocaleDateString();
+        // todaydate = moment(todaydate,"yyyy-mm-dd");
+         //var tomorowdate = todaydate.subtract(1,'days');
+
          
-          var q = "SELECT  * FROM facebooklist WHERE location = '" + station + "' and type= '" + type + "'";
-          
-           connection.query(q,function(ferr,frows,ffields)
-           {
-            if(ferr)
-            {
-                console.log(ferr);
-            }
-            else
-            {
-                if(frows.length > 0)
-                {
-                    function getNearRest(n)
-                    {
-                       if(n < frows.length)
-                       {
-                           var resname = frows[n].name;
-                           restaurantlist.push(resname);
-                          // dataarray.push({"restname" : resname, "restlat" : restlat, "restlong" : restlong});
-                           getNearRest(n + 1);
-                       }
-                       else
-                       {
-                        //   getStationDetail(restaurantlist,stnlat,stnlong,station,fromdate,todate,weekday,timeframe);
-                          getAPIJSON(reqobj);
-                       }
-                    }
-                    getNearRest(0);
-                }
-            }
-           });
-            
-         function getAPIJSON(robj)
-         {
-             console.log("Obj : " + robj);
-             var dataobj = {};
-             var dataarray = [];
-             
-               var drillq = getDrillQuery(robj);
-               
-               console.log("Drill Q : " + drillq);
-            	var reqoptions = {
+         var sdate = (startdate != undefined) ? startdate : moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0];  //Format in yyyy-mm-dd Current date
+         var edate = (enddate != undefined) ? enddate :  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0]; //Format in yyyy-mm-dd Tomorows date 
+          console.log("Start date " + sdate);
+console.log("End Date " + edate);
+         var reqobj = {"dataset" : dataset, "startdate" : sdate , "enddate" : edate, "areatype" : areatype, "boundingarea" : boundingarea};
+         var query = getDrillQuery(reqobj);
+
+	console.log(query);
+          var dataobj = {};
+         var dataarray = [];
+        
+         	var reqoptions = {
             	uri :url,
             	headers:{'Content-Type':'application/json'},
             	method : "POST",
-            	body: JSON.stringify({queryType : 'SQL', query : drillq})
+            	body: JSON.stringify({queryType : 'SQL', query : query})
         	    
         	};
         	
@@ -391,34 +366,49 @@ app.get("/api/getdata",function(req,res){
             	    console.log("Err: " + err);
             	}
             	if (!err && response.statusCode ==200){
-            		console.log("Reached within query");
-            	 	console.log(data);
+            	//	console.log("Reached within query");
+            	//	console.log(data);
     			//console.log(data.length);
     			var obj = JSON.parse(data);
-    			var jsonresp = {};
+    			//console.log(JSON.stringify(obj));
+
     			if(obj.rows.length > 0)
     			{
-            		  function buildJSONObj(p)
+    			    function buildJSONObj(p)
             		    {
             		        if(p < obj.rows.length)
             		        {
             				try
                 			   {
                         		        
-                    		        var totalcount = obj.rows[p].TotalCount;
-                    		        var businessname = obj.rows[p].BusinessName;
-                    		        var businesslong = obj.rows[p].Longitude;
-                    		        var businesslat = obj.rows[p].Latitude;
+                    		        var areaname = obj.rows[p].name;
+                    		        var arealatitude = obj.rows[p].latitude;
+                    		        var arealongitude = obj.rows[p].longitude;
+                    		        var pcforBar = obj.rows[p].p2;
+                    		        var pcforCinemas = obj.rows[p].p3;
+                    		        var pcforRestaurant = obj.rows[p].p4;
                     		        
-                    		      //  console.log(restname,restlat,restlong,postcount);
-                    		       var cordinatearray = [];
-                    		       cordinatearray.push(businesslat);
-                    		       cordinatearray.push(businesslong);
-                    		       
-                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
-                			   
+
+
+
+
+                    		        
+
+                    		        var cordinatearray = [];
+                    		        cordinatearray.push(arealatitude);
+                			        cordinatearray.push(arealongitude);
+                			        
+
+
+
                 			       dataarray.push({"type" : "Feature",
-                			       "properties" : { "name" : businessname , "postcount" : totalcount} , 
+                			       "properties" : { "p1" : areaname , 
+                			                        "p2" : pcforBar , //Bar aggregate 
+                			                        "p3" : pcforCinemas,  //Cinema Agregare
+                			                        "p4" : pcforRestaurant  //Rest Aggregate
+                			           
+                			       } , 
+
                 			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
                 			       
                 			   }
@@ -432,17 +422,22 @@ app.get("/api/getdata",function(req,res){
                                // console.log(station,stnlat,stnlong);
                                 dataobj.type = "FeatureCollection";
                                 dataobj.features = dataarray;
+          
                                 console.log(JSON.stringify(dataobj));
                                 res.send(dataobj);        		            
             		        }
             		    }
             		    
             		    buildJSONObj(0);
-            		}
+    			    
+    			}
+
     			
             	}
-        	 }); 
-        }
+        	 });
+        
+
+
         
      }
      else if(dataset == "twitter")
@@ -535,39 +530,78 @@ app.get("/api/getdata",function(req,res){
 function getDrillQuery(robj)
 {
     var querystring = "";
-    
+     var startdate = robj.startdate;
+     var enddate = robj.enddate;
+
+
     if(robj.dataset == "facebook")
     {
-         var Qobj = robj;
-        var dataset = Qobj.dataset;
-        var startdate = Qobj.startdate;
-        var enddate = Qobj.enddate;
-        var restaurantlist = Qobj.restaurantlist;
-        
-        var reststring = "";
-        
-         for(var i = 0; i < restaurantlist.length; i++)
-        {
-	    var resname = restaurantlist[i].replace(/'/g,"''");
-            reststring += "'" + resname + "',";
-        }
-        reststring = reststring.substr(0, reststring.length - 1);
-        
-        //Logic to build drill query here
-        querystring = "SELECT COUNT(1) as TotalCount,name as BusinessName ,locationlatt as Latitude,locationlong as Longitude FROM `hive_social_media`.`default`.`facebookdata` where name IN(" + reststring + ") and fb_date  BETWEEN '" + 
-                        startdate + "' and '" + enddate + "' group by name,locationlatt,locationlong";
-        
+        var areatype = robj.areatype;
+      var boundingbox = robj.boundingarea;
+      
+             if(areatype.toLowerCase() == "borough")
+             {
+                 querystring =  " Select name,latitude,longitude, " +
+                                " sum(case when category = 'Restaurant' then postcount else 0 end) as p4, " +
+                                " sum(case when category = 'Bar' then postcount else 0 end) as p2," +
+                                " sum(case when category = 'Movie Theater' then postcount else 0 end) as p3" +
+                                " From " +
+                                " ( " +
+                                " select count(1) as postcount,B.ladname as name,B.ladlatitude as latitude ,B.ladlongitude as longitude,A.category as category" +
+                                " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`DimPostCode` B" + 
+                                " on A.locationzip = B.postcode" + 
+                                " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
+                                " AND a.category IN ('Movie Theater','Bar','Restaurant')" + 
+                                " group by B.ladname,B.ladlatitude,B.ladlongitude,A.category" +
+                                " ) as G Group by G.name,G.latitude,G.longitude" ;
+             }
+             else if(areatype.toLowerCase() == "msoa" )
+             {
+                  querystring =  " Select name,latitude,longitude, " +
+                                " sum(case when category = 'Restaurant' then postcount else 0 end) as p4, " +
+                                " sum(case when category = 'Bar' then postcount else 0 end) as p2," +
+                                " sum(case when category = 'Movie Theater' then postcount else 0 end) as p3" +
+                                " From " +
+                                " ( " +
+                                " select count(1) as postcount,B.msoaname as name,B.msoalatitude as latitude ,B.msoalongitude as longitude,A.category as category" +
+                                " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`DimPostCode` B" + 
+                                " on A.locationzip = B.postcode" + 
+                                " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
+                                " AND A.category IN ('Movie Theater','Bar','Restaurant')" + 
+                                " group by B.msoaname,B.msoalatitude,B.msoalongitude,A.category" +
+                                " ) as G Group by G.name,G.latitude,G.longitude" ;
+             }
+             else if(areatype.toLowerCase() == "lsoa")
+            {
+                 querystring =  " Select name,latitude,longitude, " +
+                                " sum(case when category = 'Restaurant' then postcount else 0 end) as p4, " +
+                                " sum(case when category = 'Bar' then postcount else 0 end) as p2," +
+                                " sum(case when category = 'Movie Theater' then postcount else 0 end) as p3" +
+                                " From " +
+                                " ( " +
+                                " select count(1) as postcount,B.lsoaname as name,B.lsoalatitude as latitude ,B.lsoalongitude as longitude,A.category as category" +
+                                " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`DimPostCode` B" + 
+                                " on A.locationzip = B.postcode" + 
+                                " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
+                                " AND A.category IN ('Movie Theater','Bar','Restaurant')" + 
+                                " group by B.lsoaname,B.lsoalatitude,B.lsoalongitude,A.category" +
+                                " ) as G Group by G.name,G.latitude,G.longitude" ;
+								
+            }
+
     }
     else if(robj.dataset == "twitter")
     {
-        var startdate = robj.startdate;
-        var enddate = robj.enddate;
+       
+
+
         var track = robj.keywords.split(',');
         
         var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_social_media`.`default`.`twittercategorystream` where ";
         var query2 = "";
         var query3 = "";
         var query4 = "";
+
         for(var t = 0; t < track.length ; t++)
         {
            query2 += "STRPOS(LOWER(tweet),'" + track[t] + "') +" ;
@@ -586,6 +620,7 @@ function getDrillQuery(robj)
         }
          
         query4 = " and category = 0 order  by creeated_at desc limit 10";
+
 
          querystring = query1 + query2 + query3 + query4;
     }
