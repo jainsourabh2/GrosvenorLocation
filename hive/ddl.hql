@@ -131,3 +131,33 @@ PARTITIONED BY (fb_date string)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 LOCATION '/grosvenor/facebook/facebooktopic/';
+
+
+
+create external table DimPostCode (
+	DWPostCodeAreaId int ,
+	PostCode string,
+	PostCodeAlt string,
+	PostCodeLatitude double,
+	PostCodeLongitude double,
+	OACode string,
+	LSOACode string,
+	LSOAName string,
+	MSOACode string,
+	MSOAName string,
+	LADCode string,
+	LADName string,
+	LADWName string,
+	OALatitude double,
+	OALongitude double,
+	LSOALatitude double,
+	LSOALongitude double,
+	MSOALatitude double,
+	MSOALongitude double,
+	LADLatitude double,
+	LADLongitude double
+)
+row format delimited 
+fields terminated by ',' 
+lines terminated by '\n' 
+location '/grosvenor/facebook/DimPostCode';
