@@ -22,13 +22,30 @@ const logger = new (winston.Logger)({
       level: env === 'development' ? 'verbose' : 'info'
     }),
     new (require('winston-daily-rotate-file'))({
-      filename: `${logDir}/-grosvenor.log`,
+      filename: `${logDir}/-debug.log`,
       timestamp: tsFormat,
       datePattern: 'yyyy-MM-dd',
       prepend: true,
+      json: false,
       level: env === 'development' ? 'verbose' : 'info'
     })
-  ]
+  ],
+  exceptionHandlers: [
+    new (winston.transports.Console)({
+      timestamp: tsFormat,
+      colorize: true,
+      level: env === 'development' ? 'verbose' : 'info'
+    }),
+    new (require('winston-daily-rotate-file'))({
+      filename: `${logDir}/-exceptions.log`,
+      timestamp: tsFormat,
+      datePattern: 'yyyy-MM-dd',
+      prepend: true,
+      json: false,
+      level: env === 'development' ? 'verbose' : 'info'
+    })
+  ],
+  exitOnError: false
 });
 
 module.exports = logger;

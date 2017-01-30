@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jainsourabh2/twitterkafkapoc.git"
+    "url": "https://github.com/jainsourabh2/GrosvenorLocation.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jainsourabh2/twitterkafkapoc/issues"
+    "url": "https://github.com/jainsourabh2/GrosvenorLocation/issues"
   },
-  "homepage": "https://github.com/jainsourabh2/twitterkafkapoc#readme",
+  "homepage": "https://github.com/jainsourabh2/GrosvenorLocation#readme",
   "dependencies": {
     "cheerio": "^0.22.0",
     "csv-parse": "^1.1.7",

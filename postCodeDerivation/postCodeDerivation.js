@@ -1,3 +1,4 @@
+//node --trace-sync-io postCodeDerivation.js
 "use strict";
 
 const request = require('request');
@@ -9,7 +10,8 @@ const options = {
   headers: {'user-agent': 'chrome'}
 };
 
-var arrayLatLong = [[],[]];
+let arrayLatLong = [[],[]];
+let notFound=0;
 
 const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -20,6 +22,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 function processComplete(){
+  logger.info(notFound);
   connection.end();
   process.exit();
 }
@@ -51,7 +54,7 @@ function IterateOver(list, iterator, callback) {
     }
 }
 
-connection.query('SELECT distinct fblatitude,fblongitude FROM facebooklist WHERE  fblatitude IS NOT NULL AND fblongitude IS NOT NULL AND fbpostcode IS NULL LIMIT 30', function(err, rows, fields) {
+connection.query('SELECT distinct fblatitude,fblongitude FROM facebooklist WHERE  fblatitude IS NOT NULL AND fblongitude IS NOT NULL AND fbpostcode IS NULL LIMIT 500', function(err, rows, fields) {
   if(err){
     logger.error(err);
   }else{
@@ -73,6 +76,8 @@ connection.query('SELECT distinct fblatitude,fblongitude FROM facebooklist WHERE
                 report();
               });
             } else {
+              notFound++;
+              logger.info('No Post Code derived for latitude : ' + latitude + ' and longitude : ' + longitude + ' .');
               report();
             }
           } else {
