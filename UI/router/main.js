@@ -1,7 +1,7 @@
 module.exports = function(app){
 
 // *********** Routing Logic Here ************** //
-const config = require('./config');
+const config = require('../config/config.js');
 const constants = config.constants;
 var fs = require("fs");
 const mysql = require('mysql');
@@ -10,6 +10,7 @@ var url = "http://10.80.2.4:8047/query.json";
 var moment = require('moment');
 var q = require('q');
 var sql = require('mssql');
+const logger = require('../config/log.js');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -19,7 +20,7 @@ var sql = require('mssql');
   database : constants.mysql_database
 });
  
- connection.connect();
+// connection.connect();
  
 var mssqlconnection = {
     user: constants.mssql_username,
@@ -349,6 +350,7 @@ app.get("/api/getdata",function(req,res){
      
      if(dataset == "facebook")
      {
+        logger.info("Facebook query started");
          var todaydate = new Date().toLocaleDateString();
         // todaydate = moment(todaydate,"yyyy-mm-dd");
          //var tomorowdate = todaydate.subtract(1,'days');
@@ -386,7 +388,8 @@ app.get("/api/getdata",function(req,res){
                 //console.log(response + " " + err + " " + data);
                 if(err)
                 {
-                    console.log("Err: " + err);
+                   // console.log("Err: " + err);
+                   logger.error("Error in request : " + err);
                 }
                 if (!err && response.statusCode ==200){
                 //  console.log("Reached within query");
@@ -451,8 +454,11 @@ app.get("/api/getdata",function(req,res){
                                    
                                }
                         catch(ex)
-                            { console.log("Error while parsiing :" + ex);}
-    
+                            { 
+                                //console.log("Error while parsiing :" + ex);
+                                logger.error("Error while parsiing :" + ex);
+                            }
+                                
                                     buildJSONObj(p + 1);
                             }
                             else
@@ -461,8 +467,9 @@ app.get("/api/getdata",function(req,res){
                                 dataobj.type = "FeatureCollection";
                                 dataobj.features = dataarray;
                                 
-                                console.log(JSON.stringify(dataobj));
-                                res.send(dataobj);                          
+                                //console.log(JSON.stringify(dataobj));
+                                res.send(dataobj); 
+                                logger.info("Facebook query end");                         
                             }
                         }
                         
@@ -477,11 +484,10 @@ app.get("/api/getdata",function(req,res){
 
 	   //  console.log("Query " + query);
         
-
-        
      }
      else if(dataset == "twitter")
      {
+        logger.info("Twitter query started");
          var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
          var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
          
@@ -506,7 +512,8 @@ app.get("/api/getdata",function(req,res){
             	//console.log(response + " " + err + " " + data);
             	if(err)
             	{
-            	    console.log("Err: " + err);
+            	    //console.log("Err: " + err);
+                    logger.error("Error: " + err);
             	}
             	if (!err && response.statusCode ==200){
             	//	console.log("Reached within query");
@@ -525,12 +532,13 @@ app.get("/api/getdata",function(req,res){
                         		        
                     		        var tweet = obj.rows[p].tweet;
                     		        var created_at = new Date(obj.rows[p].creeated_at);
-					var created_at_string = created_at.toLocaleString().replace(',', '');
+					                var created_at_string = created_at.toLocaleString().replace(',', '');
                     		        var imageurl = obj.rows[p].userprofileimageurl;
                     		        var username = obj.rows[p].userscreenname;
                     		        var follcount = obj.rows[p].userfollowercount;
-					var tweetid = obj.rows[p].tweet_id;
+					               var tweetid = obj.rows[p].tweet_id;
                     		        console.log("Tweet at : " + created_at);
+
                     		      //  console.log(restname,restlat,restlong,postcount);
                     		       var cordinatearray = [];
                     		       cordinatearray.push(0.0);
@@ -544,7 +552,10 @@ app.get("/api/getdata",function(req,res){
                 			       
                 			   }
             			catch(ex)
-            				{ console.log("Error while parsiing :" + ex);}
+            				{ 
+                               // console.log("Error while parsiing :" + ex);
+                               logger.error("Error while parsiing :" + ex);
+                            }
     
                                     buildJSONObj(p + 1);
             		        }
@@ -553,8 +564,9 @@ app.get("/api/getdata",function(req,res){
                                // console.log(station,stnlat,stnlong);
                                 dataobj.type = "FeatureCollection";
                                 dataobj.features = dataarray;
-                                console.log(JSON.stringify(dataobj));
-                                res.send(dataobj);        		            
+                                //console.log(JSON.stringify(dataobj));
+                                res.send(dataobj); 
+                                logger.info("Twitter query end");       		            
             		        }
             		    }
             		    
@@ -571,32 +583,32 @@ function getPostCodeQuery(robj)
 {
     var postcodestring = "";
     var defered = q.defer();
-    console.log("Inside PostCodeQuery");
+    //console.log("Inside PostCodeQuery");
+   // logger.info("Inside PostCodequery");
     var connection2 = new sql.Connection(mssqlconnection, function(err) {
-    
+    logger.info("Querying MSSQL started");
     var request = new sql.Request(connection2);
     request.input('startlat', sql.VarChar(50), robj.boundstartlat);
     request.input('startlon', sql.VarChar(50), robj.boundstartlong);
     request.input('endlat', sql.VarChar(50), robj.boundendlat);
     request.input('endlon', sql.VarChar(50), robj.boundendlong);
     //request.output('out', sql.Int);
-    console.log(robj.boundstartlat + "," + robj.boundstartlong + "," + robj.boundendlat + "," + robj.boundendlong);
+    //console.log(robj.boundstartlat + "," + robj.boundstartlong + "," + robj.boundendlat + "," + robj.boundendlong);
+    logger.debug(robj.boundstartlat + "," + robj.boundstartlong + "," + robj.boundendlat + "," + robj.boundendlong);
     request.execute('dbo.uspSelPostCodeByBoundary', function(err, recordsets, returnValue) {
-        // ... error checks
-        //
-          /*      console.log(recordsets[0][0].PostCodes);
-                console.log(err);
-                connection2.close(); */
 
-                if(err)
-                {
-                    defered.reject(new Error(err));
-                }
-                else{
-                    console.log(recordsets[0][0].PostCodes);
-                    defered.resolve(recordsets[0][0].PostCodes);
-                    // connection2.close();
-                }
+        if(err)
+        {
+            logger.error("Error querying stored procedure : " + err);
+            defered.reject(new Error(err));
+        }
+        else{
+           // console.log(recordsets[0][0].PostCodes);
+           logger.debug(recordsets[0][0].PostCodes);
+            defered.resolve(recordsets[0][0].PostCodes);
+            connection2.close();
+            logger.info("Querying MSSQL stopped");
+        }
     });
 
 });
@@ -616,10 +628,11 @@ function getDrillQuery(robj)
     {
       var areatype = robj.areatype;
       var boundingbox = robj.boundingarea;
-      console.log("Inside Drill Q");
+     // console.log("Inside Drill Q");
 
        if(areatype.toLowerCase() == "borough")
          {
+            logger.info("Querying BOROUGH with parameter : startdate : " + startdate + " and enddate : " + enddate );
              querystring =  " Select name,latitude,longitude, " +
                             " sum(case when category = 'Bar' then postcount else 0 end) as p2," +
                             " sum(case when category = 'Casino & Gaming' then postcount else 0 end) as p3," +
@@ -644,6 +657,7 @@ function getDrillQuery(robj)
         
                 if(areatype.toLowerCase() == "msoa" )
                      {
+                        logger.info("Querying MSOA for parameter boundstartlat : " + robj.boundstartlat + ", boundstartlong : " + robj.boundstartlong + ", boundendlat : " + robj.boundendlat + ", boundendlong : " + robj.boundendlong + ", startdate : " + startdate + ", enddate : " + enddate);
                           querystring =  " Select name,latitude,longitude, " +
                                         " sum(case when category = 'Bar' then postcount else 0 end) as p2," +
                                         " sum(case when category = 'Casino & Gaming' then postcount else 0 end) as p3," +
@@ -661,6 +675,7 @@ function getDrillQuery(robj)
                      }
                      else if(areatype.toLowerCase() == "lsoa")
                     {
+                        logger.info("Querying LSOA for parameter boundstartlat : " + robj.boundstartlat + ", boundstartlong : " + robj.boundstartlong + ", boundendlat : " + robj.boundendlat + ", boundendlong : " + robj.boundendlong + ", startdate : " + startdate + ", enddate : " + enddate);
                          querystring =  " Select name,latitude,longitude, " +
                                         " sum(case when category = 'Bar' then postcount else 0 end) as p2," +
                                         " sum(case when category = 'Casino & Gaming' then postcount else 0 end) as p3," +
@@ -679,13 +694,15 @@ function getDrillQuery(robj)
                     }
                     else if(areatype.toLowerCase() == "entity")
                     {
+                        logger.info("Querying ENTITY for parameter boundstartlat : " + robj.boundstartlat + ", boundstartlong : " + robj.boundstartlong + ", boundendlat : " + robj.boundendlat + ", boundendlong : " + robj.boundendlong + ", startdate : " + startdate + ", enddate : " + enddate);
                         querystring = " select count(1) as postcount,name,locationlatt as latitude,locationlong as longitude,category" + 
                                         " from `hive_social_media`.`default`.`facebookdata` " +
                                         " where fb_date between '" + startdate + "' and '" + enddate + "' " +
                                         " AND category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') " + 
                                         " and locationzip IN( " +  postcode + " ) group by name,locationlatt,locationlong,category";
                     }
-                console.log("Query within code : " + querystring);
+               // console.log("Query within code : " + querystring);
+                logger.debug("Query within code : " + querystring);
                  deferred.resolve(querystring);
             
             });
