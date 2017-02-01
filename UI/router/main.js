@@ -348,8 +348,28 @@ app.get("/api/getdata",function(req,res){
      var boundendlat = "";
      var boundendlong = "";
      
+      if(dataset == undefined)
+        {
+            var errorobj = {"error" : "Not enough parameters. Parameters dataset is mandatory"};
+            res.send(errorobj);
+            
+        }
+
      if(dataset == "facebook")
      {
+        if(areatype == undefined)
+        {
+            var errorobj = {"error" : "Not enough parameters. Parameters areatype is mandatory for dataset facebook"};
+            res.send(errorobj);
+        }
+            
+        if((areatype.toLowerCase() == "lsoa" || areatype.toLowerCase() == "msoa" || areatype.toLowerCase() == "entity") && 
+            (boundstart == undefined || boundend == undefined))
+            {
+                var errorobj = {"error" : "Not enough parameters. Parameters boundstart and boundend is mandatory for dataset facebook and areatype lsoa/msoa/entity"};
+                res.send(errorobj);
+            } 
+
         logger.info("Facebook query started");
          var todaydate = new Date().toLocaleDateString();
         // todaydate = moment(todaydate,"yyyy-mm-dd");
@@ -487,6 +507,12 @@ app.get("/api/getdata",function(req,res){
      }
      else if(dataset == "twitter")
      {
+        if(startdate == undefined)
+        {
+            var errorobj = {"error" : "Not enough parameters. Parameter startdate is mandatory for Twitter dataset"};
+            res.send(errorobj);
+        }
+        
         logger.info("Twitter query started");
          var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
          var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
@@ -575,6 +601,11 @@ app.get("/api/getdata",function(req,res){
     			
             	}
         	 });
+     }
+     else
+     {
+            var errorobj = {"error" : "Unexpected Error"};
+            res.send(errorobj);
      }
   
 })
