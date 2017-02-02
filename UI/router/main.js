@@ -512,7 +512,7 @@ app.get("/api/getdata",function(req,res){
             var errorobj = {"error" : "Not enough parameters. Parameter startdate is mandatory for Twitter dataset"};
             res.send(errorobj);
         }
-        
+
         logger.info("Twitter query started");
          var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
          var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
@@ -672,7 +672,7 @@ function getDrillQuery(robj)
                             " From " +
                             " ( " +
                             " select count(1) as postcount,B.ladname as name,B.ladlatitude as latitude ,B.ladlongitude as longitude,A.category as category" +
-                            " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`DimPostCode` B" + 
+                            " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`NewDimPostCode` B" + 
                             " on A.locationzip = B.postcode" + 
                             " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
                             " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') " + 
@@ -684,8 +684,19 @@ function getDrillQuery(robj)
 
       if(robj.boundstartlat != "" && robj.boundstartlong != "" && robj.boundendlat != "" && robj.boundendlong != "")
       {
-            getPostCodeQuery(robj).then(function(postcode){
-        
+           // getPostCodeQuery(robj).then(function(postcode){
+           // console.log(robj.boundstartlat + "," + robj.boundstartlong + "," + robj.boundendlat + "," + robj.boundendlong);
+            var minlat = (parseFloat(robj.boundstartlat) < parseFloat(robj.boundendlat)) ? robj.boundstartlat : robj.boundendlat;
+            var maxlat = (parseFloat(robj.boundstartlat) > parseFloat(robj.boundendlat)) ? robj.boundstartlat : robj.boundendlat;
+           
+            var minlong = (parseFloat(robj.boundstartlong) < parseFloat(robj.boundendlong)) ? robj.boundstartlong : robj.boundendlong;
+            var maxlong = (parseFloat(robj.boundstartlong) > parseFloat(robj.boundendlong)) ? robj.boundstartlong : robj.boundendlong;
+
+            console.log("Min Lat : " + minlat);
+            console.log("Max Lat : " + maxlat);
+            console.log("Min Long : " + minlong);
+            console.log("Max long : " + maxlong);
+
                 if(areatype.toLowerCase() == "msoa" )
                      {
                         logger.info("Querying MSOA for parameter boundstartlat : " + robj.boundstartlat + ", boundstartlong : " + robj.boundstartlong + ", boundendlat : " + robj.boundendlat + ", boundendlong : " + robj.boundendlong + ", startdate : " + startdate + ", enddate : " + enddate);
@@ -697,10 +708,11 @@ function getDrillQuery(robj)
                                         " From " +
                                         " ( " +
                                         " select count(1) as postcount,B.msoaname as name,B.msoalatitude as latitude ,B.msoalongitude as longitude,A.category as category" +
-                                        " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`DimPostCode` B" + 
+                                        " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`NewDimPostCode` B" + 
                                         " on A.locationzip = B.postcode" + 
                                         " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
-                                        " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') and B.postcode IN(" + postcode + ")" + 
+                                        " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') and B.PostCodeLatitude Between '" +  minlat + "' and '" + maxlat + "'" +
+                                        " And B.PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "' " +
                                         " group by B.msoaname,B.msoalatitude,B.msoalongitude,A.category" +
                                         " ) as G Group by G.name,G.latitude,G.longitude" ;
                      }
@@ -715,10 +727,11 @@ function getDrillQuery(robj)
                                         " From " +
                                         " ( " +
                                         " select count(1) as postcount,B.lsoaname as name,B.lsoalatitude as latitude ,B.lsoalongitude as longitude,A.category as category" +
-                                        " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`DimPostCode` B" + 
+                                        " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`NewDimPostCode` B" + 
                                         " on A.locationzip = B.postcode" + 
                                         " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
-                                        " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') and B.postcode IN(" + postcode + ")" + 
+                                        " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') and B.PostCodeLatitude Between '" +  minlat + "' and '" + maxlat + "'" +
+                                        " And B.PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "' " + 
                                         " group by B.lsoaname,B.lsoalatitude,B.lsoalongitude,A.category" +
                                         " ) as G Group by G.name,G.latitude,G.longitude" ;
                                         
@@ -730,13 +743,15 @@ function getDrillQuery(robj)
                                         " from `hive_social_media`.`default`.`facebookdata` " +
                                         " where fb_date between '" + startdate + "' and '" + enddate + "' " +
                                         " AND category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') " + 
-                                        " and locationzip IN( " +  postcode + " ) group by name,locationlatt,locationlong,category";
+                                        " and locationzip IN( Select PostCode " +
+                                        " From `hive_social_media`.`default`.`NewDimPostCode` Where PostCodeLatitude Between  '" + minlat + "' and '" + maxlat + "' " + 
+                                        " And PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "') group by name,locationlatt,locationlong,category";
                     }
-               // console.log("Query within code : " + querystring);
+                console.log("Query within code : " + querystring);
                 logger.debug("Query within code : " + querystring);
                  deferred.resolve(querystring);
             
-            });
+            //});
       }
       
            
