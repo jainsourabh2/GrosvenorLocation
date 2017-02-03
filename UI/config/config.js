@@ -7,22 +7,22 @@ mysql_username	: 'root',
 mysql_password	: '',
 
 
-mysql_database	: 'grosvenor',
+mysql_database	: '',
 
 
-mysql_host	: '10.80.2.4',
+mysql_host	: '',
 
 
-mssql_host : '10.80.2.5',
+mssql_host : '',
 
 
-mssql_database : 'BigDataStore',
+mssql_database : '',
 
 
-mssql_username : 'mastek',
+mssql_username : '',
 
 
-mssql_password : 'M8$tek12',
+mssql_password : '',
 
 
 mssql_port : '55413',
