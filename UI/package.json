@@ -1,12 +1,19 @@
 {
   "name": "Express-web-app",
-  "version": "1.0.0",
-  "dependencies":
+  
+"version": "1.0.0",
+  
+"dependencies":
   {
-    "express": "~4.0.0",
-    "mysql": "*",
-    "ejs": "~1.0.0",
-    "request":"2.79.0",
-    "forever":"0.15.3"
-  }
+    
+"express": "~4.0.0",
+    
+"mysql": "*",
+    
+"ejs": "~1.0.0",
+ 
+"request":"2.79.0",
+"forever":"0.15.3"
+  
+}
 }

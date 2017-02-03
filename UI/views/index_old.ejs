@@ -1,0 +1,384 @@
+
+<html>
+  <head>
+     <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+     <!--<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization">
+    </script> -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyCD6FFAPbvxB1-OWHX4iOI-XiCt_FpKBno&libraries=visualization"></script> 
+     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+     <script>
+     
+function InitializeDate() {
+        var date = new Date();
+        var dd = date.getDate();             
+        var mm = date.getMonth() + 1;
+        var yyyy = date.getFullYear();
+    
+        var ToDate = mm + '/' + dd + '/' + yyyy;
+        var FromDate = (mm - 3) + '/' +  dd + '/' + yyyy;
+        
+        $('#to').datepicker('setDate', ToDate);
+        $('#from').datepicker('setDate', FromDate);
+    }
+      $( function() {
+        var dateFormat = "YYYY/MM/DD",
+          from = $( "#from" )
+            .datepicker({
+              defaultDate: "+1w",
+              changeMonth: true,
+              numberOfMonths: 1
+            })
+            .on( "change", function() {
+              to.datepicker( "option", "minDate", getDate( this ) );
+            }),
+          to = $( "#to" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1
+          })
+          .on( "change", function() {
+            from.datepicker( "option", "maxDate", getDate( this ) );
+          });
+     
+        function getDate( element ) {
+          var date;
+          try {
+            date = $.datepicker.parseDate( dateFormat, element.value );
+          } catch( error ) {
+            date = null;
+          }
+ 
+          return date;
+    }
+  } );
+     
+     </script>
+     
+     
+     <style>
+     
+     #map {
+       height: 90%;
+       width: 80%;
+       display:inline-block;
+       float:right;
+       margin-top : 10px;
+      }
+      #stations{
+          display:inline-block;
+          width:20%;
+          float:left;
+          
+      }
+      
+      #stationlist{
+        overflow-y: scroll;
+        overflow-x: scroll;
+        height: 90%;
+        float:left;
+      }
+     
+     #submit{
+       display:inline-block;
+       float:left;
+     }
+     
+     #calendar{
+         float:right;
+     }
+     
+
+   </style>
+  </head>
+   
+    <div id ="stations">
+    <div id="stationlist">
+         <h3>Station Names</h3>
+        <% if (stationnames.length > 0) { 
+            for(var i = 0; i < stationnames.length; i ++)
+            { %>
+            <div>
+               
+                <input type='checkbox'  id='<%= stationnames[i] %>' />
+                <label><%= stationnames[i] %></label>
+            </div>
+        <%    }
+            }%>
+        </div>
+      <div>
+       <input type="button" id = "submit" value="Track" />
+    </div>
+    </div>
+    <div id="calendar">
+        <label for="from">From</label>
+        <input type="text" id="from" name="from">
+        <label for="to">To</label>
+        <input type="text" id="to" name="to">
+     </div>
+    <div id="map"></div>
+    
+  </html>
+   
+<script>
+
+     $(document).ready(function(){
+         
+         $.ajax(
+            {
+                url: "callmaps",
+                success: function(pos)
+                   {
+                  //var visiblehtml = "<img alt='Positive tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/green-dot.png'> - Positive Tweets <img alt='Negative tweets' width='20' height='20' src='http://maps.google.com/mapfiles/ms/icons/red-dot.png'> - Negative Tweets";
+                  var arr = pos.data;
+                  //var station = pos.stationnames;
+                   arr = [];
+                   var lat = 51.5073509;
+                   var long = -0.1277583;
+                   initMap(arr,lat,long); 
+                   
+                   }
+          });    
+         InitializeDate();
+        });
+        
+          var map;
+           // var datarray = [{"lat":"51.5012326","lng":"-0.1622335"}];
+            
+            //initMap(datarray);
+            
+          function initMap(dataarray,lat,long) {
+                      
+            map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 15,
+              //center: {lat: 51.5073509, lng: -0.1277583},
+              center: {lat: lat, lng: long},
+              styles: [
+                    {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+                    {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+                    {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+		    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+		    {
+                        featureType: "transit.station",
+                        elementType: "labels",
+                        stylers: [
+                              { visibility: "off" }
+                        ]
+                    },
+                    {
+                      featureType: 'administrative.locality',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'poi',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'geometry',
+                      stylers: [{color: '#263c3f'}]
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#6b9a76'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry',
+                      stylers: [{color: '#38414e'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry.stroke',
+                      stylers: [{color: '#212a37'}]
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#9ca5b3'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry',
+                      stylers: [{color: '#746855'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry.stroke',
+                      stylers: [{color: '#1f2835'}]
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#f3d19c'}]
+                    },
+                    {
+                      featureType: 'transit',
+                      elementType: 'geometry',
+                      stylers: [{color: '#2f3948'}]
+                    },
+                    {
+                      featureType: 'transit.station',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#d59563'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'geometry',
+                      stylers: [{color: '#17263c'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.fill',
+                      stylers: [{color: '#515c6d'}]
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.stroke',
+                      stylers: [{color: '#17263c'}]
+                    }
+                  ]
+            });
+            
+            var transitLayer = new google.maps.TransitLayer();
+              transitLayer.setMap(map);
+            
+            var infowindow = new google.maps.InfoWindow({maxWidth: 200});
+
+            for(var o in dataarray)
+            {
+            
+                if(dataarray[o].type == "station")
+                {
+                   var  marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: map,
+                        icon: 'train.png',
+                        contentString: dataarray[o].location
+                      });
+                      
+                      marker.addListener('click', function() {
+                           infowindow.setContent(this.contentString);
+                           infowindow.open(map, this);
+                           map.setCenter(this.getPosition());
+                        });
+                }
+                else if(dataarray[o].type == "restaurant")
+                {
+                    if( 0  < dataarray[o].postcount && dataarray[o].postcount < 30)
+                    {
+                         var  restmarkerlow = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: map,
+                        icon: 'lowrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      restmarkerlow.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(map, this);
+                           map.setCenter(this.getPosition());
+                      });
+                    }
+                    else if(30 < dataarray[o].postcount &&  dataarray[o].postcount < 70)
+                    {
+                        var  restmarkermed = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: map,
+                        icon: 'medrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      restmarkermed.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(map, this);
+                           map.setCenter(this.getPosition());
+                      });
+                    }
+                    else
+                    {
+                    var  restmarkerhigh = new google.maps.Marker({
+                        position: new google.maps.LatLng(dataarray[o].lat, dataarray[o].lng),
+                        map: map,
+                        icon: 'highrestaurants.png',
+                        contentString: dataarray[o].location +  " (Number of Post : " + dataarray[o].postcount + ")"  
+                      });
+                      
+                      restmarkerhigh.addListener('click', function() {
+                          infowindow.setContent(this.contentString);
+                           infowindow.open(map, this);
+                           map.setCenter(this.getPosition());
+                      });
+                    }
+                     /* restmarker.addListener('click', function() {
+                        
+                        //Make ajax call and query via drill bit to get the info 
+                        var restname = this.contentString;
+                        var mark = this;
+                        
+                         $.ajax(
+                            {
+                                url: "getPostsCount",
+                                data: {"restname" : restname},
+                                success: function(pos)
+                                   {
+                                      // restmarker.contentString = " Number of Posts : " + pos.count;
+                                       infowindow.setContent(mark.contentString + " (Number of Posts :" + pos + ")");
+                                       infowindow.open(map, mark);
+                                        map.setCenter(mark.getPosition());
+                                   }
+                          });  
+                            
+                           
+                        });*/
+                }
+            }
+          }
+  
+  $('#submit').click(function(e){
+    var name = $('input[type="checkbox"]:checked')[0].id;
+    var fromdate = $('#from')[0].value;
+    var todate = $('#to')[0].value;
+    
+    var d = new Date(fromdate);
+    var dd= d.getDate();
+    var mm= d.getMonth()+1;
+    var yy= d.getFullYear();
+    var newfromdate = yy+"/"+mm+"/"+dd;
+    
+     var d = new Date(todate);
+    var dd= d.getDate();
+    var mm= d.getMonth()+1;
+    var yy= d.getFullYear();
+    var newtodate = yy+"/"+mm+"/"+dd;
+    
+   // name = name.innerHTML;
+    //Make ajax call and get restaurant and station position and plot on map
+     $.ajax(
+            {
+                url: "getPosition",
+                data: {"station" : name , "fromdate" : newfromdate, "todate" : newtodate},
+                success: function(pos)
+                   {
+                 
+                  var arr = pos;
+                  //var station = pos.stationnames;
+                   initMap(arr,arr[arr.length - 1].lat,arr[arr.length - 1].lng); 
+                   
+                   }
+          });   
+  });
+ 
+         
+    </script>
