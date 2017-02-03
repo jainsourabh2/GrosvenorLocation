@@ -1,7 +1,7 @@
 #!/bin/sh
 
-startdate=`/bin/date  +2016-01-01`
-currentdate=`/bin/date  +2016-02-29`
+startdate=`/bin/date  +2016-10-01`
+currentdate=`/bin/date  +2017-01-05`
 
 foldate="$startdate"
 

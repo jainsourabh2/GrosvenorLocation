@@ -7,6 +7,6 @@ then
     echo "$SERVICE service running, everything is fine @ $now"
 else
     echo "$SERVICE is not running and hence restarting the service @ $now"
-    nohup node /opt/nodeprojects/twitterkafkapoc/twitterstream.js > /var/log/twitterkafkapoc/twitterstream.log &
+    nohup node /opt/nodeprojects/GrosvenorLocation/twitter/twitterstream.js > /var/log/GrosvenorLocation/twitterstream.log &
     echo "$SERVICE restarted!"
 fi

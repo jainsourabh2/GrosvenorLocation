@@ -3,7 +3,7 @@
 currenthour=`/bin/date +%H`
 echo $currenthour
 
-if [ $currenthour == 0 ]
+if [ $currenthour == 00 ]
 then
 currentdate=`/bin/date --date="1 days ago" +%Y-%m-%d`
 else 
@@ -20,7 +20,7 @@ if [ $? != 0 ]
 then 
 nohup node /opt/nodeprojects/GrosvenorLocation/facebook/facebookgraphapi.js $fdate &
 else 
-hadoop fs -rm /grosvenor/facebook/facebooktopic/$fdate/FacebookData.* 
+hadoop fs -rm /grosvenor/facebook/facebooktopic/$fdate/*.* 
 nohup node /opt/nodeprojects/GrosvenorLocation/facebook/facebookgraphapi.js $fdate &   
 fi
 
