@@ -78,17 +78,19 @@ function startstreaming(){
 			if(tweet.text){
 				//tweetString = jsonparsing.getParsedString(JSON.stringify(tweet),abusivelist,false);
 				categorisedtweetstring = jsonparsing.getParsedString(JSON.stringify(tweet),abusivelist,true);
-				/*if(tweetString!=''){
+				/*
+				if(tweetString!=''){
 					//console.log("Inside 1st topic");
 					payloads = [{	 topic: 'grosvenorkafkaflume', messages: tweetString, partition: 0 }];
 					producer.send(payloads, function (err, data) {
 						//console.log('Pushed Successfully');
 					});
-				} */
+				}
+				*/	
 				if(categorisedtweetstring!==''){
 					newpayloads =  [{	 topic: 'twittercategoryflume', messages: categorisedtweetstring, partition: 0 }];
 						producer.send(newpayloads, function (err, data) {
-						console.log(data);
+						//console.log(data);
 						//console.log('Pushed Successfully');
 					});
 				}
