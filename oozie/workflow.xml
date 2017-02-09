@@ -1,30 +1,33 @@
 <workflow-app xmlns="uri:oozie:workflow:0.4" name="oozie-wf">
-    <start to="sqoop-wf1"/>
+ <start to="sqoop-wf1"/>
     <action name="sqoop-wf1">
         <sqoop xmlns="uri:oozie:sqoop-action:0.2">
-                <job-tracker>10.80.2.4:8050</job-tracker>
-                <name-node>hdfs://10.80.2.4:8020</name-node>
+                <job-tracker>${jobtracker}</job-tracker>
+                <name-node>${nameNode}</name-node>
+		 <prepare>
+                <delete path="${outputdir}" />
+            	</prepare>
 				<arg>import</arg>
 				<arg>--connect</arg>
-				<arg>jdbc:sqlserver://10.80.2.5:55413;database=BigDataStore;user=mastek;password=M8$tek12</arg>
+				<arg>jdbc:sqlserver://${sqlserver};database=${databaseName};user=${databaseuser};password=${databasepw}</arg>
 				<arg>--driver</arg>
 				<arg>com.microsoft.sqlserver.jdbc.SQLServerDriver</arg>
 				<arg>--table</arg>
-				<arg>dbo.DimPostCode</arg>
+				<arg>${databasetablename}</arg>
 				<arg>--columns</arg>
 				<arg>postcode,postcodealt,postcodelatitude,postcodelongitude,oacode,lsoacode,lsoaname,msoacode,msoaname,ladcode,ladname,ladwname,oalatitude,oalongitude,lsoalatitude,lsoalongitude,msoalatitude,msoalongitude,ladlatitude,ladlongitude</arg>
 				<arg>--where</arg>
 				<arg>LADNAME IN('City of London','Barking and Dagenham','Barnet','Bexley','Brent','Bromley','Camden','Croydon','Ealing','Enfield','Greenwich','Hackney','Hammersmith and Fulham','Haringey','Harrow','Havering','Hillingdon','Hounslow','Islington','Kensington and Chelsea','Kingston upon Thames','Lambeth','Lewisham','Merton','Newham','Redbridge','Richmond upon Thames','Southwark','Sutton','Tower Hamlets','Waltham Forest','Wandsworth','Westminster')</arg>
 				<arg>--target-dir</arg>
-				<arg>/tmp/sqoopdata</arg>
+				<arg>${outputdir}</arg>
 				<arg>-m</arg>
 				<arg>1</arg>
         </sqoop>
         <ok to="end"/>
         <error to="fail"/>
-    </action> 
-    <kill name="fail">
+    </action>
+	<kill name="fail">
         <message>Failed, Error Message[${wf:errorMessage(wf:lastErrorNode())}]</message>
     </kill>
-    <end name="end"/>
+    <end name="end"/> 
 </workflow-app>
