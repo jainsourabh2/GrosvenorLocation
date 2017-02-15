@@ -370,7 +370,7 @@ app.get("/api/getdata",function(req,res){
                 res.send(errorobj);
             } 
 
-        logger.info("Facebook query started");
+        logger.info("API call started");
          var todaydate = new Date().toLocaleDateString();
         // todaydate = moment(todaydate,"yyyy-mm-dd");
          //var tomorowdate = todaydate.subtract(1,'days');
@@ -404,6 +404,7 @@ app.get("/api/getdata",function(req,res){
                 
             };
             
+	     logger.info("Facebook query started");
              request(reqoptions, function(err, response, data){
                 //console.log(response + " " + err + " " + data);
                 if(err)
@@ -412,10 +413,13 @@ app.get("/api/getdata",function(req,res){
                    logger.error("Error in request : " + err);
                 }
                 if (!err && response.statusCode ==200){
+		logger.info("Facebook query ended");
                 //  console.log("Reached within query");
                 //  console.log(data);
                 //console.log(data.length);
+		logger.info("Parse started");
                 var obj = JSON.parse(data);
+		logger.info("Parse ended");
                 //console.log(JSON.stringify(obj));
 
                 if(obj.rows.length > 0)
@@ -484,15 +488,16 @@ app.get("/api/getdata",function(req,res){
                             else
                             {
                                // console.log(station,stnlat,stnlong);
+				logger.info("Building Object collection ended");
                                 dataobj.type = "FeatureCollection";
                                 dataobj.features = dataarray;
                                 
                                 //console.log(JSON.stringify(dataobj));
                                 res.send(dataobj); 
-                                logger.info("Facebook query end");                         
+                                logger.info("API call end");                         
                             }
                         }
-                        
+                        logger.info("Building Object collection started");
                         buildJSONObj(0);
                     
                 }
@@ -610,6 +615,256 @@ app.get("/api/getdata",function(req,res){
   
 })
 
+
+app.get("/api/getgeotwitterdata",function(req,res){
+    var source = req.query.dataset;
+    var dataobj = {};
+    var dataarray = [];
+     var startdate = req.query.startdate;
+    var enddate = req.query.enddate;
+    var todaydate = new Date().toLocaleDateString();
+    //var moment_todaydate = moment(todaydate,"yyyy-mm-dd");
+     var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0].substr(2,moment(todaydate,"yyyy-mm-dd").toISOString().length);  //Format in yyyy-mm-dd Current date
+     var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) :  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0].substr(2,moment(todaydate,"yyyy-mm-dd").toISOString().length); 
+     console.log("Startdate" + sdate);
+     console.log("EndDate" + edate);
+     logger.info("Twitter API call with geo query started");
+    if(source == "twitter")
+    {
+       // var q = "select tweet_id,geo,coordinates from `hive_social_media`.`default`.`twittercategorystream` " + 
+        " where  create_date between '" + sdate + "' and '" + edate + "' and category=0 and " +
+        " CAST(SUBSTR(place_coordinate1,POSITION(',' in place_coordinate1) + 1) as float) >= 51.2611 " +
+        " and CAST(SUBSTR(place_coordinate2,POSITION(',' in place_coordinate2) + 1) as float) <= 51.7160 " +
+        " and CAST(SUBSTR(place_coordinate1,1,POSITION(',' in place_coordinate1) - 1 ) as float) >= -0.5383 " +
+        " and CAST(SUBSTR(place_coordinate3,1,POSITION(',' in place_coordinate3) - 1 ) as float) <= 0.2939 " +  
+        " and place_coordinate1 <> 'null' and place_coordinate2 <> 'null' and place_coordinate3 <> 'null' and geo <> 'null' " ;
+	 var q = "select tweet_id,geo,coordinates from `hive_social_media`.`default`.`twittercategorystream` where  placefullname like '%London%' and geo like '%51.%' and create_date between '" + sdate + "' and '" + edate + "' and category=0";
+        
+        var reqoptions = {
+                uri :url,
+                headers:{'Content-Type':'application/json'},
+                method : "POST",
+                body: JSON.stringify({queryType : 'SQL', query : q})
+                
+            };
+            
+             request(reqoptions, function(err, response, data){
+                //console.log(response + " " + err + " " + data);
+                if(err)
+                {
+                    //console.log("Err: " + err);
+                    logger.error("Error: " + err);
+                }
+                if (!err && response.statusCode ==200){
+                 // console.log("Reached within query");
+                   logger.info("Twitter API call with geo : Drill API Request called");
+                 // console.log(data);
+                //console.log(data.length);
+                var obj = JSON.parse(data);
+
+                var jsonresp = {};
+                logger.info("For loop started");
+                for(let c =0; c < obj.rows.length; c++)
+                {
+                     let geo = obj.rows[c].geo;
+                    let coordinates = obj.rows[c].coordinates;
+                    let tweet = obj.rows[c].tweet_id;
+                    let cordinatearray = [];
+
+                    cordinatearray.push(geo);
+                    cordinatearray.push(coordinates);
+
+                    dataarray.push({"type" : "Feature",
+                   "properties" : { "p1" : tweet  } , 
+                   "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+
+                }
+
+                logger.info("For loop end");
+                dataobj.type = "FeatureCollection";
+                dataobj.features = dataarray;
+                //console.log(JSON.stringify(dataobj));
+                res.send(dataobj); 
+                logger.info("Twitter query end"); 
+                
+            }
+            
+        });
+    }
+});
+
+
+app.get("/api/getalltwitterdata",function(req,res){
+  /*  var obj1 = { "longitude" : -0.74578, "latitude" : 51.448222};
+    var obj2 = {"longitude" : -0.74578, "latitude" : 52.992679};
+    var obj3 = {"longitude" : -0.74578, "latitude" : 52.992679};
+    var obj4 = {"longitude" : 1.768936, "latitude" : 51.448222};
+
+    var r = randomCoordinates(obj1,obj2,obj3,obj4); */
+     let source = req.query.dataset;
+     let obj = {};
+    let dataobj = {};
+    let dataarray = [];
+     let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+    let todaydate = new Date().toLocaleDateString();
+    //var moment_todaydate = moment(todaydate,"yyyy-mm-dd");
+     let sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0].substr(2,moment(todaydate,"yyyy-mm-dd").toISOString().length);  //Format in yyyy-mm-dd Current date
+     let edate = (enddate != undefined) ? enddate.substr(2,enddate.length) :  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0].substr(2,moment(todaydate,"yyyy-mm-dd").toISOString().length); 
+     console.log("Startdate" + sdate);
+     console.log("EndDate" + edate);
+
+     if(source == "twitter")
+    {
+       // let q = "select tweet_id,geo,coordinates,place_coordinate1,place_coordinate2,place_coordinate3,place_coordinate4 from `hive_social_media`.`default`.`twittercategorystream` where  placefullname like '%London%' and create_date between '" + sdate + "' and '" + edate + "' and category=0 ";
+        //let postData = JSON.stringify({queryType : 'SQL', query : q});
+        let q = "select tweet_id,geo,coordinates,place_coordinate1,place_coordinate2,place_coordinate3,place_coordinate4 from `hive_social_media`.`default`.`twittercategorystream` " + 
+        " where  create_date between '" + sdate + "' and '" + edate + "' and category=0 and " +
+        " CAST(SUBSTR(place_coordinate1,POSITION(',' in place_coordinate1) + 1) as float) >= 51.2611 " +
+        " and CAST(SUBSTR(place_coordinate2,POSITION(',' in place_coordinate2) + 1) as float) <= 51.7160 " +
+        " and CAST(SUBSTR(place_coordinate1,1,POSITION(',' in place_coordinate1) - 1 ) as float) >= -0.5383 " +
+        " and CAST(SUBSTR(place_coordinate3,1,POSITION(',' in place_coordinate3) - 1 ) as float) <= 0.2939 " +  
+        " and place_coordinate1 <> 'null' and place_coordinate2 <> 'null' and place_coordinate3 <> 'null' " ;
+
+        let reqoptions = {
+                uri :url,
+                headers:{'Content-Type':'application/json'},
+                method : "POST",
+                body: JSON.stringify({queryType : 'SQL', query : q})
+                
+            };
+            
+           // var postData = ;
+           let jsondata = "";
+                            
+            logger.info("Starting query"); 
+            request(reqoptions, function(err, response, data){
+                //console.log(response + " " + err + " " + data);
+                if(err)
+                {
+                    console.log("Err: " + err);
+                   // logger.error("Error: " + err);
+                }
+                if (!err && response.statusCode ==200){
+                  console.log("Reached within query");
+                 // console.log(data);
+                //console.log(data.length);
+                try
+                {
+                    logger.info("Callback receieved");
+                    obj = JSON.parse(data); 
+                }
+                catch(ex)
+                {
+                    console.log("Parsing Exception : " + ex);
+                }
+
+                var jsonresp = {};
+                logger.info("Before for loop");
+                for(let p = 0; p < obj.rows.length; p++)
+                {
+
+                     let pc1= {};
+                    let pc2 = {};
+                    let pc3 = {};
+                    let pc4 = {};
+                    let tweet = obj.rows[p].tweet_id;
+                    let geo = obj.rows[p].geo;
+                    let coordinates = obj.rows[p].coordinates;
+                   
+                
+                    let cordinatearray = [];
+
+                    if(geo == 'null')
+                    {
+                         //var tweethandle = obj.rows[p].userscreenname;
+                   // console.log(obj.rows[p].place_coordinate1);
+                    pc1.longitude = parseFloat(obj.rows[p].place_coordinate1.split(',')[0]);
+                   // console.log("obj1_long : " + pc1.longitude);
+                    pc1.latitude = parseFloat(obj.rows[p].place_coordinate1.split(',')[1]);
+                   // console.log("obj1_lat : " + pc1.latitude);
+                    pc2.longitude = parseFloat(obj.rows[p].place_coordinate2.split(',')[0]);
+                   // console.log("obj2_long : " + pc2.longitude);
+                    pc2.latitude = parseFloat(obj.rows[p].place_coordinate2.split(',')[1]);
+                   // console.log("obj2_lat : " + pc2.latitude);
+                    pc3.longitude = parseFloat(obj.rows[p].place_coordinate3.split(',')[0]);
+                   // console.log("obj3_long : " + pc3.longitude);
+                    pc3.latitude = parseFloat(obj.rows[p].place_coordinate3.split(',')[1]);
+                   // console.log("obj3_lat : " + pc3.latitude);
+                    pc4.longitude = parseFloat(obj.rows[p].place_coordinate4.split(',')[0]);
+                   // console.log("obj4_long : " + pc4.longitude);
+                    pc4.latitude = parseFloat(obj.rows[p].place_coordinate4.split(',')[1]);
+                   // console.log("obj4_lat : " + pc4.latitude);
+
+                    let random_coord = randomCoordinates(pc1,pc2,pc3,pc4);
+                      // console.log(tweet,geo,coordinates);
+                       
+                       cordinatearray.push(random_coord.latitude.toFixed(8));
+                       cordinatearray.push(random_coord.longitude.toFixed(8));
+                    }
+                    else
+                    {
+                         cordinatearray.push(geo);
+                         cordinatearray.push(coordinates);
+                    }
+                    
+                   
+                    //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
+               
+                   dataarray.push({"type" : "Feature",
+                   "properties" : { "p1" : tweet  } , 
+                   "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                  
+
+                }
+                logger.info("For loop end");
+                dataobj.type = "FeatureCollection";
+                dataobj.features = dataarray;
+                //console.log(JSON.stringify(dataobj));
+                res.send(dataobj); 
+                logger.info("Twitter query end"); 
+                
+
+                }
+        }); 
+    }
+
+});
+
+
+function randomCoordinates(pc1,pc2,pc3,pc4)
+{
+    let randomCoord = {};
+    if(pc4.latitude > pc2.latitude)
+    {
+        randomCoord.latitude =  Math.random().toFixed(2) * (pc4.latitude - pc2.latitude) + pc2.latitude;
+        console.log("RV1: " + randomCoord.latitude);
+    }
+    else
+    {
+         randomCoord.latitude =  Math.random().toFixed(2) * (pc2.latitude - pc4.latitude) + pc4.latitude;
+         
+    }   
+   
+   if(pc3.longitude > pc1.longitude)
+   {
+    randomCoord.longitude = Math.random().toFixed(2) * (pc3.longitude - pc1.longitude) + pc1.longitude;
+   }
+   else
+    {
+    randomCoord.longitude = Math.random().toFixed(2) * (pc1.longitude - pc3.longitude) + pc3.longitude; 
+    }
+
+
+    //console.log(randomCoord);
+    return  randomCoord;
+
+}
+
+
+
+
+
 function getPostCodeQuery(robj)
 {
     var postcodestring = "";
@@ -654,7 +909,7 @@ function getDrillQuery(robj)
      var startdate = robj.startdate;
      var enddate = robj.enddate;
      var deferred = q.defer();
-
+	logger.info("Inside GetDrill Query");
     if(robj.dataset == "facebook")
     {
       var areatype = robj.areatype;
@@ -788,7 +1043,7 @@ function getDrillQuery(robj)
 
 
          querystring = query1 + query2 + query3 + query4;
-
+	logger.info("GetDrill Query ended");
          return querystring;
     }
         
