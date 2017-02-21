@@ -26,10 +26,10 @@ const connection = mysql.createConnection({
 connection.connect();
 
 const client = new Twitter({
-	consumer_key: constants.twitter_consumer_key,
-	consumer_secret: constants.twitter_consumer_secret,
-	access_token_key: constants.twitter_access_token_key,
-	access_token_secret: constants.twitter_access_token_secret
+	consumer_key: constants.twitter_consumer_key_2,
+	consumer_secret: constants.twitter_consumer_secret_2,
+	access_token_key: constants.twitter_access_token_key_2,
+	access_token_secret: constants.twitter_access_token_secret_2
 });
 
 //async.series()
@@ -88,7 +88,7 @@ function startstreaming(){
 				}
 				*/	
 				if(categorisedtweetstring!==''){
-					newpayloads =  [{	 topic: 'twittercategoryflume', messages: categorisedtweetstring, partition: 0 }];
+					newpayloads =  [{	 topic: 'newtwittercategoryflume', messages: categorisedtweetstring, partition: 0 }];
 						producer.send(newpayloads, function (err, data) {
 						//console.log(data);
 						//console.log('Pushed Successfully');

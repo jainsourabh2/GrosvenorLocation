@@ -245,11 +245,6 @@ try{
 }catch(ex){
 	console.log(ex);
 	
-		fs.appendFile("op/errfile.txt",input,function(err){
-		console.log(err);	
-	});
-	
-	
 }
 
 	//output = output.substr(0,output.length-1);
