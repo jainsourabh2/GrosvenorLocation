@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 module.exports.members=[
 {slug:"michelin-star-restaurants",owner_screen_name:"LRestaurants"},
@@ -27,7 +27,12 @@ module.exports.constants = {
 	logDir	: '/var/log/grosvenor/',
 	environment : 'development',
 	null : null,
-	undefined : undefined
+	undefined : undefined,
+	flickr_api_key : "",
+   
+        flickr_secret : "",
+   
+        flickr_filename : "/opt/nodeprojects/GrosvenorLocation/flickr/op/flickrdata"
 };
 
 module.exports.middlewareconstants = {
