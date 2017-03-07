@@ -333,6 +333,86 @@ app.get('/getPosition',function(req,res){
     }
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   GetData:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ */
+
+/**
+ * @swagger
+ * /getdata?dataset={dataset}&startdate={startdate}:
+ *   get:
+ *     tags:
+ *       -  Twitter API
+ *     description: Returns twitter data
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: dataset
+ *         description: Dataset 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: startdate
+ *         description: Dataset 
+ *         in: path
+ *         required: false
+ *         type: string
+ *  
+ *     responses:
+ *       200:
+ *         description: Twitter data
+ *     schema:
+ *           $ref: '#/definitions/GetData'
+ */
+
+ /**
+ * @swagger
+ * /getdata?dataset={dataset}&areatype={areatype}&boundstart={boundstart}&boundend={boundend}:
+ *   get:
+ *     tags:
+ *       - Facebook API
+ *     description: Returns facebook data
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: dataset
+ *         description: Dataset 
+ *         in: path
+ *         required: true
+ *         type: string
+ *      
+ *       - name: areatype
+ *         description: Dataset 
+ *         in: path
+ *         required: false
+ *         type: string
+ *
+ *       - name: boundstart
+ *         description: Dataset 
+ *         in: path
+ *         required: false
+ *         type: string
+ *
+ *       - name: boundend
+ *         description: Dataset 
+ *         in: path
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Facebook data
+ *     schema:
+ *           $ref: '#/definitions/GetData'
+ */
+
+
 app.get("/api/getdata",function(req,res){
     var dataset = req.query.dataset;
     var startdate = req.query.startdate;
@@ -455,6 +535,7 @@ app.get("/api/getdata",function(req,res){
                                     }
                                     else
                                     {
+					var fbid = obj.rows[p].id;
                                         var name = obj.rows[p].name;
                                         var category = obj.rows[p].category;
                                         var postcount = obj.rows[p].postcount;
@@ -468,7 +549,8 @@ app.get("/api/getdata",function(req,res){
                                         dataarray.push({"type" : "Feature",
                                         "properties" : { "p1" : name , 
                                                          "p2" : category , 
-                                                         "p3" : postcount  
+                                                         "p3" : postcount,
+							  "id" : fbid  
                                                                             
                                         }, 
 
@@ -519,9 +601,11 @@ app.get("/api/getdata",function(req,res){
         }
 
         logger.info("Twitter query started");
+	
          var sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : undefined;
          var edate = (enddate != undefined) ? enddate.substr(2,enddate.length) : undefined;
-         
+         console.log(sdate);
+	console.log(edate);
 	if(track == undefined)
 	{
 	  track = "grosvenor,mayfair,belgravia";
@@ -615,6 +699,39 @@ app.get("/api/getdata",function(req,res){
   
 })
 
+
+/**
+ * @swagger
+ * definitions:
+ *   GeoTweets:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ */
+
+/**
+ * @swagger
+ * /getgeotwitterdata?dataset={dataset}:
+ *   get:
+ *     tags:
+ *       - Geo based tweets
+ *     description: Returns geo based twitter data
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: dataset
+ *         description: Dataset 
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Geo based tweets
+ *     schema:
+ *           $ref: '#/definitions/GeoTweets'
+ */
 
 app.get("/api/getgeotwitterdata",function(req,res){
     let source = req.query.dataset;
@@ -987,7 +1104,7 @@ function getDrillQuery(robj)
                             " ( " +
                             " select count(1) as postcount,B.ladname as name,B.ladlatitude as latitude ,B.ladlongitude as longitude,A.category as category" +
                             " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`NewDimPostCode` B" + 
-                            " on A.locationzip = B.postcode" + 
+                            " on REGEXP_REPLACE(A.locationzip,' ','') = REGEXP_REPLACE(B.postcode,' ','')" + 
                             " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
                             " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') " + 
                             " group by B.ladname,B.ladlatitude,B.ladlongitude,A.category" +
@@ -1023,7 +1140,7 @@ function getDrillQuery(robj)
                                         " ( " +
                                         " select count(1) as postcount,B.msoaname as name,B.msoalatitude as latitude ,B.msoalongitude as longitude,A.category as category" +
                                         " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`NewDimPostCode` B" + 
-                                        " on A.locationzip = B.postcode" + 
+                                        " on REGEXP_REPLACE(A.locationzip,' ','') = REGEXP_REPLACE(B.postcode,' ','')" + 
                                         " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
                                         " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') and B.PostCodeLatitude Between '" +  minlat + "' and '" + maxlat + "'" +
                                         " And B.PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "' " +
@@ -1042,7 +1159,7 @@ function getDrillQuery(robj)
                                         " ( " +
                                         " select count(1) as postcount,B.lsoaname as name,B.lsoalatitude as latitude ,B.lsoalongitude as longitude,A.category as category" +
                                         " from `hive_social_media`.`default`.`facebookdata` as A join `hive_social_media`.`default`.`NewDimPostCode` B" + 
-                                        " on A.locationzip = B.postcode" + 
+                                        " on REGEXP_REPLACE(A.locationzip,' ','') = REGEXP_REPLACE(B.postcode,' ','')" + 
                                         " where A.fb_date between '" + startdate + "' and '" + enddate + "'" +  
                                         " AND A.category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') and B.PostCodeLatitude Between '" +  minlat + "' and '" + maxlat + "'" +
                                         " And B.PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "' " + 
@@ -1053,13 +1170,13 @@ function getDrillQuery(robj)
                     else if(areatype.toLowerCase() == "entity")
                     {
                         logger.info("Querying ENTITY for parameter boundstartlat : " + robj.boundstartlat + ", boundstartlong : " + robj.boundstartlong + ", boundendlat : " + robj.boundendlat + ", boundendlong : " + robj.boundendlong + ", startdate : " + startdate + ", enddate : " + enddate);
-                        querystring = " select count(1) as postcount,name,locationlatt as latitude,locationlong as longitude,category" + 
+                        querystring = " select count(1) as postcount,id,name,locationlatt as latitude,locationlong as longitude,category" + 
                                         " from `hive_social_media`.`default`.`facebookdata` " +
                                         " where fb_date between '" + startdate + "' and '" + enddate + "' " +
                                         " AND category IN ('Movie Theater','Bar','Restaurant','Casino & Gaming') " + 
-                                        " and locationzip IN( Select PostCode " +
+                                        " and REGEXP_REPLACE(locationzip,' ','')  IN( Select REGEXP_REPLACE(PostCode,' ','') " +
                                         " From `hive_social_media`.`default`.`NewDimPostCode` Where PostCodeLatitude Between  '" + minlat + "' and '" + maxlat + "' " + 
-                                        " And PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "') group by name,locationlatt,locationlong,category";
+                                        " And PostCodeLongitude Between '" + minlong + "' and '" + maxlong + "') group by id,name,locationlatt,locationlong,category";
                     }
                 console.log("Query within code : " + querystring);
                 logger.debug("Query within code : " + querystring);
@@ -1076,7 +1193,7 @@ function getDrillQuery(robj)
        
         var track = robj.keywords.split(',');
         
-        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_social_media`.`default`.`twittercategorystream` where ";
+        var query1 = "SELECT tweet,tweet_id,userprofileimageurl,userscreenname,creeated_at,userfollowercount FROM `hive_social_media`.`default`.`newtwittercategorystream` where ";
         var query2 = "";
         var query3 = "";
         var query4 = "";
@@ -1103,10 +1220,115 @@ function getDrillQuery(robj)
 
          querystring = query1 + query2 + query3 + query4;
 	logger.info("GetDrill Query ended");
+console.log(querystring);
          return querystring;
     }
         
     }
+
+
+/**
+ * @swagger
+ * definitions:
+ *   FacebookDetail:
+ *     properties:
+ *       posts:
+ *         type: Array
+ */
+
+/**
+ * @swagger
+ * /getfbdetail?dataset={dataset}&entityid={entityid}:
+ *   get:
+ *     tags:
+ *       - Facebook post details
+ *     description: Returns facebook posts details respective to facebook page id.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: dataset
+ *         description: Dataset 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: entityid
+ *         description: Id of the entity 
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Facebook details
+ *       schema:
+ *           $ref: '#/definitions/FacebookDetail'
+ */
+app.get("/api/getfbdetail",function(req,res){
+      let dataset = req.query.dataset;
+      let fbid = req.query.entityid;
+      let todaydate = new Date().toLocaleDateString();
+
+      let sdate =  moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0];  
+      let edate =  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0];  
+
+      let q = "select message_id,message_from,message,createdtime from `hive_social_media`.`default`.`facebookdata` where  categorize=0 and id='" + fbid + "' and fb_date between '" + sdate + "' and '"+  edate + "' order by createdtime desc";
+
+      var reqoptions = {
+                  uri :url,
+                  headers:{'Content-Type':'application/json'},
+                  method : "POST",
+                  body: JSON.stringify({queryType : 'SQL', query : q})
+                  
+              };
+      		//console.log("Query : " + q);
+      		logger.info("Facebook latest post api query started");
+
+      request(reqoptions, function(err, response, data){
+              //console.log(response + " " + err + " " + data);
+              if(err)
+              {
+                  //console.log("Err: " + err);
+                    logger.error("Error: " + err);
+              }
+              if (!err && response.statusCode ==200)
+              {
+                  //  console.log("Reached within query");
+                  //  console.log(data);
+                  //console.log(data.length);
+                 let obj = JSON.parse(data);
+                 
+                 var jsonarray = [];
+                 var postsobj = {};
+                 console.log(obj.rows.length);
+                 for(let o = 0; o < obj.rows.length; o++ )
+                 {
+                  if(obj.rows[o].message != undefined)
+                  {
+                    let jsonobj = {};
+                    console.log(obj.rows[o]);
+                    let fbmsg = obj.rows[o].message.substring(0,140);
+                    let created_tm = obj.rows[o].createdtime;
+                    let uname = obj.rows[o].message_from;
+                    let fbmsgid = obj.rows[o].message_id;
+
+                    jsonobj.p1 = uname;
+                    jsonobj.p2 = fbmsg;
+                    jsonobj.p3 = created_tm;
+                    jsonobj.p4 = "https://www.facebook.com/" + fbmsgid;
+                    jsonarray.push(jsonobj);
+                  }
+                    
+                 }
+                // console.log(jsonarray);
+                 postsobj.posts = jsonarray;
+                 res.send(postsobj);
+                 logger.info("Facebook latest post api query end");
+              }
+            });
+
+          
+
+});
+
 
 app.get("/api/getstation",function(req,res){
    
