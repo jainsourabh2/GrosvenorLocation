@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE twittercategorystream
+CREATE EXTERNAL TABLE newtwittercategorystream
 ( Tweet_Id bigint,
 creeated_at timestamp,
 Tweet varchar(8000),
@@ -27,8 +27,8 @@ UserLanguage varchar(100),
 UserProfileImageURL varchar(1000),
 UserDefaultProfile varchar(100),
 UserDefaultProfileImage varchar(100),
-Geo varchar(500),
-Coordinates varchar(1000),
+tweetlongitude varchar(500),
+tweetlatitude varchar(1000),
 RetweetCount varchar(100),
 FavouriteCount int,
 Retweeted varchar(100),
@@ -40,28 +40,27 @@ PlaceName varchar(100),
 PlaceFullName varchar(100),
 PlaceCountryCode varchar(100),
 PlaceCountry varchar(100),
-Place_coordinate1 varchar(100),
-Place_coordinate2 varchar(100),
-Place_coordinate3 varchar(100),
-Place_coordinate4 varchar(100),
+Place_coordinate1_lng varchar(100),
+Place_coordinate1_lat varchar(100),
+Place_coordinate2_lng varchar(100),
+Place_coordinate2_lat varchar(100),
+Place_coordinate3_lng varchar(100),
+Place_coordinate3_lat varchar(100),
+Place_coordinate4_lng varchar(100),
+Place_coordinate4_lat varchar(100),
 Hashtags varchar(1000),
 user_mentions varchar(1000),
 Urls varchar(1000),
-Category int
+Category int,
+geolatitude varchar(100),
+geolongitude varchar(100)
 )
 PARTITIONED BY (create_date string)
 row format delimited fields terminated by "|"
-LOCATION '/grosvenor/twitter/twittercategoryflume/';
+LOCATION '/grosvenor/twitter/newtwittercategoryflume/';
 
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-28') location '/grosvenor/twitter/twittercategoryflume/16-11-28';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-29') location '/grosvenor/twitter/twittercategoryflume/16-11-29';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-11-30') location '/grosvenor/twitter/twittercategoryflume/16-11-30';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-01') location '/grosvenor/twitter/twittercategoryflume/16-12-01';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-02') location '/grosvenor/twitter/twittercategoryflume/16-12-02';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-03') location '/grosvenor/twitter/twittercategoryflume/16-12-03';
-ALTER TABLE twitterstream ADD PARTITION(create_date='16-12-04') location '/grosvenor/twitter/twittercategoryflume/16-12-04';
-
-
+ALTER TABLE newtwittercategorystream ADD PARTITION(create_date='16-11-28') location '/grosvenor/twitter/newtwittercategoryflume/16-11-28';
+ALTER TABLE newtwittercategorystream ADD PARTITION(create_date='16-11-29') location '/grosvenor/twitter/newtwittercategoryflume/16-11-29';
 
 
 CREATE EXTERNAL TABLE facebookdata (
