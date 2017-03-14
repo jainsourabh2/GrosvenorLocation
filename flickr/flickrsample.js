@@ -119,12 +119,16 @@ Flickr.tokenOnly(flickrOptions, function(error, flickr) {
                     {
                         deferred.reject(new Error(err));
                     }
+		  // console.log("PhotoID : " + photoids[n].id);
+		  // console.log("Res : " + infores );
+try
+{
                     let photoid = infores.photo.id;
                     let dateuploaded = moment.unix(infores.photo.dateuploaded).format("YYYY-MM-DD HH:mm:ss");
                     let owner_nsid = infores.photo.owner.nsid;
                     let owner_username = infores.photo.owner.username.replace(/'/g,"''");
                     let owner_realname = infores.photo.owner.realname.replace(/'/g,"''");
-                    let owner_location = infores.photo.owner.location;
+                    let owner_location = infores.photo.owner.location.replace(/'/g,"''");
                     let title= infores.photo.title._content.replace(/'/g,"''");
                     title = title.replace(/(\r\n|\n|\r)/gm,"").trim();
                     let description = infores.photo.description._content.replace(/'/g,"''");
@@ -150,7 +154,11 @@ Flickr.tokenOnly(flickrOptions, function(error, flickr) {
                         console.log(insertvalues);
                         console.log("Error in inserting photoinfo : " + err);
                     });
-                    
+}
+catch(ex)
+{
+console.log("Exception : " + ex);
+}                    
                     getphotoinfo(n + 1); //Increment the loop
                 }); 
             }
@@ -232,6 +240,10 @@ Flickr.tokenOnly(flickrOptions, function(error, flickr) {
                        {
                            val = 'null';
                        }
+		       if(typeof(val) == "string")
+			{
+			  val = val.replace(/\|/g,'#').trim(); 
+			}
                        
                        output +=  val + seperator;
                        
