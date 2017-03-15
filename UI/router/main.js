@@ -333,6 +333,8 @@ app.get('/getPosition',function(req,res){
     }
 });
 
+
+
 /**
  * @swagger
  * definitions:
@@ -342,6 +344,9 @@ app.get('/getPosition',function(req,res){
  *         type: string
  *       features:
  *         type: array
+ *         items : {
+            type : string
+            }
  */
 
 /**
@@ -349,8 +354,8 @@ app.get('/getPosition',function(req,res){
  * /getdata?dataset={dataset}&startdate={startdate}:
  *   get:
  *     tags:
- *       -  Twitter API
- *     description: Returns twitter data
+ *       -  Latest tweets for Live Activities.
+ *     description: Returns latest 10 twitter data to be displayed for Live Activities. Parameter dataset must be twitter and startdate in format yyyy-mm-dd
  *     produces:
  *       - application/json
  *     parameters:
@@ -378,7 +383,7 @@ app.get('/getPosition',function(req,res){
  *   get:
  *     tags:
  *       - Facebook API
- *     description: Returns facebook data
+ *     description: Parameter dataset should be facebook and areatype can be borough or msoa or lsoa and boundstart,boundend should be in format lat,long 
  *     produces:
  *       - application/json
  *     parameters:
@@ -523,7 +528,7 @@ app.get("/api/getdata",function(req,res){
                                         cordinatearray.push(arealatitude);
                                         cordinatearray.push(arealongitude);
                                         
-                                       dataarray.push({"type" : "Feature",
+                                      /* dataarray.push({"type" : "Feature",
                                        "properties" : { "p1" : areaname , 
                                                         "p2" : pcforBar , //Bar aggregate 
                                                         "p3" : pcforCasinos,  //Cinema Agregare
@@ -531,7 +536,18 @@ app.get("/api/getdata",function(req,res){
                                                         "p5" : pcforRestaurant        //Casinos Aggregate
                                        } , 
 
-                                       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                                       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}}); */
+
+				    dataarray.push({
+                                       "pr" :         { "p1" : areaname , 
+                                                        "p2" : pcforBar , //Bar aggregate 
+                                                        "p3" : pcforCasinos,  //Cinema Agregare
+                                                        "p4" : pcforCinemas,  //Rest Aggregate
+                                                        "p5" : pcforRestaurant        //Casinos Aggregate
+                                       } , 
+
+                                      "ge" : { "lo" : arealongitude, "la" : arealatitude }});
+
                                     }
                                     else
                                     {
@@ -546,7 +562,7 @@ app.get("/api/getdata",function(req,res){
                                         coordinates.push(latitude);
                                         coordinates.push(longitude);
 
-                                        dataarray.push({"type" : "Feature",
+                                      /*  dataarray.push({"type" : "Feature",
                                         "properties" : { "p1" : name , 
                                                          "p2" : category , 
                                                          "p3" : postcount,
@@ -555,7 +571,19 @@ app.get("/api/getdata",function(req,res){
                                         }, 
 
                                        "geometry" : { "type" : "Point" , "coordinates" : coordinates}}
-                                       );
+                                       ); */
+
+					dataarray.push({
+                                        "pr" :         { "p1" : name , 
+                                                         "p2" : category , 
+                                                         "p3" : postcount,
+                                                          "id" : fbid  
+                                                                            
+                                        }, 
+
+                                       "ge" : { "lo" : longitude, "la" : latitude }});
+					
+					
                                     }
                                    
                                }
@@ -659,11 +687,14 @@ app.get("/api/getdata",function(req,res){
                     		       cordinatearray.push(0.0);
                     		       cordinatearray.push(0.0);
                     		       
-                    		        //dataarray.push({"type" : "Feature", "properties" : {"name" : businessname , "postcount" : totalcount},"geometry" : {"type" : "Point" , "coordinates" : cordinatearray });
                 			   
-                			       dataarray.push({"type" : "Feature",
-                			       "properties" : { "p1" : tweet , "p2" : created_at_string , "p3" : username, "p4" : imageurl, "p5" : follcount, "p6" : tweetid} , 
-                			       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                	/* dataarray.push({"type" : "Feature",
+                	    "properties" : { "p1" : tweet , "p2" : created_at_string , "p3" : username, "p4" : imageurl, "p5" : follcount, "p6" : tweetid} , 
+               		"geometry" : { "type" : "Point" , "coordinates" : cordinatearray}}); */
+		
+			 dataarray.push({
+                             "pr" : { "p1" : tweet , "p2" : created_at_string , "p3" : username, "p4" : imageurl, "p5" : follcount, "p6" : tweetid} , 
+                             "ge" : { "lo" : cordinatearray[0] , "la" : cordinatearray[1] }});
                 			       
                 			   }
             			catch(ex)
@@ -699,7 +730,6 @@ app.get("/api/getdata",function(req,res){
   
 })
 
-
 /**
  * @swagger
  * definitions:
@@ -709,6 +739,9 @@ app.get("/api/getdata",function(req,res){
  *         type: string
  *       features:
  *         type: array
+ *         items: {
+            type: string
+            }
  */
 
 /**
@@ -794,9 +827,13 @@ app.get("/api/getgeotwitterdata",function(req,res){
                         cordinatearray.push(geo);
                         cordinatearray.push(coordinates);
 
-                        dataarray.push({"type" : "Feature",
+                      /*  dataarray.push({"type" : "Feature",
                        "properties" : { "p1" : tweet  } , 
-                       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                       "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}}); */
+
+			 dataarray.push({
+                       "pr" : { "p1" : tweet  } , 
+                       "ge" : { "lo" : cordinatearray[1], "la" : cordinatearray[0]}});
 
                     }
 
@@ -1233,7 +1270,10 @@ console.log(querystring);
  *   FacebookDetail:
  *     properties:
  *       posts:
- *         type: Array
+ *         type: array
+ *         items: {
+            type: string
+            }
  */
 
 /**
@@ -1259,9 +1299,11 @@ console.log(querystring);
  *     responses:
  *       200:
  *         description: Facebook details
- *       schema:
+ *     schema:
  *           $ref: '#/definitions/FacebookDetail'
  */
+
+
 app.get("/api/getfbdetail",function(req,res){
       let dataset = req.query.dataset;
       let fbid = req.query.entityid;
