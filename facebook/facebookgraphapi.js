@@ -48,38 +48,43 @@ function readAbusiveList(filename)
 
 readAbusiveList(abusivewordpath).then(function(data){
 
- var abusivelist = data.split('\n');
+  var abusivelist = data.split('\n');
 
- connection.query("SELECT distinct id FROM facebooklist order by id asc",function(ferr,frows,ffields)
-    {
+  connection.query("SELECT distinct id FROM facebooklist order by id asc",function(ferr,frows,ffields)
+      {
         if(frows.length > 0)
         {
             console.log("Fetching data from mysql");
-	    console.log("Total ids : " + frows.length);
+	          console.log("Total ids : " + frows.length);
             function getDetails(n)
             {
                 
                 if(n < frows.length)
                 {
-		console.log("Procesed : " + n + " request with id " + frows[n].id);
+		                console.log("Procesed : " + n + " request with id " + frows[n].id);
                     var date = new Date().toISOString();
                     var params = "";
                     completedata = "";
                     
- params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.until("+ toDate+").since("+ fromDate +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
+                    params = { fields: "id,about,bio,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.until("+ toDate+").since("+ fromDate +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time,from}" }; 
 
-    // params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since("+ ep +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time}" }; 
+                    // params = { fields: "id,about,bio,business,category,category_list,cover,description,engagement,fan_count,general_info,hours,is_always_open,is_verified,is_permanently_closed,is_unclaimed,link,location,name,overall_star_rating,place_type,price_range,rating_count,username,verification_status,website,feed.since("+ ep +"){message,place,link,picture,source,actions,message_tags,scheduled_publish_time,created_time,from}" }; 
                     
                     
                     graph.setAccessToken(constants.access_token[Math.floor(Math.random()*constants.access_token.length)]);
 
                     graph.get(frows[n].id.toString(), params,  function(err, res) {
                       //console.log(res); // { picture: "http://profile.ak.fbcdn.net/..." } 
+		      console.log("Inside the graph get Api");
                       if(err)
                       {
-                          console.log(err);
+                          console.log("Error in graph get : " + JSON.stringify(err));
+			
                       }
 			console.log("Fetching data from api");
+			//console.log(res);
+                   try
+                   {
                       if(res != null)
                       {
                           var data = res;
@@ -97,21 +102,26 @@ readAbusiveList(abusivewordpath).then(function(data){
                       {
                           //For Pages which does not have feeds spanned across pages.
                           jsonparsing.getParsedString(JSON.stringify(completedata),abusivelist);     
- 			connection.query('UPDATE facebooklist SET epoch = "'+ new Date().toISOString() +'" WHERE id = "'+ frows[n].id +'";', function(err, rows, fields) {
-        			if (err) 
-        			 {
-        				console.log(err);   
-        				}
-        			else
-        			{
-        				//console.log("Updated");
-        			}
-        		});
+                   			connection.query('UPDATE facebooklist SET epoch = "'+ new Date().toISOString() +'" WHERE id = "'+ frows[n].id +'";', function(err, rows, fields) {
+                          			if (err) 
+                          			 {
+                          				console.log(err);   
+                          				}
+                          			else
+                          			{
+                          				//console.log("Updated");
+                          			}
+                          		});
                           getDetails(n + 1);
                       }
+                    }
+                    catch(ex)
+                    {
+			getDetails(n + 1);
+                    }
                     });
                 }
-		else
+		          else
                 {
                     //Close SQL connection
                     connection.end(function(err) {
@@ -137,45 +147,48 @@ readAbusiveList(abusivewordpath).then(function(data){
         function recursivecall(res,n)
           {
               
-              if(res.paging && res.paging.next)
+              try
               {
-                  graph.get(res.paging.next, function(nerr, nres) {
-                      if(nerr)
-                      {
-                          console.log(nerr);
-                      }
-                        var ndata = nres;
-          
-                         for(var d = 0; d < ndata.data.length; d++) //Push all paginated feed data into single feed data array
-                         {
-                           completedata.feed.data.push(ndata.data[d]);
-                         }
-                          
-                          recursivecall(nres,n); //Recursive call
-                  });
-              }
-              else
-              {
-    			   jsonparsing.getParsedString(JSON.stringify(completedata),abusivelist);
-    			      
-    			
-                  //Update sql table : epoch field with todays date time.
-                  connection.query('UPDATE facebooklist SET epoch = "'+ new Date().toISOString() +'" WHERE id = "'+ frows[n].id +'";', function(err, rows, fields) {
-					if (err) 
-					{
-					 console.log(err);   
-					}
-					else
-					{
-					    //console.log("Updated");
-					}
-				});
-                  
-                  getDetails(n + 1); 
-              }
-             
+                  if(res.paging && res.paging.next)
+                  {
+                      graph.get(res.paging.next, function(nerr, nres) {
+                          if(nerr)
+                          {
+                              console.log(nerr);
+				
+                          }
+                            var ndata = nres;
+              
+                             for(var d = 0; d < ndata.data.length; d++) //Push all paginated feed data into single feed data array
+                             {
+                               completedata.feed.data.push(ndata.data[d]);
+                             }
+                              
+                              recursivecall(nres,n); //Recursive call
+                      });
+                  }
+                  else
+                  {
+        			       jsonparsing.getParsedString(JSON.stringify(completedata),abusivelist);
+                      //Update sql table : epoch field with todays date time.
+                      connection.query('UPDATE facebooklist SET epoch = "'+ new Date().toISOString() +'" WHERE id = "'+ frows[n].id +'";', function(err, rows, fields) {
+              					if (err) 
+              					{
+              					 console.log(err);   
+              					}
+              					else
+              					{
+              					    //console.log("Updated");
+              					}
+              				});
+                      
+                      getDetails(n + 1); 
+                  }
+            }
+            catch(ex)
+            {}
           }
-  
+            
         }
     });
 });                      

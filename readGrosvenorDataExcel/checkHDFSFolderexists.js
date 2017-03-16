@@ -1,4 +1,7 @@
+//Module to check for existing HDFS folder before putting the file
+
 'use strict';
+
 const Q = require('q');
 var child;
 var exec = require('child_process').exec;

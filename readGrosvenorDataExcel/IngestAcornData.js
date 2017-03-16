@@ -1,54 +1,62 @@
-//Script to ingest Store footfall data from Liverpoolone excel sheet.
-
+//Script to ingest Acorn Data from LiverpoolOne Excel sheet
 'use strict'
 var Excel = require('exceljs');
 var workbook = new Excel.Workbook();
 var fs = require('fs');
 var Q = require('q');
-let year = process.argv[2]; 
+let year = process.argv[2];
+let startline = process.argv[3];
+let endline = process.argv[4];
 var exec = require('child_process').exec;
 var child;
 let basefolderpath = "outputfile/";
 var checkHDFS = require("./checkHDFSFolderexists");
 var checkLocalFile = require('./createLocalFile');
+var conf = require('./config/config');
+const constant = conf.constants;
+let sheetname = constant.AcornSheetName;
+let filename = "/opt/nodeprojects/GrosvenorLocation/readGrosvenorDataExcel/outputfile/" + sheetname + ".txt";
 
-let sheetname = "FF";
-let filename = "outputfile/" + sheetname + ".txt";
+if(process.argv.length < 5)
+{
+console.log("Required parameters for ingesting acorn is : year startline endline. Eg : node IngestAcornData.js 2016 40 57 ");
+process.exit(0);
+}
+
 function readSheet()
 {
     var defered = Q.defer();
-     workbook.xlsx.readFile("inputfile/GROSVENOR_PROJECT_DATA_2016.xlsx")
+     workbook.xlsx.readFile(constant.AcornPath)
         .then(function() {
             // use workbook
-            var worksheet =  workbook.getWorksheet("FF (2 Way Flow Unless Stated)");
+            var worksheet =  workbook.getWorksheet(sheetname);
             var yeararray = [];
            
             worksheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
                     var rowvalues =  row.values;
                     var output="";
                     
-                    if(rowNumber > 1)
+               // console.log(rowNumber + " : " + JSON.stringify(rowvalues));
+                
+                if(rowNumber >= startline && rowNumber <= endline)
+                {
+                    
+                    for(let r =1; r < rowvalues.length; r++)
                     {
-                        for(let r =1; r < rowvalues.length ; r++)
+                        let value = "";
+                        if(rowvalues[r] != undefined && typeof(rowvalues[r]) == "object")
                         {
-                            var val ="";
-                            if(r == 1 && rowvalues[r] != undefined)
-                            {
-                               val = JSON.stringify(rowvalues[r]).split('T')[0].replace('"',''); 
-                            }
-                            else
-                            {
-                                val = (rowvalues[r] == undefined) ? 0 : rowvalues[r];
-                            }
-                           
-                            output += val + '|' ;
+                           value = rowvalues[r].result;
                         }
-                        
-                        output = output.substr(0,output.length - 1);
-                        output = output + "\n";
+                         else
+                        {
+                           value = (rowvalues[r] == undefined) ? null : rowvalues[r];
+                        }
+                         output += value + '|' ;
                     }
-                    
-                    
+                    output = output.substr(0,output.length - 1);
+                    output = output + "\n";
+                }
                 
                 checkLocalFile.removeExistingLocalfile(filename).then(function(r){
                             
@@ -92,7 +100,6 @@ readSheet().then(function(res){
         if(re == 0)
         {
             console.log("Finished");
-            // let filename = basefolderpath + sheetname;
                
                  let hdfspath = YearFolder + "/" + sheetname + ".txt";
                  var FScommand = "hadoop fs -rm -skipTrash " + hdfspath + ";hadoop fs -put " + filename  + " " + YearFolder;
@@ -114,3 +121,6 @@ readSheet().then(function(res){
     });
    }
 });
+
+
+//readSheet();

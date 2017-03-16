@@ -1,3 +1,5 @@
+//Script to ingest Sales,Transaction and Store Footfall data from LiverpoolOne - Grosvenor Data Excel sheet
+
 'use strict'
 var Excel = require('exceljs');
 var workbook = new Excel.Workbook();
@@ -49,13 +51,12 @@ function readSheet(name)
                         }
                     }
                     
-                    if(yeararray.length == salearray.length)
-                    {
+                   
                         var storename = rowvalues[1];
                         var zonename = rowvalues[2];
                         var output = "";
                         //output += storename + ',' + zonename + ",";
-                        for(let c=0; c < yeararray.length; c++)
+                        for(let c=0; c < salearray.length; c++)
                         {
                             output += storename + '|' + zonename + "|" +  yeararray[c] + '|' + salearray[c] + "\n";
                         }
@@ -82,9 +83,6 @@ function readSheet(name)
                             }
                              
                         });
-                        
-                        
-                    }
                        
                 });
         });
