@@ -1,4 +1,3 @@
-//Script to ingest Acorn Data from LiverpoolOne Excel sheet
 'use strict'
 var Excel = require('exceljs');
 var workbook = new Excel.Workbook();

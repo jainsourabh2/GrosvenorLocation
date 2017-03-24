@@ -1,5 +1,3 @@
-//Script to ingest Sales,Transaction and Store Footfall data from LiverpoolOne - Grosvenor Data Excel sheet
-
 'use strict'
 var Excel = require('exceljs');
 var workbook = new Excel.Workbook();

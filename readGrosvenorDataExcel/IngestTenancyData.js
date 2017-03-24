@@ -9,34 +9,45 @@ var child;
 let basefolderpath = "outputfile/";
 var checkHDFS = require("./checkHDFSFolderexists");
 var checkLocalFile = require('./createLocalFile');
+var config = require("./config/config.js");
+const constant = config.constants;
+let sheetname = "Tenancy";
+let filename = "/opt/nodeprojects/GrosvenorLocation/readGrosvenorDataExcel/outputfile/" + sheetname + ".txt";
 
-let sheetname = "FF";
-let filename = "outputfile/" + sheetname + ".txt";
 function readSheet()
 {
-    var defered = Q.defer();
-     workbook.xlsx.readFile("inputfile/GROSVENOR_PROJECT_DATA_2016.xlsx")
+     var defered = Q.defer();
+     workbook.xlsx.readFile(constant.tenancyfilepath)
         .then(function() {
             // use workbook
-            var worksheet =  workbook.getWorksheet("FF (2 Way Flow Unless Stated)");
+            var worksheet =  workbook.getWorksheet(constant.Tenancysheetname);
             var yeararray = [];
-           
+            let lastRowCount = worksheet.rowCount;
             worksheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
                     var rowvalues =  row.values;
                     var output="";
                     
-                    if(rowNumber > 1)
+                    if(rowNumber > 2 && rowNumber != lastRowCount)
                     {
                         for(let r =1; r < rowvalues.length ; r++)
                         {
                             var val ="";
-                            if(r == 1 && rowvalues[r] != undefined)
+                            if(typeof rowvalues[r] == "object" && rowvalues[r] != undefined) //For Date type
                             {
-                               val = JSON.stringify(rowvalues[r]).split('T')[0].replace('"',''); 
+                                let date = JSON.stringify(rowvalues[r]);
+                                if(date != undefined)
+                                {
+                                    val = JSON.stringify(rowvalues[r]).split('T')[0].replace('"','');      
+                                }
+                                else
+                                {
+                                     val = (rowvalues[r] == undefined) ? null : rowvalues[r];
+                                }
+                               
                             }
                             else
                             {
-                                val = (rowvalues[r] == undefined) ? 0 : rowvalues[r];
+                                val = (rowvalues[r] == undefined) ? null : rowvalues[r];
                             }
                            
                             output += val + '|' ;
@@ -46,9 +57,7 @@ function readSheet()
                         output = output + "\n";
                     }
                     
-                    
-                
-                checkLocalFile.removeExistingLocalfile(filename).then(function(r){
+                    checkLocalFile.removeExistingLocalfile(filename).then(function(r){
                             
                             if(r == 0)
                             {
@@ -67,11 +76,10 @@ function readSheet()
                             }
                              
                         });
-                
+                    
             });
         });
-        
-        return defered.promise;
+    return defered.promise;
 }
 
 readSheet().then(function(res){
@@ -90,7 +98,6 @@ readSheet().then(function(res){
         if(re == 0)
         {
             console.log("Finished");
-            // let filename = basefolderpath + sheetname;
                
                  let hdfspath = YearFolder + "/" + sheetname + ".txt";
                  var FScommand = "hadoop fs -rm -skipTrash " + hdfspath + ";hadoop fs -put " + filename  + " " + YearFolder;
