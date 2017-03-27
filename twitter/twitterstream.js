@@ -72,7 +72,7 @@ function startstreaming(){
 	var payloads;
 	var newpayloads;
 	//Location boundary coordinate for London (-0.5103, 51.2868, 0.3340, 51.6923), for liverpool(-3.022091,53.377726,-2.876204,53.447641) 
-	client.stream('statuses/filter', {follow: twitterIdList,locations:'-0.5103, 51.2868, 0.3340, 51.6923,-3.022091,53.377726,-2.876204,53.447641',track:'Grosvenor,Mayfair,Belgravia,#LiverpoolONE'}, function(stream) {
+	client.stream('statuses/filter', {follow: twitterIdList,locations:'-0.5103, 51.2868, 0.3340, 51.6923,-3.022091,53.377726,-2.876204,53.447641',track:'Grosvenor,Mayfair,Belgravia,LiverpoolONE'}, function(stream) {
 	//client.stream('statuses/filter', {follow: twitterIdList}, function(stream) {
 		stream.on('data', function(tweet) {
 			if(tweet.text){

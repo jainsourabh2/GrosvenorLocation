@@ -1527,6 +1527,290 @@ function getDrillQueryForType(type)
 
 
 
+app.get("/api/liverpoolOneFB",function(req,res){
+    let dataset = req.query.dataset;
+    let startdate = req.query.startdate;
+    let enddate = req.query.enddate;
+    let todaydate = new Date().toLocaleDateString();
+    let error = {errormsg : ""};    
+     let sdate = (startdate != undefined) ? startdate : moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0];  //Format in yyyy-mm-dd Current date
+     let edate = (enddate != undefined) ? enddate :  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0]; //Format in yyyy-mm-dd Tomorows date 
+     
+     if(dataset == undefined || dataset != 'facebook')
+     {
+        error.errormsg = "Dataset parameter is mandatory and its value must be facebook";
+        res.send(error);
+     }
+
+     let query = " select distinct A.id,A.name,A.category,B.Latitude,B.Longitude from `hive_social_media`.`default`.`facebookdata` A inner join `dfs`.`default`.`MasterStoreData` B on " + 
+                 " LOWER(A.username) = LOWER(B.FBHandle)  where A.fb_date between '" + sdate + "' and '" + edate + "' and LOWER(A.username) in(" + 
+                 "'adidasuk','allsaints','americanapparel','annsummersofficial','apple','barburritouk','barberbarberuk','bembrasil'," +
+                 "'birminghambierkeller','billsrestaurants','boseuk','bouxavenue','bravissimo','brownsfashion','buildabear','busabaeathai'," +
+                 "'byronhamburgers','cadenzza','caffenero','card-factory-124991387578486','cassArt1984','cathkidston','liverpoolchaophraya'," +
+                 "'claireseurope','clintonsuk','coaststores','costacoffee','cosyclubliverpool','d.m.robinson.jewellers','debenhams','alive-dirty-460312137396247'," +
+                 "'disneystoreuk','drmartens','dunelondon','eatltduk','edseasydiners','ernestjonesjewellers','evanscycles','everton','fishlocks.flowers.liverpool'," +                  "'flannelsfashion','fredperry','gourmetburgerkitchen','ukgap','goldsmithsuk','greggsofficial','hmunitedkingdom','hsamuelthejeweller','harveynichols',"+
+                 "'hobbsvip','hollister','hotelchocolat','hugoboss','interestingeat','jdsportsofficial','jackandjonesUK','jackwolfskinofficial','jamiesitalianuk'," +
+                 "'jonesbootmaker','junglerumbleuk','karenmillen','kiehls','krispykremeuk','kuonitraveluk','loccitane.uk','liverpoolfc','lakelanduk','lasiguanasuk'," +
+                 "'lego','levis.gb','lindtuk','lunya','mamasandpapas','mango.com','menkind','michaelkors','milliesliverpool','missselfridge','modainpelle'," + 
+                 "'monsoonuk','like.mooboo','nandos.unitedkingdom','newlookfashion','nike','o2uk','oasisfashions','officeshoes1','pandorajewelry','paperchase'," +
+                 "'pizzaexpress','pizzahutuk','pretamanger','prettygreenltd','pullandbear','radleylondon','redhotbuffet','redsbbqliverpool','reiss','rolex'," +
+                 "'roxyballroomliverpool','sky','sblended.milkshakes.uk','schuhshoes','selectonline','7liverpool-266703353688640','simplybefashion','skechers'," +
+                 "'smiggleuk','sportsdirect','starbucksuk','subwayukireland','superdry','ststudio.hq','swarovskicom','swatchuk','tgifridaysuk','tailorthread'," +
+                 "'tavernL1','tedbaker','tessutiuk','thebodyshopuk','theclubhousel1','theentertainertoyshop','fragranceshopuk','fueljuicebars','thenorthface'," +
+                 "'theperfumeshoponline','thewhitecompany','thorntonschocs','topshop','tortillauk','toysrusuk','turtlebayrestaurants','uscfashion','ugguk'," +
+                 "'urbandecaycosmetics','urbanoutfitterseurope','utilitydesign.co.uk','vanseurope','victoriassecret','whsmith','wagamama-uk-1837864496502928'," +
+                 "'wahaca','warehousefashion','waterstones','thisiswhistles','whitewallgalleries','yardandcoop','yeerahliverpool','yosushi','zara','zizziliverpool')" ;
+        
+        let dataarray = [];
+        let dataobj = {};
+        
+      let reqoptions = {
+              uri :url,
+              headers:{'Content-Type':'application/json'},
+              method : "POST",
+              body: JSON.stringify({queryType : 'SQL', query : query})
+              
+          };
+          
+           request(reqoptions, function(err, response, data){
+              //console.log(response + " " + err + " " + data);
+              if(err)
+              {
+                  console.log("Err: " + err);
+              }
+              if (!err && response.statusCode ==200){
+                  
+              var obj = JSON.parse(data);
+              //console.log(obj);
+              for(let n =0; n < obj.rows.length; n++)
+              {
+                  let facebookid = obj.rows[n].id;
+                  let facebookpagename = obj.rows[n].name;
+                  let pagecategory = obj.rows[n].category;
+                  let latitude = obj.rows[n].Latitude;
+                  let longitude = obj.rows[n].Longitude;
+                  
+                  let cordinatearray = [];
+                  cordinatearray.push(longitude);
+                  cordinatearray.push(latitude);
+                  
+                   dataarray.push({"type" : "Feature",
+                             "properties" : { "p1" : facebookid,"p2" : facebookpagename, "p3" : pagecategory } , 
+                             "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+              }
+              
+                dataobj.type = "FeatureCollection";
+                      dataobj.features = dataarray;
+          
+                      console.log(JSON.stringify(dataobj));
+                      res.send(dataobj);  
+              }
+           });
+    
+});
+
+
+//Get tweets having keyword #LiverpoolOne
+
+/**
+
+* @swagger
+* /getliverpoolonedata?dataset={dataset}&startdate={startdate}&enddate={enddate}:
+*   get:
+*     tags:
+*       -  Latest tweets for Live Activities.
+*     description: Returns tweets with data liverpoolone keyword. Parameter dataset must be twitter and date in format yyyy-mm-dd
+*     produces:
+*       - application/json
+*     parameters:
+*       - name: dataset
+*         description: Dataset
+*         in: path
+*         required: true
+*         type: string
+*       - name: startdate
+*         description: Dataset
+*         in: path
+*         required: false
+*         type: string
+*       - name: enddate
+*         description: Dataset
+*         in: path
+*         required: false
+*         type: string
+* 
+*     responses:
+*       200:
+*         description: Twitter data
+*     schema:
+*           $ref: '#/definitions/GetLiverPoolData'
+*/
+
+app.get("/api/getliverpoolonedata",function(req,res){
+
+    var dataset = req.query.dataset;
+
+    var startdate = req.query.startdate;
+
+    var enddate = req.query.enddate;
+
+    var todaydate = new Date().toLocaleDateString();
+
+    if(dataset == undefined)
+      {
+          var errorobj = {"error" : "Not enough parameters. Parameters dataset is mandatory"};
+          res.send(errorobj);
+      }
+
+     if(dataset == "twitter")
+     {
+        logger.info("Twitter query started for LiverPoolOne");       
+
+         let sdate = (startdate != undefined) ? startdate.substr(2,startdate.length) : moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0].substr(2,moment(todaydate,"yyyy-mm-dd").toISOString().length);  //Format in yyyy-mm-dd Current date
+
+         let edate = (enddate != undefined) ? enddate.substr(2,enddate.length) :  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0].substr(2,moment(todaydate,"yyyy-mm-dd").toISOString().length); 
+
+
+        logger.info("StartDate for LiverPoolOne ",startdate);
+
+        logger.info("EndDate for LiverPoolOne ",enddate);                           
+
+         var track = "liverpoolone";
+
+         var reqobj = {"dataset" : dataset, "startdate" : sdate, "enddate" : edate, "keywords" : track}
+
+         var q = getQueryForLiverPoolOne(reqobj);
+
+         console.log(q);
+
+         var dataobj = {};
+
+         var dataarray = [];
+         var reqoptions = {
+
+         uri :url,
+
+         headers:{'Content-Type':'application/json'},
+
+         method : "POST",
+
+         body: JSON.stringify({queryType : 'SQL', query : q})
+         };
+         
+
+        request(reqoptions, function(err, response, data){
+
+               //console.log(response + " " + err + " " + data);
+
+               if(err)
+
+               {
+
+                   //console.log("Err: " + err);
+
+                    logger.error("Error: " + err);
+
+               }
+
+               if (!err && response.statusCode ==200){
+                   var obj = JSON.parse(data);
+                   for(let p =0; p < obj.rows.length; p++)
+
+                    {
+
+                      console.log(obj.rows[p]);
+
+                        var created_at = new Date(obj.rows[p].creeated_at);
+
+                        var tweet = obj.rows[p].tweet;                        
+
+                        var imageurl = obj.rows[p].userprofileimageurl;
+
+                        var username = obj.rows[p].userscreenname;
+
+                        var follcount = obj.rows[p].userfollowercount;
+
+                        var tweetid = obj.rows[p].tweet_id;
+
+                                                                     
+
+                        var cordinatearray = [];
+
+                         cordinatearray.push(0.0);
+
+                         cordinatearray.push(0.0);
+
+                        
+
+                         dataarray.push({
+
+                             "pr" : { "p1" : tweet , "p2" : created_at , "p3" : username, "p4" : imageurl, "p5" : follcount, "p6" : tweetid} ,
+
+                             "ge" : { "lo" : cordinatearray[0] , "la" : cordinatearray[1] }});
+
+                    }
+
+                dataobj.type = "FeatureCollection";
+
+                      dataobj.features = dataarray;
+
+                      console.log(JSON.stringify(dataobj));
+
+                      res.send(dataobj); 
+
+                }
+
+                 else
+
+                 {
+
+                        var errorobj = {"error" : "Unexpected Error"};
+
+                        res.send(errorobj);
+
+                 }
+
+ 
+
+        });
+
+      }
+
+    });
+
+
+function getQueryForLiverPoolOne(robj)
+
+{
+
+     var dataset = robj.dataset;
+
+     var startdate = robj.startdate;
+
+     var enddate = robj.enddate;
+
+     var track = robj.keywords;
+
+     logger.info("Inside getQueryForLiverPoolOne");
+
+    if(robj.dataset == "twitter")
+
+    {
+
+        var query= "select creeated_at,tweet, userscreenname,userprofileimageurl,userfollowercount,tweet_id from `hive_social_media`.`default`.`newtwittercategorystream` where create_date between '" + startdate + "' and '" + enddate+ "' and category=0 and STRPOS(LOWER(tweet),'"+ track +"') > 0";
+
+        logger.info("Get Query For LiverPoolOne ",query);
+
+        return query;
+
+    }
+
+       
+
+}
+
+
+
 app.get("/api/getstation",function(req,res){
    
    var param = req.query.dataset;
