@@ -566,19 +566,18 @@ app.get("/api/getdata",function(req,res){
                                         "properties" : { "p1" : name , 
                                                          "p2" : category , 
                                                          "p3" : postcount,
-							  "id" : fbid  
+							                             "id" : fbid  
                                                                             
                                         }, 
 
                                        "geometry" : { "type" : "Point" , "coordinates" : coordinates}}
                                        ); */
 
-					dataarray.push({
-                                        "pr" :         { "p1" : name , 
+					                               dataarray.push({
+                                          "pr" :         { "p1" : name , 
                                                          "p2" : category , 
                                                          "p3" : postcount,
-                                                          "id" : fbid  
-                                                                            
+                                                          "id" : fbid                                   
                                         }, 
 
                                        "ge" : { "lo" : longitude, "la" : latitude }});
@@ -598,7 +597,7 @@ app.get("/api/getdata",function(req,res){
                             else
                             {
                                // console.log(station,stnlat,stnlong);
-				logger.info("Building Object collection ended");
+				                        logger.info("Building Object collection ended");
                                 dataobj.type = "FeatureCollection";
                                 dataobj.features = dataarray;
                                 
@@ -1526,7 +1525,7 @@ function getDrillQueryForType(type)
 }
 
 
-
+//Get Facebook posts of LiverpoolOne stores.
 app.get("/api/liverpoolOneFB",function(req,res){
     let dataset = req.query.dataset;
     let startdate = req.query.startdate;
@@ -1590,13 +1589,10 @@ app.get("/api/liverpoolOneFB",function(req,res){
                   let latitude = obj.rows[n].Latitude;
                   let longitude = obj.rows[n].Longitude;
                   
-                  let cordinatearray = [];
-                  cordinatearray.push(longitude);
-                  cordinatearray.push(latitude);
-                  
-                   dataarray.push({"type" : "Feature",
-                             "properties" : { "p1" : facebookid,"p2" : facebookpagename, "p3" : pagecategory } , 
-                             "geometry" : { "type" : "Point" , "coordinates" : cordinatearray}});
+                  dataarray.push({
+                             "pr" : {"p1" : facebookid,"p2" : facebookpagename, "p3" : pagecategory},
+                             "ge" : {"lo" : longitude , "la" : latitude }
+                     });
               }
               
                 dataobj.type = "FeatureCollection";
@@ -1638,6 +1634,11 @@ app.get("/api/liverpoolOneFB",function(req,res){
 *         in: path
 *         required: false
 *         type: string
+*       - name: limit
+*         description: Dataset
+*         in: path
+*         required: false
+*         type: string
 * 
 *     responses:
 *       200:
@@ -1655,6 +1656,9 @@ app.get("/api/getliverpoolonedata",function(req,res){
     var enddate = req.query.enddate;
 
     var todaydate = new Date().toLocaleDateString();
+    let limit = req.query.limit;
+
+    limit = (limit == undefined) ? 10 : limit;
 
     if(dataset == undefined)
       {
@@ -1677,7 +1681,7 @@ app.get("/api/getliverpoolonedata",function(req,res){
 
          var track = "liverpoolone";
 
-         var reqobj = {"dataset" : dataset, "startdate" : sdate, "enddate" : edate, "keywords" : track}
+         var reqobj = {"dataset" : dataset, "startdate" : sdate, "enddate" : edate, "keywords" : track, "limit" : limit}
 
          var q = getQueryForLiverPoolOne(reqobj);
 
@@ -1779,40 +1783,31 @@ app.get("/api/getliverpoolonedata",function(req,res){
     });
 
 
+
+
 function getQueryForLiverPoolOne(robj)
-
 {
-
      var dataset = robj.dataset;
-
      var startdate = robj.startdate;
-
      var enddate = robj.enddate;
-
      var track = robj.keywords;
+     var limit = robj.limit;
 
      logger.info("Inside getQueryForLiverPoolOne");
 
     if(robj.dataset == "twitter")
-
     {
-
-        var query= "select creeated_at,tweet, userscreenname,userprofileimageurl,userfollowercount,tweet_id from `hive_social_media`.`default`.`newtwittercategorystream` where create_date between '" + startdate + "' and '" + enddate+ "' and category=0 and STRPOS(LOWER(tweet),'"+ track +"') > 0";
-
+        var query= "select creeated_at,tweet, userscreenname,userprofileimageurl,userfollowercount,tweet_id from `hive_social_media`.`default`.`newtwittercategorystream` where create_date between '" + startdate + "' and '" + enddate+ "' and category=0 and STRPOS(LOWER(tweet),'"+ track +"') > 0 order by creeated_at desc LIMIT " + limit;
         logger.info("Get Query For LiverPoolOne ",query);
-
         return query;
 
     }
-
-       
 
 }
 
 
 
-app.get("/api/getstation",function(req,res){
-   
+app.get("/api/getstation",function(req,res){  
    var param = req.query.dataset;
    
     var q = "SELECT distinct location,latitude,longitude FROM facebooklist";
@@ -1839,8 +1834,7 @@ app.get("/api/getstation",function(req,res){
                        var stationname = frows[n].location;
                        var stnlat = frows[n].latitude;
                        var stnlong = frows[n].longitude;
-                      
-			var stncoordinates = [];
+			                 var stncoordinates = [];
                       stncoordinates.push(stnlat);
                       stncoordinates.push(stnlong);
                       
