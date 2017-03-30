@@ -9,7 +9,6 @@ var request = require("request");
 var url = "http://10.80.2.4:8047/query.json";
 var q = require('q');
 const logger = require('../config/log.js');
-//var entity="";
 
  /**
  * @swagger
@@ -30,7 +29,7 @@ const logger = require('../config/log.js');
  
 /**
  * @swagger
- * /getAggregateSalesData?startdate={startdate}&enddate={enddate}&day={day}&latitude={latitude}&longitude={longitude}:
+ * /getAggregateSalesData?startdate={startdate}&enddate={enddate}&days={day};
  *   get:
  *     tags:
  *       -  Get aggregate data for Sales.
@@ -142,7 +141,7 @@ function getQueryForSalesData(robj)
 
 /**
  * @swagger
- * /getAggregateTransactionsData?startdate={startdate}&enddate={enddate}&day={day}&latitude={latitude}&longitude={longitude}:
+ * /getAggregateTransactionsData?startdate={startdate}&enddate={enddate}&days={day};
  *   get:
  *     tags:
  *       -  Get aggregate data for Transactions.
@@ -255,7 +254,7 @@ function getQueryForTransactionsData(robj)
 
 /**
  * @swagger
- * /getAggregateFootfallData?startdate={startdate}&enddate={enddate}&day={day}&latitude={latitude}&longitude={longitude}:
+ * /getAggregateFootfallData?startdate={startdate}&enddate={enddate}&days={day};
  *   get:
  *     tags:
  *       -  Get aggregate data for Transactions.
@@ -406,13 +405,9 @@ function parseRequest(req,res,entity,q)
 						var id = obj.rows[p].Id;
 						var dayPeriod = obj.rows[p].DayPeriod;
 						
-						var cordinatearray = [];
-						cordinatearray.push(lon);
-						cordinatearray.push(lat);
-		
 						dataarray.push({
                              "pr" : { "p1" : totalcount , "p2" : storename , "p3" : zone, "p4" : id, "p5" : dayPeriod} , 
-                             "ge" : { "lo" : cordinatearray[1] , "la" : cordinatearray[0] }});
+                             "ge" : { "lo" : lon , "la" : lat }});
 
                     }
 
