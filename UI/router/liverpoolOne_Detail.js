@@ -76,6 +76,7 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
     let weekdays = req.query.weekdays;  //optional
     let error = { errormsg : "" };
    
+    logger.info("LiverpoolOne Store Detail API started");
 
     if(fromdate == undefined || todate == undefined || storeid == undefined || entity == undefined)
     {
@@ -86,9 +87,11 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
     let queryobj = { weekdays : weekdays, startdate : fromdate, enddate : todate,storeid : storeid};
 
     entity = entity.toLowerCase();
-    console.log(entity);
+    //console.log(entity);
+    logger.info("Query for " + entity);
+    logger.info("Building query started");
     let q = buildDrillQuery(queryobj,entity);
-
+    logger.info("Building query end");
     let dataarray = [];
     let dataobj = {};
         
@@ -100,16 +103,18 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
 	      
 	  };
 
+	  logger.info("Before Drill Request");
 	  request(reqoptions, function(err, response, data){
               //console.log(response + " " + err + " " + data);
               if(err)
               {
                   console.log("Err: " + err);
+                  logger.error(err);
               }
 
               if (!err && response.statusCode ==200)
               {
-                  
+                  logger.info("Drill Request complete");
 	              var obj = JSON.parse(data);
 	              //console.log(obj);
 	              for(let n =0; n < obj.rows.length; n++)
@@ -130,6 +135,7 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
           
                   //console.log(JSON.stringify(dataobj));
                   res.send(dataobj); 
+                  logger.info("LiverpoolOne Store Detail API end");
           	  }
           	});
 
@@ -181,7 +187,7 @@ if(entity == "sales")
 {
 	let query1 = " SELECT CAST(S.SalesValue as int) as totalvalue,S.StoreName as storename,S.Zone as zone,S.Period as period,S.DayPeriod as dayperiod from ";
 	let query2 = " (Select * from `dfs`.`default`.`SalesView` V where V.Period between '" + startdate + "' and '" + enddate + "' ";
-	let query3 =  " and LOWER(DayPeriod) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
+	let query3 =  " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
 	let query4 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "'";
 	let query = "";
 
@@ -195,6 +201,7 @@ if(entity == "sales")
 	}
 	
 	console.log(query);
+	logger.info("Sales query : " + query);
 	return query;
 }
 
@@ -203,7 +210,7 @@ if(entity == "transactions")
 
 	let query1 = " SELECT CAST(S.TransactionsValue as int) as totalvalue,S.StoreName as storename,S.Zone as zone,S.Period as period,S.DayPeriod as dayperiod from ";
 	let query2 = " (Select * from `dfs`.`default`.`TransactionsView` V where V.Period between '" + startdate + "' and '" + enddate + "' ";
-	let query3 =  " and LOWER(DayPeriod) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
+	let query3 =  " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
 	let query4 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "'";
 	let query = "";
 
@@ -217,6 +224,7 @@ if(entity == "transactions")
 	}
 	
 	console.log(query);
+	logger.info("Transactions query : " + query);
 	return query;
 
 }
@@ -226,7 +234,7 @@ if(entity == "footfall")
 
 	let query1 = " SELECT CAST(S.FootfallValue as int) as totalvalue,S.StoreName as storename,S.Zone as zone,S.Period as period,S.DayPeriod as dayperiod from ";
 	let query2 = " (Select * from `dfs`.`default`.`StorefootfallView` V where V.Period between '" + startdate + "' and '" + enddate + "' ";
-	let query3 =  " and LOWER(DayPeriod) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
+	let query3 =  " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
 	let query4 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "'";
 	let query = "";
 
@@ -240,6 +248,7 @@ if(entity == "footfall")
 	}
 	
 	console.log(query);
+	logger.info("Storefootfall query : " + query);
 	return query;
 }
 

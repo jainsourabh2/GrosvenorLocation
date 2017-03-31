@@ -104,12 +104,17 @@ function getQueryForSalesData(robj)
 	var weekdays = robj.days;
 	var query2 = "";
 	var query3 =")";
-	var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone,S.DayPeriod, M.Latitude,M.Longitude,M.Id";
+	var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, ";
+	var quer4Period="";
+	var query4remain= "M.Latitude,M.Longitude,M.Id";
 	let weekdaylist="";
 
 	logger.info("Start of getQueryForSalesData");
     
-	var query1 = "SELECT SUM(CAST(S.SalesValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude,S.DayPeriod from (Select * from `dfs`.`default`.`SalesView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";    	 
+	var query1 = "SELECT SUM(CAST(S.SalesValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude";
+	var query1Period=""
+	var query1remain = " from (Select * from `dfs`.`default`.`SalesView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";
+
 	if(weekdays != undefined )
 	{
 		if(weekdays.indexOf(',') > -1) //If multiple weekdays are selected, make comma seperated list 
@@ -127,10 +132,13 @@ function getQueryForSalesData(robj)
 		{
 			weekdaylist = "'" + weekdays.toLowerCase() + "'";
 		}
-		query2 = "and LOWER(V.DayPeriod) IN ("+ weekdaylist + ")";
+		
+		query2 = "and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
+		query1Period =", S.DayPeriod ";
+		quer4Period= "S.DayPeriod,";
 	}
 	
-	var query = query1+query2+query3+query4;
+	var query = query1+query1Period+query1remain+query2+query3+query4+quer4Period+query4remain;
 	logger.info("query in getQueryForSalesData", query);
 	
 	logger.info("End of getQueryForSalesData");
@@ -210,19 +218,24 @@ app.get("/api/getAggregateTransactionsData",function(req,res){
 
 function getQueryForTransactionsData(robj)
 {
-    var fromdate = robj.startdate;
+	var fromdate = robj.startdate;
     var todate = robj.enddate;
     var latitude = robj.latitude;
 	var longitude = robj.longitude;
 	var weekdays = robj.days;
 	var query2 = "";
 	var query3 =")";
-	var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone,S.DayPeriod, M.Latitude,M.Longitude,M.Id";
+	var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, ";
+	var quer4Period="";
+	var query4remain= "M.Latitude,M.Longitude,M.Id";
 	let weekdaylist="";
 
 	logger.info("Start of getQueryForTransactionsData");
     
-	var query1 = "SELECT SUM(CAST(S.TransactionsValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude,S.DayPeriod from (Select * from `dfs`.`default`.`TransactionsView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";    	 
+	var query1 = "SELECT SUM(CAST(S.TransactionsValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude";
+	var query1Period=""
+	var query1remain = " from (Select * from `dfs`.`default`.`TransactionsView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";
+
 	if(weekdays != undefined )
 	{
 		if(weekdays.indexOf(',') > -1) //If multiple weekdays are selected, make comma seperated list 
@@ -240,15 +253,19 @@ function getQueryForTransactionsData(robj)
 		{
 			weekdaylist = "'" + weekdays.toLowerCase() + "'";
 		}
-		query2 = "and LOWER(V.DayPeriod) IN ("+ weekdaylist + ")";
+		
+		query2 = "and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
+		query1Period =", S.DayPeriod ";
+		quer4Period= "S.DayPeriod,";
 	}
 	
-	var query = query1+query2+query3+query4;
+	var query = query1+query1Period+query1remain+query2+query3+query4+quer4Period+query4remain;
 	logger.info("query in getQueryForTransactionsData", query);
 	
 	logger.info("End of getQueryForTransactionsData");
 	
 	return query;
+    
 }
 
 
@@ -329,12 +346,17 @@ function getQueryForFootfallData(robj)
 	var weekdays = robj.days;
 	var query2 = "";
 	var query3 =")";
-	var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone,S.DayPeriod, M.Latitude,M.Longitude,M.Id";
+	var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, ";
+	var quer4Period="";
+	var query4remain= "M.Latitude,M.Longitude,M.Id";
 	let weekdaylist="";
-	
+
 	logger.info("Start of getQueryForFootfallData");
     
-	var query1 = "SELECT SUM(CAST(S.FootfallValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude,S.DayPeriod from (Select * from `dfs`.`default`.`StorefootfallView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";    	 
+	var query1 = "SELECT SUM(CAST(S.FootfallValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude";
+	var query1Period=""
+	var query1remain = " from (Select * from `dfs`.`default`.`StorefootfallView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";
+
 	if(weekdays != undefined )
 	{
 		if(weekdays.indexOf(',') > -1) //If multiple weekdays are selected, make comma seperated list 
@@ -352,10 +374,13 @@ function getQueryForFootfallData(robj)
 		{
 			weekdaylist = "'" + weekdays.toLowerCase() + "'";
 		}
-		query2 = "and LOWER(V.DayPeriod) IN ("+ weekdaylist + ")";
+		
+		query2 = "and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
+		query1Period =", S.DayPeriod ";
+		quer4Period= "S.DayPeriod,";
 	}
 	
-	var query = query1+query2+query3+query4;
+	var query = query1+query1Period+query1remain+query2+query3+query4+quer4Period+query4remain;
 	logger.info("query in getQueryForFootfallData", query);
 	
 	logger.info("End of getQueryForFootfallData");
@@ -428,5 +453,6 @@ function parseRequest(req,res,entity,q)
         });
         console.log("End parseRequest for getAggregate"+entity+"Data");
 }
+
 
 }
