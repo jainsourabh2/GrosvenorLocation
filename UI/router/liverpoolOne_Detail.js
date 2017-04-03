@@ -1,74 +1,10 @@
 'use strict';
-module.exports = function(app){
+module.exports.getLiverpoolOneDetail = function(req,res,logger){
 
-// *********** Routing Logic Here ************** //
-const config = require('../config/config.js');
-const constants = config.constants;
 var request = require("request");
 var url = "http://10.80.2.4:8047/query.json";
 var moment = require('moment');
-var q = require('q');
-var sql = require('mssql');
-const logger = require('../config/log.js');
 
-
-/**
- * @swagger
- * definitions:
- *   LiverpoolStoreDetails:
- *     properties:
- *       Type:
- *         type: string
- *       features:
- *         type: array
- *         items: {
-            type: string
-            }
- */
-
-/**
- * @swagger
- * /getLiverpoolStoreDetail?storeid={storeid}&fromdate={fromdate}&todate={todate}&entity={entity}:
- *   get:
- *     tags:
- *       - Liverpool Store Details
- *     description: Returns Sales/Transactions/Footfall data for stores
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: storeid
- *         description: Store Id 
- *         in: path
- *         required: true
- *         type: string
- *       - name: fromdate
- *         description: From date (eg 2016-03-01)
- *         in: path
- *         required: true
- *         type: string
- *       - name: todate
- *         description: To Date (eg 2016-03-31)
- *         in: path
- *         required: true
- *         type: string
- *       - name: entity
- *         description: Either Sales/Transactions/Footfall
- *         in: path
- *         required: true
- *         type: string
- *       - name: weekdays
- *         description: Weekday value (eg Sunday,Monday,...)
- *         in: path
- *         required: false
- *         type: string
- *     responses:
- *       200:
- *         description: Sales/Transactions/Footfall data of store within date range.
- *     schema:
- *           $ref: '#/definitions/LiverpoolStoreDetails'
- */
-//This API returns back LiverpoolOne stores Sales/Transactions/StoreFootfall details
-app.get("/api/getLiverpoolStoreDetail",function(req,res){
 	let storeid = req.query.storeid;
     let fromdate = req.query.fromdate;
     let todate = req.query.todate;
@@ -76,7 +12,6 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
     let weekdays = req.query.weekdays;  //optional
     let error = { errormsg : "" };
    
-    logger.info("LiverpoolOne Store Detail API started");
 
     if(fromdate == undefined || todate == undefined || storeid == undefined || entity == undefined)
     {
@@ -87,11 +22,9 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
     let queryobj = { weekdays : weekdays, startdate : fromdate, enddate : todate,storeid : storeid};
 
     entity = entity.toLowerCase();
-    //console.log(entity);
-    logger.info("Query for " + entity);
-    logger.info("Building query started");
+    console.log(entity);
     let q = buildDrillQuery(queryobj,entity);
-    logger.info("Building query end");
+
     let dataarray = [];
     let dataobj = {};
         
@@ -103,18 +36,16 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
 	      
 	  };
 
-	  logger.info("Before Drill Request");
 	  request(reqoptions, function(err, response, data){
               //console.log(response + " " + err + " " + data);
               if(err)
               {
                   console.log("Err: " + err);
-                  logger.error(err);
               }
 
               if (!err && response.statusCode ==200)
               {
-                  logger.info("Drill Request complete");
+                  
 	              var obj = JSON.parse(data);
 	              //console.log(obj);
 	              for(let n =0; n < obj.rows.length; n++)
@@ -135,13 +66,8 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
           
                   //console.log(JSON.stringify(dataobj));
                   res.send(dataobj); 
-                  logger.info("LiverpoolOne Store Detail API end");
           	  }
           	});
-
-
-
-});
 
 
 //Function to build drill query based on parameters passed
@@ -201,7 +127,6 @@ if(entity == "sales")
 	}
 	
 	console.log(query);
-	logger.info("Sales query : " + query);
 	return query;
 }
 
@@ -224,7 +149,6 @@ if(entity == "transactions")
 	}
 	
 	console.log(query);
-	logger.info("Transactions query : " + query);
 	return query;
 
 }
@@ -248,7 +172,6 @@ if(entity == "footfall")
 	}
 	
 	console.log(query);
-	logger.info("Storefootfall query : " + query);
 	return query;
 }
 

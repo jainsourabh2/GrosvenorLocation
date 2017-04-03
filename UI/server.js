@@ -3,8 +3,6 @@ var app = express();
 var swaggerJSDoc = require('swagger-jsdoc');
 //***** Routing call ********
 var router = require("./router/main");
-var liverpoolOneDetail = require("./router/liverpoolOne_Detail");
-var liverpoolOneAggregate = require("./router/liverpoolOne_Aggregate");
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -25,8 +23,8 @@ var swaggerDefinition = {
     version: '1.0.0',
     description: 'Demonstrating how to describe a RESTful API with Swagger',
   },
-  host: 'gvpocw01.westeurope.cloudapp.azure.com:3000',
-  basePath: '/api',
+  host: 'gvpocw01.westeurope.cloudapp.azure.com:3000', //On server this needs to be  gvpocw01.westeurope.cloudapp.azure.com:3000
+  basePath: '/api', 
 };
 
 // options for the swagger docs
@@ -34,7 +32,7 @@ var options = {
   // import swaggerDefinitions
   swaggerDefinition: swaggerDefinition,
   // path to the API docs
-  apis: ['./router/main.js','./router/liverpoolOne_Detail.js'],
+  apis: ['./router/main.js'],
 };
 
 // initialize swagger-jsdoc
@@ -47,9 +45,7 @@ app.get('/swagger.json', function(req, res) {
 });
 
 router(app);
-liverpoolOneDetail(app);
-liverpoolOneAggregate(app);
 
 var server = app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0",function(){
-	console.log("Started server on port 3000 !!!");
+  console.log("Started server on port 3000 !!!");
 });
