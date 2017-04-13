@@ -24,6 +24,8 @@ const liverpoolOnedetail = require('./liverpoolOne_Detail.js');
 const liverpoolOneSales_agg = require('./getLiverpoolOneSales_agg.js');
 const liverpoolOneTrans_agg = require('./getLiverpoolOneTrans_agg.js');
 const liverpoolOneFF_agg = require('./getLiverpoolOneFF_agg.js');
+const liverpoolOne_getRates = require('./getliverpoolOneRates.js');
+const liverpoolOneAvgTranNConv_agg = require('./getLiverpoolOneAvgTranNConv_agg.js');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -714,8 +716,13 @@ app.get("/api/getliverpoolonedata",function(req,res){
  *         required: true
  *         type: string
  *       - name: weekdays
- *         description: Weekday value (eg Sunday,Monday,...)
- *         in: path
+ *         description: Weekday value (eg Sun,Mon,...)
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: aggregateby
+ *         description: Aggregate value by weekly or daily?
+ *         in: query
  *         required: false
  *         type: string
  *     responses:
@@ -744,6 +751,16 @@ app.get("/api/getAggregateTransactionsData",function(req,res){
 
 app.get("/api/getAggregateFootfallData",function(req,res){
   liverpoolOneFF_agg.getliverpoolOneFF_agg(req,res,logger);
+});
+
+
+app.get("/api/getRates",function(req,res){
+  liverpoolOne_getRates.getliverpoolOneRates(req,res,logger);
+   
+});
+
+app.get("/api/getAggrConvRateWithAvgTranData",function(req,res){
+  liverpoolOneAvgTranNConv_agg.getliverpoolOneAvgTranNConvRate_agg(req,res,logger);
 });
 
 

@@ -38,16 +38,19 @@ const logger = require('../config/log.js');
 
                       console.log(obj.rows[p]);
 
-                        var totalcount = obj.rows[p].totalcount;		
+                        var curAgr = obj.rows[p].Cur;		
+            						var prevAgr = obj.rows[p].Prev;
             						var storename = obj.rows[p].storename;
             						var zone = obj.rows[p].Zone;
             						var lat = obj.rows[p].Latitude;
             						var lon = obj.rows[p].Longitude;
             						var id = obj.rows[p].Id;
-            						var dayPeriod = obj.rows[p].DayPeriod;
+                        var dayPeriod = obj.rows[p].DayPeriod;
+
+                        let diff = getVariance(curAgr,prevAgr);
 						
-            						dataarray.push({
-                                         "pr" : { "p1" : totalcount , "p2" : storename , "p3" : zone, "p4" : id, "p5" : dayPeriod} , 
+            						dataarray.push({ 
+                                         "pr" : { "p1" : curAgr , "p2" : prevAgr , "p3" : storename, "p4" : zone, "p5" : id, "p6" : dayPeriod, "p7":diff} , 
                                          "ge" : { "lo" : lon , "la" : lat }});
 
                                 }
@@ -68,5 +71,11 @@ const logger = require('../config/log.js');
 				logger.info("End for getAggregate"+entity+"Data");
         });
         console.log("End parseRequest for getAggregate"+entity+"Data");
+
+        function getVariance(curAgr,prevAgr)
+        {
+          let variance = (100 * (curAgr - prevAgr ))/curAgr;
+          return (parseFloat(variance).toFixed(2));
+        }
 
 }

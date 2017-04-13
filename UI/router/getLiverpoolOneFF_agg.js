@@ -29,23 +29,40 @@ var parser = require('./parseRequest.js');
 
 function getQueryForFootfallData(robj)
 {
-    var fromdate = robj.startdate;
-    var todate = robj.enddate;
-    var latitude = robj.latitude;
-  var longitude = robj.longitude;
-  var weekdays = robj.days;
-  var query2 = "";
-  var query3 =")";
-  var query4 = " S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, ";
-  var quer4Period="";
-  var query4remain= "M.Latitude,M.Longitude,M.Id";
+  
+  let fromdate = robj.startdate;
+  let todate = robj.enddate;
+  let latitude = robj.latitude;
+  let longitude = robj.longitude;
+  let weekdays = robj.days;
   let weekdaylist="";
 
+  let prevyearstartdate = moment(fromdate).subtract(1,'years').format('YYYY-MM-DD');
+  let prevyearenddate = moment(todate).subtract(1,'years').format('YYYY-MM-DD');
+
+  let check = moment(fromdate, 'YYYY/MM/DD');
+  let curyear  = check.format('YYYY');
+  console.log("current year ",curyear);
+  let prevyear = check.subtract(1,'years').format('YYYY');
+  console.log("prevyear year ",prevyear);
+
+  let query1 = "SELECT sum(case when YearPeriod = '" + curyear + "' then CAST(totalcount as int) else 0 end) as Cur,sum(case when YearPeriod = '"+prevyear+"' then CAST(totalcount as int) else 0 end) as  Prev,storename,Zone,Latitude,Longitude,Id";
+  let query1Period=""
+  let query1Next = " from (SELECT SUM(CAST(S.FootfallValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Latitude,M.Longitude,S.YearPeriod,M.Id";
+  let query1NextPeriod=""
+
+  let query2 = " from (Select * from `dfs`.`default`.`StorefootfallView` V where  V.Period between '"+fromdate+"' and '"+todate+"'";
+  let query2Period ="";
+  let query3 = " union Select * from `dfs`.`default`.`StorefootfallView` SV where SV.Period between '"+prevyearstartdate+"' and '"+prevyearenddate+"'";
+  let query3Period="";
+  let query3Next=")";
+
+  let query4 ="S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,M.Id";
+  let query4Period = "";
+  let query5 = " order by storename,zone) group by Zone,Latitude,Longitude,storename,Id";
+  let query5Period="";
+
   logger.info("Start of getQueryForFootfallData");
-    
-  var query1 = "SELECT SUM(CAST(S.FootfallValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Id,M.Latitude,M.Longitude";
-  var query1Period=""
-  var query1remain = " from (Select * from `dfs`.`default`.`StorefootfallView` V where V.Period between '" + fromdate + "' and '"+ todate + "'";
 
   if(weekdays != undefined )
   {
@@ -65,19 +82,24 @@ function getQueryForFootfallData(robj)
       weekdaylist = "'" + weekdays.toLowerCase() + "'";
     }
     
-    query2 = "and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
-    query1Period =", S.DayPeriod ";
-    quer4Period= "S.DayPeriod,";
+    query1Period = ",DayPeriod";
+    query1NextPeriod = ",S.DayPeriod";
+    query2Period = " and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
+    query3Period = " and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
+    query4Period = ",S.DayPeriod";
+    query5Period = ",DayPeriod";
+
   }
   
-  var query = query1+query1Period+query1remain+query2+query3+query4+quer4Period+query4remain;
-  logger.info("query in getQueryForFootfallData", query);
+  var query = query1+query1Period+query1Next+query1NextPeriod+query2+query2Period+query3+query3Period+query3Next+query4+query4Period+query5+query5Period;
   
+  logger.info("query in getQueryForFootfallData", query);
+ 
   logger.info("End of getQueryForFootfallData");
   
   return query;
+  
 }
-
 
 
 }
