@@ -10,7 +10,7 @@ columns[7] as MonthPeriod,
 columns[8] as DatePeriod
 from `dfs`.`default`.`/liverpoolone/Store_Footfall`
 
--------------
+---------------
 
 create view `dfs`.`default`.`SalesView` as 
 SELECT columns[0] as StoreName,
