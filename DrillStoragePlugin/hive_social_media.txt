@@ -1,0 +1,11 @@
+{
+  "type": "hive",
+  "enabled": true,
+  "configProps": {
+    "hive.metastore.uris": "thrift://10.80.2.4:9083",
+    "javax.jdo.option.ConnectionURL": "jdbc:mysql;databaseName=hive;create=true",
+    "hive.metastore.warehouse.dir": "/tmp/drill_hive_wh",
+    "fs.default.name": "file:///",
+    "hive.metastore.sasl.enabled": "false"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "type": "file",
+  "enabled": true,
+  "connection": "hdfs://10.80.2.4:8020/",
+  "config": null,
+  "workspaces": {
+    "root": {
+      "location": "/",
+      "writable": false,
+      "defaultInputFormat": null
+    },
+    "default": {
+      "location": "/grosvenor",
+      "writable": true,
+      "defaultInputFormat": null
+    },
+    "tmp": {
+      "location": "/tmp",
+      "writable": true,
+      "defaultInputFormat": null
+    }
+  },
+  "formats": {
+    "psv": {
+      "type": "text",
+      "extensions": [
+        "tbl",
+        "txt"
+      ],
+      "delimiter": "|"
+    },
+    "csv": {
+      "type": "text",
+      "extensions": [
+        "csv"
+      ],
+      "delimiter": ","
+    },
+    "tsv": {
+      "type": "text",
+      "extensions": [
+        "tsv"
+      ],
+      "delimiter": "\t"
+    },
+    "parquet": {
+      "type": "parquet"
+    },
+    "json": {
+      "type": "json",
+      "extensions": [
+        "json"
+      ]
+    },
+    "avro": {
+      "type": "avro"
+    },
+    "sequencefile": {
+      "type": "sequencefile",
+      "extensions": [
+        "seq"
+      ]
+    },
+    "csvh": {
+      "type": "text",
+      "extensions": [
+        "csvh"
+      ],
+      "extractHeader": true,
+      "delimiter": ","
+    }
+  }
+}
