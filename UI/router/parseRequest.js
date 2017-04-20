@@ -75,7 +75,14 @@ const logger = require('../config/log.js');
         function getVariance(curAgr,prevAgr)
         {
           let variance = (100 * (curAgr - prevAgr ))/curAgr;
-          return (parseFloat(variance).toFixed(2));
+          if (!isFinite(parseFloat(variance).toFixed(2)))
+          {
+              variance = "0";
+              //console.log("diff is nan ",variance);
+              return variance;
+          }else {
+            return (parseFloat(variance).toFixed(2));
+          }
         }
 
 }

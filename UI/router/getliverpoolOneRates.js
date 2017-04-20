@@ -1,6 +1,6 @@
 module.exports.getliverpoolOneRates = function(req,res,logger){
 
-	  let storeid = req.query.storeid;
+    let storeid = req.query.storeid;
     let fromdate = req.query.fromdate;
     let todate = req.query.todate;
     let weekdays = req.query.weekdays;  //optional(fri,sat)
@@ -8,10 +8,17 @@ module.exports.getliverpoolOneRates = function(req,res,logger){
     var asyncobj = require('async');
     var request = require("request");
     
-    let detailTransAPI = "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=Transactions" ;
+   
+   let detailTransAPI = "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=Transactions" ;
     let detailFFAPI =     "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=footfall";
     let detailSalesAPI = "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate+ "&todate=" + todate + "&storeid=" + storeid + "&entity=sales";
     
+/*
+    let detailTransAPI = "http://localhost:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=Transactions" ;
+    let detailFFAPI =     "http://localhost:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=footfall";
+    let detailSalesAPI = "http://localhost:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate+ "&todate=" + todate + "&storeid=" + storeid + "&entity=sales";
+   */
+
     if(weekdays != undefined)
     {
       detailTransAPI += "&weekdays=" + weekdays;
@@ -210,25 +217,60 @@ module.exports.getliverpoolOneRates = function(req,res,logger){
                 for(let i =0; i < transactionval.features.length; i++)
                 {
                   let RsObj = {};
-                  let salesval = Salesval.features[i].pr.p1;
-                  let transval = transactionval.features[i].pr.p1;
-                  let ffallval = footfallval.features[i].pr.p1;
+                  let psalesval = Salesval.features[i].pr.pcount;
+                  let ptransval = transactionval.features[i].pr.pcount;
+                  let pffallval = footfallval.features[i].pr.pcount;
 
-                  let ConversionRate = ffallval/transval;
-                  let AvgSales = ConversionRate/salesval;
+                  let csalesval = Salesval.features[i].pr.ccount;
+                  let ctransval = transactionval.features[i].pr.ccount;
+                  let cffallval = footfallval.features[i].pr.ccount;
 
+                  let pConversionRate = pffallval/ptransval;
+
+                   if(isNaN(pConversionRate))
+                  {
+                    pConversionRate = 0;
+                  }
+
+                  let cConversionRate = cffallval/ctransval;
+
+                   if(isNaN(cConversionRate))
+                  {
+                    cConversionRate = 0;
+                  }
+
+                  let pAvgSales = psalesval/ptransval;
+
+                   if(isNaN(pAvgSales))
+                  {
+                    pAvgSales = 0;
+                  }
+
+
+                  let cAvgSales = csalesval/ctransval;
+
+                   if(isNaN(cAvgSales))
+                  {
+                    cAvgSales = 0;
+                  }
                   //console.log("Conversion rate : " + ConversionRate);
                   //console.log("Avg Sales : " + AvgSales);
 
-                  RsObj.CR = ConversionRate.toFixed(4);
-                  RsObj.AS = AvgSales.toFixed(4);
-                  RsObj.Date = transactionval.features[i].pr.p4;
-                  RsObj.Day = transactionval.features[i].pr.p5;
+                  RsObj.pCR = pConversionRate.toFixed(2);
+                  RsObj.pAS = pAvgSales.toFixed(2);
+                  RsObj.pDate = transactionval.features[i].pr.pperiod;
+                  RsObj.pDay = transactionval.features[i].pr.pdperiod;
+
+                  RsObj.cCR = cConversionRate.toFixed(2);
+                  RsObj.cAS = cAvgSales.toFixed(2);
+                  RsObj.cDate = transactionval.features[i].pr.cperiod;
+                  RsObj.cDay = transactionval.features[i].pr.cdperiod;
+
                   RArray.push(RsObj);
                 }
 
-                RObj.p1 = transactionval.features[0].pr.p2;
-                RObj.p2 = transactionval.features[0].pr.p3;
+                RObj.p1 = transactionval.features[0].pr.storename;
+                RObj.p2 = transactionval.features[0].pr.zone;
                 RObj.p3 = RArray;
 
                 res.send(RObj);

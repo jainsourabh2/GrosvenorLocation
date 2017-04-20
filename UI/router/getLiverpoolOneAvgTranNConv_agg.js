@@ -154,15 +154,15 @@
                 let PrvSalesAgg = sales.features[i].pr.p2;
 
                 let curConvRate = curFFAgg/curTranAgg;
-                if (!isFinite(curConvRate))
+                if (!isFinite(parseFloat(curConvRate).toFixed(2)))
                 {
-                   curConvRate = " ";
+                   curConvRate = "0";
                    //console.log("curConvRate is nan ",transactions.features[i].pr.p3);
                 }
                 //console.log("curConvRate is ",curConvRate);
 
                 let prvConvRate = PrvFFAgg/PrvTranAgg;
-                if (!isFinite(prvConvRate))
+                if (!isFinite(parseFloat(prvConvRate).toFixed(2)))
                 {
                    prvConvRate = "0";
                    //console.log("prvConvRate is nan ",transactions.features[i].pr.p3);
@@ -170,7 +170,7 @@
                 //console.log("prvConvRate is ",prvConvRate);
 
                 let curAvgTran = curSalesAgg/curTranAgg;
-                if (!isFinite(curAvgTran))
+                if (!isFinite(parseFloat(curAvgTran).toFixed(2)))
                 {
                    curAvgTran = "0";
                    //console.log("curAvgSales is nan ",transactions.features[i].pr.p3);
@@ -178,7 +178,7 @@
                 //console.log("curAvgSales is ",curAvgSales);
 
                 let prvAvgTran = PrvSalesAgg/PrvTranAgg;
-                 if (!isFinite(prvAvgTran))
+                 if (!isFinite(parseFloat(prvAvgTran).toFixed(2)))
                 {
                    prvAvgTran = "0";
                    //console.log("prvAvgSales is nan ",transactions.features[i].pr.p3);
