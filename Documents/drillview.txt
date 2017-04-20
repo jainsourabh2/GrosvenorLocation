@@ -1,0 +1,40 @@
+create view `dfs`.`default`.`StorefootfallView` as 
+SELECT columns[0] as StoreName,
+columns[1] as Zone,
+columns[2] as Period,
+columns[3] as FootfallValue,
+columns[4] as DayPeriod,
+columns[5] as WeekPeriod,
+columns[6] as YearPeriod,
+columns[7] as MonthPeriod,
+columns[8] as DatePeriod
+from `dfs`.`default`.`/liverpoolone/Store_Footfall`
+
+---------------
+
+create view `dfs`.`default`.`SalesView` as 
+SELECT columns[0] as StoreName,
+columns[1] as Zone,
+columns[2] as Period,
+columns[3] as SalesValue,
+columns[4] as DayPeriod,
+columns[5] as WeekPeriod,
+columns[6] as YearPeriod,
+columns[7] as MonthPeriod,
+columns[8] as DatePeriod
+from `dfs`.`default`.`/liverpoolone/Sales`
+
+------------
+
+create view `dfs`.`default`.`TransactionsView` as 
+SELECT columns[0] as StoreName,
+columns[1] as Zone,
+columns[2] as Period,
+columns[3] as TransactionsValue,
+columns[4] as DayPeriod,
+columns[5] as WeekPeriod,
+columns[6] as YearPeriod,
+columns[7] as MonthPeriod,
+columns[8] as DatePeriod
+from `dfs`.`default`.`liverpoolone/Transactions`
+---------------
