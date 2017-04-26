@@ -83,12 +83,12 @@ function getQueryForTransactionsData(robj)
       weekdaylist = "'" + weekdays.toLowerCase() + "'";
     }
     
-    query1Period = ",DayPeriod";
-    query1NextPeriod = ",S.DayPeriod";
+    //query1Period = ",DayPeriod";
+    //query1NextPeriod = ",S.DayPeriod";
     query2Period = " and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
     query3Period = " and LOWER(SUBSTR(DayPeriod,1,3)) IN ("+ weekdaylist + ")";
-    query4Period = ",S.DayPeriod";
-    query5Period = ",DayPeriod";
+    //query4Period = ",S.DayPeriod";
+    //query5Period = ",DayPeriod";
 
   }
   

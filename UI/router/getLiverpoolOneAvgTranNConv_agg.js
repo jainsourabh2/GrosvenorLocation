@@ -4,8 +4,10 @@
       var moment = require('moment');
       var asyncobj = require("async");
 
-      let serverIP="10.80.1.4";
-      let port="3000";
+      //let serverIP="10.80.1.4";
+      //let port="3000";
+      let serverIP="localhost";
+      let port="3040";
       let fromdate = req.query.startdate;
       let todate = req.query.enddate;
       let days = req.query.days;
@@ -154,15 +156,15 @@
                 let PrvSalesAgg = sales.features[i].pr.p2;
 
                 let curConvRate = curFFAgg/curTranAgg;
-                if (!isFinite(curConvRate))
+                if (!isFinite(parseFloat(curConvRate).toFixed(2)))
                 {
-                   curConvRate = " ";
+                   curConvRate = "0";
                    //console.log("curConvRate is nan ",transactions.features[i].pr.p3);
                 }
                 //console.log("curConvRate is ",curConvRate);
 
                 let prvConvRate = PrvFFAgg/PrvTranAgg;
-                if (!isFinite(prvConvRate))
+                if (!isFinite(parseFloat(prvConvRate).toFixed(2)))
                 {
                    prvConvRate = "0";
                    //console.log("prvConvRate is nan ",transactions.features[i].pr.p3);
@@ -170,7 +172,7 @@
                 //console.log("prvConvRate is ",prvConvRate);
 
                 let curAvgTran = curSalesAgg/curTranAgg;
-                if (!isFinite(curAvgTran))
+                if (!isFinite(parseFloat(curAvgTran).toFixed(2)))
                 {
                    curAvgTran = "0";
                    //console.log("curAvgSales is nan ",transactions.features[i].pr.p3);
@@ -178,7 +180,7 @@
                 //console.log("curAvgSales is ",curAvgSales);
 
                 let prvAvgTran = PrvSalesAgg/PrvTranAgg;
-                 if (!isFinite(prvAvgTran))
+                 if (!isFinite(parseFloat(prvAvgTran).toFixed(2)))
                 {
                    prvAvgTran = "0";
                    //console.log("prvAvgSales is nan ",transactions.features[i].pr.p3);
@@ -189,10 +191,10 @@
                 resultObj.p2 = parseFloat(prvConvRate).toFixed(2);
                 resultObj.p3 = parseFloat(curAvgTran).toFixed(2);
                 resultObj.p4 = parseFloat(prvAvgTran).toFixed(2);
-                resultObj.p5 = transactions.features[i].pr.p3;
-                resultObj.p6 = transactions.features[i].pr.p4;
-                resultObj.p7 = transactions.features[i].pr.p5;
-                resultObj.p8 = transactions.features[i].pr.p6;
+                resultObj.p5 = transactions.features[i].pr.p3;//storename
+                resultObj.p6 = transactions.features[i].pr.p4;//zone
+                resultObj.p7 = transactions.features[i].pr.p5;//id
+                //resultObj.p8 = transactions.features[i].pr.p6;
                 resultObj.lo = transactions.features[i].ge.lo;
                 resultObj.la = transactions.features[i].ge.la;
 
