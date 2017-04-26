@@ -1,5 +1,5 @@
       module.exports.getliverpoolOneAvgTranNConvRate_agg = function(req,res,logger){
-//This is code
+
       var request = require("request");
       var moment = require('moment');
       var asyncobj = require("async");
