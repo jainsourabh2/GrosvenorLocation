@@ -5,7 +5,7 @@ var request = require("request");
 var url = "http://10.80.2.4:8047/query.json";
 const logger = require('../config/log.js');
   
-//This is common function which will be called for parsing request 
+//This is common function which will be called for parsing request from all endpoints
 
 	var dataobj = {};
 	var dataarray = [];

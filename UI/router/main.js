@@ -26,6 +26,8 @@ const liverpoolOneTrans_agg = require('./getLiverpoolOneTrans_agg.js');
 const liverpoolOneFF_agg = require('./getLiverpoolOneFF_agg.js');
 const liverpoolOne_getRates = require('./getliverpoolOneRates.js');
 const liverpoolOneAvgTranNConv_agg = require('./getLiverpoolOneAvgTranNConv_agg.js');
+const liverpoolEventDetails = require('./getLiverpoolEventsDetail');
+const events = require('./getEvents.js');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -629,41 +631,50 @@ app.get("/api/liverpoolOneFB",function(req,res){
 });
 
 
-//Get tweets having keyword #LiverpoolOne
+/**
+ * @swagger
+ * definitions:
+ *   GetLiverpoolOneData:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
 
 /**
-
-* @swagger
-* /getliverpoolonedata?dataset={dataset}&startdate={startdate}&enddate={enddate}:
-*   get:
-*     tags:
-*       -  Latest tweets for Live Activities.
-*     description: Returns tweets with data liverpoolone keyword. Parameter dataset must be twitter and date in format yyyy-mm-dd
-*     produces:
-*       - application/json
-*     parameters:
-*       - name: dataset
-*         description: Dataset
-*         in: path
-*         required: true
-*         type: string
-*       - name: startdate
-*         description: Dataset
-*         in: path
-*         required: false
-*         type: string
-*       - name: enddate
-*         description: Dataset
-*         in: path
-*         required: false
-*         type: string
-* 
-*     responses:
-*       200:
-*         description: Twitter data
-*     schema:
-*           $ref: '#/definitions/GetLiverPoolData'
-*/
+ * @swagger
+ * /getliverpoolonedata?dataset={dataset}&startdate={startdate}&enddate={enddate}:
+ *   get:
+ *     tags:
+ *       - Get Liverpoolone tags from twitter
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: dataset
+ *         description: Dataset (twitter) 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: startdate
+ *         description: Date in format yyyy-mm-dd
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: enddate
+ *         description: Date in format yyyy-mm-dd
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Returns tweets with liverpoolone tag
+ *     schema:
+ *           $ref: '#/definitions/GetLiverpoolOneData'
+ */
 
 app.get("/api/getliverpoolonedata",function(req,res){
       liverpoolonehashtag.getliverpoolonehashtag(req,res,logger);
@@ -738,31 +749,348 @@ app.get("/api/getLiverpoolStoreDetail",function(req,res){
    liverpoolOnedetail.getLiverpoolOneDetail(req,res,logger);
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   GetAggregateSalesData:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
 
+/**
+ * @swagger
+ * /getAggregateSalesData?startdate={startdate}&enddate={enddate}:
+ *   get:
+ *     tags:
+ *       - Get Aggregate Sum of Sales
+ *     description: Returns aggregate sum of sales per store
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: startdate
+ *         description: start date eg 2016-01-01
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: enddate
+ *         description: end date eg 2016-05-01
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: days
+ *         description: selected weekdays in three letters eg mon,tue
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Get Aggregate Sum of Sale
+ *     schema:
+ *           $ref: '#/definitions/GetAggregateSalesData'
+ */
 app.get("/api/getAggregateSalesData",function(req,res){
   liverpoolOneSales_agg.getliverpoolOneSales_agg(req,res,logger);
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   GetAggregateTransactionsData:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getAggregateTransactionsData?startdate={startdate}&enddate={enddate}:
+ *   get:
+ *     tags:
+ *       - Get Aggregate Sum of Transaction
+ *     description: Returns aggregate sum of transcation per store
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: startdate
+ *         description: start date eg 2016-01-01
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: enddate
+ *         description: end date eg 2016-05-01
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: days
+ *         description: selected weekdays in three letters eg mon,tue
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Get Aggregate Sum of Sale
+ *     schema:
+ *           $ref: '#/definitions/GetAggregateTransactionsData'
+ */
 
 app.get("/api/getAggregateTransactionsData",function(req,res){
   liverpoolOneTrans_agg.getliverpoolOneTrans_agg(req,res,logger);
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   GetAggregateFootfallData:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getAggregateFootfallData?startdate={startdate}&enddate={enddate}:
+ *   get:
+ *     tags:
+ *       - Get Aggregate Sum of footfall
+ *     description: Returns aggregate Sum of footfall per store
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: startdate
+ *         description: start date eg 2016-01-01
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: enddate
+ *         description: end date eg 2016-05-01
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: days
+ *         description: selected weekdays in three letters eg mon,tue
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Get Aggregate Sum of Sale
+ *     schema:
+ *           $ref: '#/definitions/GetAggregateFootfallData'
+ */
 
 app.get("/api/getAggregateFootfallData",function(req,res){
   liverpoolOneFF_agg.getliverpoolOneFF_agg(req,res,logger);
 });
 
 
+/**
+ * @swagger
+ * definitions:
+ *   CalculateRates:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getRates?storeid={storeid}&fromdate={fromdate}&todate={todate}&entity={entity}:
+ *   get:
+ *     tags:
+ *       - Conversion Rates and Average Sales calculation
+ *     description: Returns CR and Avg sales data for stores
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: storeid
+ *         description: Store Id 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: fromdate
+ *         description: From date (eg 2016-03-01)
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: todate
+ *         description: To Date (eg 2016-03-31)
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: weekdays
+ *         description: Weekday value (eg Sun,Mon,...)
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: aggregateby
+ *         description: Aggregate value by weekly or daily?
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Conversion Rate/ Avg Sales 
+ *     schema:
+ *           $ref: '#/definitions/CalculateRates'
+ */
+
 app.get("/api/getRates",function(req,res){
   liverpoolOne_getRates.getliverpoolOneRates(req,res,logger);
    
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   GetAggrConvRateWithAvgTranData:
+ *     properties:
+ *       posts:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getAggrConvRateWithAvgTranData?startdate={startdate}&enddate={enddate}:
+ *   get:
+ *     tags:
+ *       - Get Aggregate Conversion Rate and Avg transaction Data
+ *     description: Get Aggregate Conversion Rate and Avg transaction Data.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: startdate
+ *         description: start date 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: enddate
+ *         description: end date 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: days
+ *         description: week days (eg mon,tue)
+ *         in: query
+ *         required: false
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Get Aggregate Conversion Rate and Avg transaction Data
+ *     schema:
+ *           $ref: '#/definitions/GetAggrConvRateWithAvgTranData'
+ */
+
 app.get("/api/getAggrConvRateWithAvgTranData",function(req,res){
   liverpoolOneAvgTranNConv_agg.getliverpoolOneAvgTranNConvRate_agg(req,res,logger);
 });
 
+
+/**
+ * @swagger
+ * definitions:
+ *   LiverpoolEventDetails:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getLiverpoolEventsDetail?eventid={eventid}:
+ *   get:
+ *     tags:
+ *       - Liverpool Events Details
+ *     description: Returns Events detail based on id.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: eventid
+ *         description: Event Id 
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Event detail based on id.
+ *     schema:
+ *           $ref: '#/definitions/LiverpoolEventDetails'
+ */
+
+app.get("/api/getLiverpoolEventsDetail",function(req,res){
+  liverpoolEventDetails.getLiverpoolEventsDetail(req,res,logger);
+   
+});
+
+/**
+ * @swagger
+ * definitions:
+ *   GetEvents:
+ *     properties:
+ *       posts:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getEvents?startdate={startdate}&enddate={enddate}:
+ *   get:
+ *     tags:
+ *       - Get Events Data
+ *     description: Get Events Data.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: startdate
+ *         description: start date 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: enddate
+ *         description: end date 
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Get Events Data
+ *     schema:
+ *           $ref: '#/definitions/GetEvents'
+ */
+app.get("/api/getEvents",function(req,res){
+  events.getEvents(req,res,logger);
+});
 
 app.get("/api/getstation",function(req,res){  
    var param = req.query.dataset;

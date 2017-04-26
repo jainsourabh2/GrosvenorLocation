@@ -66,8 +66,8 @@ var moment = require('moment');
 
 
 	              	 dataarray.push({
-                             "pr" : {"storename" : storename, "zone" : zone, "pcount" : pc,"ccount" : cc, "pperiod" : prevperiod, 
-                                 "cperiod" : currperiod, "pdperiod" : prevdayperiod, "cdperiod" :  currdayperiod}
+                             "pr" : {"sn" : storename, "zn" : zone, "pc" : pc,"cc" : cc, "pp" : prevperiod, 
+                                 "cp" : currperiod, "pd" : prevdayperiod, "cd" :  currdayperiod}
                      });
 	              }
 	              

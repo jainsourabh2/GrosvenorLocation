@@ -1,13 +1,11 @@
       module.exports.getliverpoolOneAvgTranNConvRate_agg = function(req,res,logger){
-//This is code
+
       var request = require("request");
       var moment = require('moment');
       var asyncobj = require("async");
 
-      //let serverIP="10.80.1.4";
-      //let port="3000";
-      let serverIP="localhost";
-      let port="3040";
+      let serverIP="10.80.1.4";
+      let port="3000";
       let fromdate = req.query.startdate;
       let todate = req.query.enddate;
       let days = req.query.days;

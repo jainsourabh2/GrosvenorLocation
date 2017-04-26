@@ -217,13 +217,13 @@ module.exports.getliverpoolOneRates = function(req,res,logger){
                 for(let i =0; i < transactionval.features.length; i++)
                 {
                   let RsObj = {};
-                  let psalesval = Salesval.features[i].pr.pcount;
-                  let ptransval = transactionval.features[i].pr.pcount;
-                  let pffallval = footfallval.features[i].pr.pcount;
+                  let psalesval = Salesval.features[i].pr.pc;
+                  let ptransval = transactionval.features[i].pr.pc;
+                  let pffallval = footfallval.features[i].pr.pc;
 
                   let csalesval = Salesval.features[i].pr.ccount;
-                  let ctransval = transactionval.features[i].pr.ccount;
-                  let cffallval = footfallval.features[i].pr.ccount;
+                  let ctransval = transactionval.features[i].pr.cc;
+                  let cffallval = footfallval.features[i].pr.cc;
 
                   let pConversionRate = pffallval/ptransval;
 
@@ -258,19 +258,19 @@ module.exports.getliverpoolOneRates = function(req,res,logger){
 
                   RsObj.pCR = pConversionRate.toFixed(2);
                   RsObj.pAS = pAvgSales.toFixed(2);
-                  RsObj.pDate = transactionval.features[i].pr.pperiod;
-                  RsObj.pDay = transactionval.features[i].pr.pdperiod;
+                  RsObj.pDt = transactionval.features[i].pr.pp;
+                  RsObj.pDay = transactionval.features[i].pr.pd;
 
                   RsObj.cCR = cConversionRate.toFixed(2);
                   RsObj.cAS = cAvgSales.toFixed(2);
-                  RsObj.cDate = transactionval.features[i].pr.cperiod;
-                  RsObj.cDay = transactionval.features[i].pr.cdperiod;
+                  RsObj.cDt = transactionval.features[i].pr.cp;
+                  RsObj.cDay = transactionval.features[i].pr.cd;
 
                   RArray.push(RsObj);
                 }
 
-                RObj.p1 = transactionval.features[0].pr.storename;
-                RObj.p2 = transactionval.features[0].pr.zone;
+                RObj.p1 = transactionval.features[0].pr.sn;
+                RObj.p2 = transactionval.features[0].pr.zn;
                 RObj.p3 = RArray;
 
                 res.send(RObj);

@@ -1,5 +1,5 @@
 module.exports.getliverpoolOneTrans_agg = function(req,res,logger){
-//begins code
+
 var request = require("request");
 var url = "http://10.80.2.4:8047/query.json";
 var moment = require('moment');
