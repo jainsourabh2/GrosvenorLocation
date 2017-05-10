@@ -221,7 +221,7 @@ module.exports.getliverpoolOneRates = function(req,res,logger){
                   let ptransval = transactionval.features[i].pr.pc;
                   let pffallval = footfallval.features[i].pr.pc;
 
-                  let csalesval = Salesval.features[i].pr.ccount;
+                  let csalesval = Salesval.features[i].pr.cc;
                   let ctransval = transactionval.features[i].pr.cc;
                   let cffallval = footfallval.features[i].pr.cc;
 

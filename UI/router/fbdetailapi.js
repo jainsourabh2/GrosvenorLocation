@@ -6,10 +6,30 @@ module.exports.getFBDetails = function(req,res,logger){
       
       let dataset = req.query.dataset;
       let fbid = req.query.entityid;
+      let startdate = req.query.startdate;//added on 5th Apr
+      let enddate = req.query.enddate;// added on 5th Apr
+
       let todaydate = new Date().toLocaleDateString();
 
-      let sdate =  moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0];  
-      let edate =  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0];  
+      //Format in yyyy-mm-dd Current date
+      let sdate="";
+      let edate="";     
+     if(startdate === undefined )
+      {
+        sdate =  moment(todaydate,"yyyy-mm-dd").subtract(1,'days').toISOString().split('T')[0]; 
+      }else{
+        sdate = startdate;
+      }
+       
+      if(enddate === undefined )
+      {
+        edate =  moment(todaydate,"yyyy-mm-dd").toISOString().split('T')[0]; 
+      }else{
+        edate = enddate;
+      }
+
+      console.log(sdate);        
+      console.log(edate);
 
       let q = "select message_id,message_from,message,createdtime from `hive_social_media`.`default`.`facebookdata` where  categorize=0 and id='" + fbid + "' and fb_date between '" + sdate + "' and '"+  edate + "' order by createdtime desc";
 

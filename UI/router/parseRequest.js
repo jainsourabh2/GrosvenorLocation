@@ -45,12 +45,17 @@ const logger = require('../config/log.js');
             						var lat = obj.rows[p].Latitude;
             						var lon = obj.rows[p].Longitude;
             						var id = obj.rows[p].Id;
-                        //var dayPeriod = obj.rows[p].DayPeriod;
+                        var flrLevel = obj.rows[p].FloorLevel;
+                        if (flrLevel === null || flrLevel ==="" || flrLevel=== "null"){
+                          flrLevel = "Ground Level";
+                        }
+
+                        let flrValue = getFloorInt(flrLevel);
 
                         let diff = getVariance(curAgr,prevAgr);
 						           
             						dataarray.push({ 
-                                         "pr" : { "p1" : curAgr , "p2" : prevAgr , "p3" : storename, "p4" : zone, "p5" : id, "p6" : diff} , 
+                                         "pr" : { "p1" : curAgr , "p2" : prevAgr , "p3" : storename, "p4" : zone, "p5" : id, "p6" : diff, "p7":flrValue} , 
                                          "ge" : { "lo" : lon , "la" : lat }});
 
                                 }
@@ -83,6 +88,21 @@ const logger = require('../config/log.js');
           }else {
             return (parseFloat(variance).toFixed(2));
           }
+        }
+
+        function getFloorInt(flrLevel){
+
+          let flrValue="";
+
+          if (flrLevel === "Ground Level"){
+            flrValue = "0";
+          }else if(flrLevel === "Upper Level"){
+            flrValue = "1";
+          }else{
+            flrValue = "2";
+          }
+          return flrValue;
+
         }
 
 }

@@ -13,7 +13,7 @@ module.exports.getLiverpoolEventsDetail = function(req,res,logger){
         res.send(err);
       }
 
-      let q = "select Title,Start_time,Description,url,venue_name,venue_address from `dfs`.`default`.`EventsView` where Id = '" + id + "'";
+      let q = "select Title,Start_time,Description,url,venue_name,venue_address,image from `dfs`.`default`.`EventsView` where Id = '" + id + "'";
 
       let reqoptions = {
                   uri :url,
@@ -46,6 +46,11 @@ module.exports.getLiverpoolEventsDetail = function(req,res,logger){
                     let url =  obj.rows[0].url;
                     let venuename =  obj.rows[0].venue_name; 
                     let venueadd =  obj.rows[0].venue_address;
+                    let image =  obj.rows[0].image;
+
+                    if (image === null || image === '' || image === 'null'){
+                      image = "";
+                    }
 
                     eventsobj.p1 = title;
                     eventsobj.p2 = starttime;
@@ -53,6 +58,7 @@ module.exports.getLiverpoolEventsDetail = function(req,res,logger){
                     eventsobj.p4 = url;
                     eventsobj.p5 = venuename;
                     eventsobj.p6 = venueadd;
+                    eventsobj.p7 = image;
                     
                 // console.log(jsonarray);
                  

@@ -46,9 +46,9 @@ function getQueryForSalesData(robj)
   let prevyear = check.subtract(1,'years').format('YYYY');
   console.log("prevyear year ",prevyear);
 
-  let query1 = "SELECT sum(case when YearPeriod = '" + curyear + "' then CAST(totalcount as int) else 0 end) as Cur,sum(case when YearPeriod = '"+prevyear+"' then CAST(totalcount as int) else 0 end) as  Prev,storename,Zone,Latitude,Longitude,Id";
+  let query1 = "SELECT sum(case when YearPeriod = '" + curyear + "' then CAST(totalcount as int) else 0 end) as Cur,sum(case when YearPeriod = '"+prevyear+"' then CAST(totalcount as int) else 0 end) as  Prev,storename,Zone,Latitude,Longitude,Id,FloorLevel";
   let query1Period=""
-  let query1Next = " from (SELECT SUM(CAST(S.SalesValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Latitude,M.Longitude,S.YearPeriod,M.Id";
+  let query1Next = " from (SELECT SUM(CAST(S.SalesValue as int)) as totalcount,S.StoreName as storename,S.Zone,M.Latitude,M.Longitude,S.YearPeriod,M.Id,M.FloorLevel";
   let query1NextPeriod=""
 
   let query2 = " from (Select * from `dfs`.`default`.`SalesView` V where  V.Period between '"+fromdate+"' and '"+todate+"'";
@@ -57,9 +57,9 @@ function getQueryForSalesData(robj)
   let query3Period="";
   let query3Next=")";
 
-  let query4 ="S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,M.Id";
+  let query4 ="S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,M.Id,M.FloorLevel";
   let query4Period = "";
-  let query5 = " order by storename,zone) group by Zone,Latitude,Longitude,storename,Id";
+  let query5 = " order by storename,zone) group by Zone,Latitude,Longitude,storename,Id,FloorLevel";
   let query5Period="";
 
   logger.info("Start of getQueryForSalesData");

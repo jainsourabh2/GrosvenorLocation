@@ -19,7 +19,7 @@ var q = require('q');
         res.send(error);
      }
 
-     let query = " select distinct A.id,A.name,A.category,B.Latitude,B.Longitude from `hive_social_media`.`default`.`facebookdata` A inner join `dfs`.`default`.`MasterStoreData` B on " + 
+     let query = " select count(1) as postcount,A.id,A.name,A.category,B.Latitude,B.Longitude from `hive_social_media`.`default`.`facebookdata` A inner join `dfs`.`default`.`MasterStoreData` B on " + 
                  " LOWER(A.username) = LOWER(B.FBHandle)  where A.fb_date between '" + sdate + "' and '" + edate + "' and LOWER(A.username) in(" + 
                  "'adidasuk','allsaints','americanapparel','annsummersofficial','apple','barburritouk','barberbarberuk','bembrasil'," +
                  "'birminghambierkeller','billsrestaurants','boseuk','bouxavenue','bravissimo','brownsfashion','buildabear','busabaeathai'," +
@@ -36,7 +36,7 @@ var q = require('q');
                  "'tavernL1','tedbaker','tessutiuk','thebodyshopuk','theclubhousel1','theentertainertoyshop','fragranceshopuk','fueljuicebars','thenorthface'," +
                  "'theperfumeshoponline','thewhitecompany','thorntonschocs','topshop','tortillauk','toysrusuk','turtlebayrestaurants','uscfashion','ugguk'," +
                  "'urbandecaycosmetics','urbanoutfitterseurope','utilitydesign.co.uk','vanseurope','victoriassecret','whsmith','wagamama-uk-1837864496502928'," +
-                 "'wahaca','warehousefashion','waterstones','thisiswhistles','whitewallgalleries','yardandcoop','yeerahliverpool','yosushi','zara','zizziliverpool')" ;
+                 "'wahaca','warehousefashion','waterstones','thisiswhistles','whitewallgalleries','yardandcoop','yeerahliverpool','yosushi','zara','zizziliverpool') group by A.id,A.name,A.category,B.Latitude,B.Longitude" ;
         
         let dataarray = [];
         let dataobj = {};
@@ -66,9 +66,10 @@ var q = require('q');
                   let pagecategory = obj.rows[n].category;
                   let latitude = obj.rows[n].Latitude;
                   let longitude = obj.rows[n].Longitude;
+                  let postcount = obj.rows[n].postcount;
 
                   dataarray.push({
-                             "pr" : {"p1" : facebookid,"p2" : facebookpagename, "p3" : pagecategory},
+                             "pr" : {"p1" : facebookpagename,"p2" : pagecategory, "p3" : postcount,"id": facebookid },
                              "ge" : {"lo" : longitude , "la" : latitude }
                      });
 

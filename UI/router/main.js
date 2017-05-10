@@ -565,6 +565,16 @@ return defered.promise;
  *         in: path
  *         required: true
  *         type: string
+ *       - name: startdate (yyyy-mm-dd)
+ *         description: start date 
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: enddate
+ *         description: end date (yyyy-mm-dd) 
+ *         in: query
+ *         required: false
+ *         type: string
  *     responses:
  *       200:
  *         description: Facebook details
