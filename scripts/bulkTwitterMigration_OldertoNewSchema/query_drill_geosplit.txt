@@ -1,0 +1,35 @@
+CREATE TABLE fs.psvOut.tweeterdata
+AS 
+select tweet_id,creeated_at,tweet,sentimentscore,source,inreplytostatusid,inreplytouserid,inreplytousername,userid,userfullname,userscreenname,userlocation,userdescription,userurl,userprotected,userverified,userfollowercount,userfollowingcount,userstatuscount,userfriendscount,userlistedcount,userfavouritecount,usercreateat,usergeoenabled,userlanguage,userprofileimageurl,userdefaultprofile,userdefaultprofileimage,
+CASE WHEN  coordinates <> '' THEN coordinates ELSE 'null' END as tweetlongitude,
+CASE WHEN geo <> '' THEN geo ELSE 'null' END as tweetlatitude,
+retweetcount,favouritecount,retweeted,favourited,filterlevel,`language`,
+CASE WHEN placetype <> '' THEN placetype ELSE 'null' END as placetype,
+CASE WHEN placename <> '' THEN placename ELSE 'null' END as placename,
+CASE WHEN placefullname <> '' THEN placefullname ELSE 'null' END as placefullname,
+CASE WHEN placecountrycode <> '' THEN placecountrycode ELSE 'null' END as placecountrycode,
+CASE WHEN placecountry <> '' THEN placecountry ELSE 'null' END as placecountry,
+CASE WHEN place_coordinate1 <> '' THEN SUBSTR(place_coordinate1,1,STRPOS(place_coordinate1,',') - 1)  ELSE 'null' END as pc1_lng,
+CASE WHEN place_coordinate1 <> '' THEN SUBSTR(place_coordinate1,STRPOS(place_coordinate1,',') + 1,LENGTH(place_coordinate1)) ELSE 'null' END as pc1_lat,
+CASE WHEN place_coordinate2 <> '' THEN SUBSTR(place_coordinate2,1,STRPOS(place_coordinate2,',') - 1) ELSE 'null' END as pc2_lng,
+CASE WHEN place_coordinate2 <> '' THEN SUBSTR(place_coordinate2,STRPOS(place_coordinate2,',') + 1,LENGTH(place_coordinate2)) ELSE 'null' END as pc2_lat,
+CASE WHEN place_coordinate3 <> '' THEN SUBSTR(place_coordinate3,1,STRPOS(place_coordinate3,',') - 1) ELSE 'null' END as pc3_lng,
+CASE WHEN place_coordinate3 <> '' THEN SUBSTR(place_coordinate3,STRPOS(place_coordinate3,',') + 1,LENGTH(place_coordinate3)) ELSE 'null' END as pc3_lat,
+CASE WHEN place_coordinate4 <> '' THEN SUBSTR(place_coordinate4,1,STRPOS(place_coordinate4,',') - 1)  ELSE 'null' END as pc4_lng,
+CASE WHEN place_coordinate4 <> '' THEN SUBSTR(place_coordinate4,STRPOS(place_coordinate4,',') + 1,LENGTH(place_coordinate4)) ELSE 'null' END as pc4_lat,
+CASE WHEN hashtags <> '' THEN hashtags ELSE 'null' END as hashtags,
+CASE WHEN user_mentions <> '' THEN user_mentions ELSE 'null' END as user_mentions,
+CASE WHEN urls <> '' THEN urls ELSE 'null' END as urls,
+category,
+CASE WHEN geo <> '' THEN geo ELSE 
+SUBSTR(
+RANDOMCO(SUBSTR(place_coordinate1,STRPOS(place_coordinate1,',') + 1,LENGTH(place_coordinate1)),SUBSTR(place_coordinate1,1,STRPOS(place_coordinate1,',') - 1),SUBSTR(place_coordinate2,STRPOS(place_coordinate2,',') + 1,LENGTH(place_coordinate2)),SUBSTR(place_coordinate2,1,STRPOS(place_coordinate2,',') - 1),SUBSTR(place_coordinate3,STRPOS(place_coordinate3,',') + 1,LENGTH(place_coordinate3)),SUBSTR(place_coordinate3,1,STRPOS(place_coordinate3,',') - 1),SUBSTR(place_coordinate4,STRPOS(place_coordinate4,',') + 1,LENGTH(place_coordinate4)),SUBSTR(place_coordinate4,1,STRPOS(place_coordinate4,',') - 1)),1,
+STRPOS(
+RANDOMCO(SUBSTR(place_coordinate1,STRPOS(place_coordinate1,',') + 1,LENGTH(place_coordinate1)),SUBSTR(place_coordinate1,1,STRPOS(place_coordinate1,',') - 1),SUBSTR(place_coordinate2,STRPOS(place_coordinate2,',') + 1,LENGTH(place_coordinate2)),SUBSTR(place_coordinate2,1,STRPOS(place_coordinate2,',') - 1),SUBSTR(place_coordinate3,STRPOS(place_coordinate3,',') + 1,LENGTH(place_coordinate3)),SUBSTR(place_coordinate3,1,STRPOS(place_coordinate3,',') - 1),SUBSTR(place_coordinate4,STRPOS(place_coordinate4,',') + 1,LENGTH(place_coordinate4)),SUBSTR(place_coordinate4,1,STRPOS(place_coordinate4,',') - 1)),','
+) - 1) END as randomcord_lat
+,CASE WHEN coordinates <> '' THEN coordinates ELSE SUBSTR(
+RANDOMCO(SUBSTR(place_coordinate1,STRPOS(place_coordinate1,',') + 1,LENGTH(place_coordinate1)),SUBSTR(place_coordinate1,1,STRPOS(place_coordinate1,',') - 1),SUBSTR(place_coordinate2,STRPOS(place_coordinate2,',') + 1,LENGTH(place_coordinate2)),SUBSTR(place_coordinate2,1,STRPOS(place_coordinate2,',') - 1),SUBSTR(place_coordinate3,STRPOS(place_coordinate3,',') + 1,LENGTH(place_coordinate3)),SUBSTR(place_coordinate3,1,STRPOS(place_coordinate3,',') - 1),SUBSTR(place_coordinate4,STRPOS(place_coordinate4,',') + 1,LENGTH(place_coordinate4)),SUBSTR(place_coordinate4,1,STRPOS(place_coordinate4,',') - 1)),
+STRPOS(
+RANDOMCO(SUBSTR(place_coordinate1,STRPOS(place_coordinate1,',') + 1,LENGTH(place_coordinate1)),SUBSTR(place_coordinate1,1,STRPOS(place_coordinate1,',') - 1),SUBSTR(place_coordinate2,STRPOS(place_coordinate2,',') + 1,LENGTH(place_coordinate2)),SUBSTR(place_coordinate2,1,STRPOS(place_coordinate2,',') - 1),SUBSTR(place_coordinate3,STRPOS(place_coordinate3,',') + 1,LENGTH(place_coordinate3)),SUBSTR(place_coordinate3,1,STRPOS(place_coordinate3,',') - 1),SUBSTR(place_coordinate4,STRPOS(place_coordinate4,',') + 1,LENGTH(place_coordinate4)),SUBSTR(place_coordinate4,1,STRPOS(place_coordinate4,',') - 1)),','
+) + 1) END as randomcord_long,create_date 
+from `hive_social_media`.`default`.`twittercategorystream`  where create_date between '16-11-28' and '17-02-17'
