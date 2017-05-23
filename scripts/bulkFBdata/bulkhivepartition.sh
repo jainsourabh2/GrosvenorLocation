@@ -2,7 +2,7 @@
 startdate=`/bin/date  +2016-01-01`
 #echo $startdate $startmonth
 
-currentdate=`/bin/date +2016-12-30`
+currentdate=`/bin/date +2017-02-22`
 #echo $currentdate $currentmonth
 
 foldate="$startdate"

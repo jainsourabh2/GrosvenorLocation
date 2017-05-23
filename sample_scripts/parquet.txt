@@ -1,0 +1,102 @@
+
+
+echo 'DROP TABLE `dfs`.`default`.`parquetwitterdata`;' | ./sqlline -u jdbc:drill:zk=localhost:2181
+echo 'ALTER SESSION SET `store.format` = '"'"'parquet'"'"';' | ./sqlline -u jdbc:drill:zk=localhost:2181
+echo 'ALTER SESSION SET `store.parquet.block-size` = 536870912;' | ./sqlline -u jdbc:drill:zk=localhost:2181
+echo 'alter session set `store.parquet.compression`='gzip';' | ./sqlline -u jdbc:drill:zk=localhost:2181
+echo 'CREATE TABLE `dfs`.`default`.`parquetwitterdata` AS SELECT * FROM `hive_social_media`.`default`.`newtwittercategorystream` where create_date between '"'"'16-11-28'"'"' and '"'"'17-05-18'"'"';' | ./sqlline -u jdbc:drill:zk=localhost:2181 
+
+
+CREATE VIEW `dfs`.`default`.`testtwitterdata` AS 
+Select * from `dfs`.`default`.`parquetwitterdata` union
+Select * from `hive_social_media`.`default`.`newtwittercategorystream` where create_date between '17-05-01' and '17-05-17';
+------------------------------------------------------------------
+ select tweet_id,tweet from `hive_social_media`.`default`.`newtwittercategorystream`    where  create_date between '16-11-28' and '17-04-12' and category=0   and  CAST(geolatitude as float) between 51.2611 and 51.7160  and CAST(geolongitude as float) between -0.5383 and 0.2939 and geolatitude <> 'null' and   geolongitude <> 'null' and tweetlatitude <> 'null' 
+ -  43 sec
+ 
+ 
+
+Create Parquet table on Drill and test -
+ select tweet_id,tweet from `dfs`.`default`.`parquetwitterdata`    where  create_date between '16-11-28' and '17-04-12' and category=0   and  CAST(geolatitude as float) between 51.2611 and 51.7160  and CAST(geolongitude as float) between -0.5383 and 0.2939 and geolatitude <> 'null' and   geolongitude <> 'null' and tweetlatitude <> 'null'
+ 10 secs
+
+
+
+Create Hive Parquet table and test
+
+
+
+ select tweet_id,tweet from `dfs`.`default`.`testtwitterdata`    where  create_date between '16-11-28' and '17-04-12' and category=0   and  CAST(geolatitude as float) between 51.2611 and 51.7160  and CAST(geolongitude as float) between -0.5383 and 0.2939 and geolatitude <> 'null' and   geolongitude <> 'null' and tweetlatitude <> 'null'
+ 
+ -------------------------
+ CREATE TABLE `dfs`.`default`.`parquejandata` AS SELECT * FROM `hive_social_media`.`default`.`newtwittercategorystream` where create_date between '17-01-01' and '17-01-31';  --Create Parquet files
+ 
+ Move this data into Month wise directory
+ 
+ 
+ ---------------------
+ 
+ 
+ CREATE EXTERNAL TABLE parquetjan
+( Tweet_Id string,
+creeated_at string,
+Tweet string,
+Sentiment string,
+Source string,
+InReplyToStatusId string,
+InReplyToUserId string,
+InReplyToUserName string,
+UserId string,
+UserFullName string,
+UserScreenName string,
+UserLocation string,
+UserDescription string,
+UserURL string,
+UserProtected string,
+UserVerified string,
+UserFollowerCount string,
+UserFollowingCount string,
+UserStatusCount string,
+UserFriendsCount string,
+UserListedCount string,
+UserFavouriteCount string,
+UserCreateAt string,
+UserGeoEnabled string,
+UserLanguage string,
+UserProfileImageURL string,
+UserDefaultProfile string,
+UserDefaultProfileImage string,
+tweetlongitude string,
+tweetlatitude string,
+RetweetCount string,
+FavouriteCount string,
+Retweeted string,
+Favourited string,
+FilterLevel string,
+Language string,
+PlaceType string,
+PlaceName string,
+PlaceFullName string,
+PlaceCountryCode string,
+PlaceCountry string,
+Place_coordinate1_lng string,
+Place_coordinate1_lat string,
+Place_coordinate2_lng string,
+Place_coordinate2_lat string,
+Place_coordinate3_lng string,
+Place_coordinate3_lat string,
+Place_coordinate4_lng string,
+Place_coordinate4_lat string,
+Hashtags string,
+user_mentions string,
+Urls string,
+Category string,
+geolatitude string,
+geolongitude string
+)
+PARTITIONED BY (create_date string)
+row format delimited fields terminated by "|"
+STORED AS PARQUET location '/grosvenor/parquetwitterdata';
+
+---------------------------------------
+INSERT OVERWRITE TABLE parquettwitter PARTITION(create_date) SELECT * FROM newtwittercategorystream;
