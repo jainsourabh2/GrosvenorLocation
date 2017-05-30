@@ -20,7 +20,7 @@ if [ $? != 0 ]
 then 
 nohup node /opt/nodeprojects/GrosvenorLocation/facebook/facebookgraphapi.js $fdate &
 else 
-hadoop fs -rm /grosvenor/facebook/facebooktopic/$fdate/*.* 
+#hadoop fs -rm /grosvenor/facebook/facebooktopic/$fdate/*.* 
 nohup node /opt/nodeprojects/GrosvenorLocation/facebook/facebookgraphapi.js $fdate &   
 fi
 

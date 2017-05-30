@@ -10,8 +10,8 @@ fi
 startdate="$currentdate" 
 echo "$startdate"
 
-FB_BASE_PATH="/grosvenor/facebook/facebooktopic/$startdate" 
-FILES=$(hdfs dfs -ls "/grosvenor/facebook/facebooktopic/$startdate/FacebookData.*" | awk '{print $8}' | grep -v "/grosvenor/facebook/facebooktopic/$startdate/FacebookData.*.tmp")
+FB_BASE_PATH="/grosvenor/facebook/facebooktopic/current" 
+FILES=$(hdfs dfs -ls "$FB_BASE_PATH/FacebookData.*" | awk '{print $8}' | grep -v "$FB_BASE_PATH/FacebookData.*.tmp")
 for FILENAME in $FILES
 do 
 echo "For file $FILENAME"

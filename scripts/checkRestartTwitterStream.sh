@@ -10,3 +10,5 @@ else
     nohup node /opt/nodeprojects/GrosvenorLocation/twitter/twitterstream.js > /var/log/GrosvenorLocation/twitterstream.log &
     echo "$SERVICE restarted!"
 fi
+
+

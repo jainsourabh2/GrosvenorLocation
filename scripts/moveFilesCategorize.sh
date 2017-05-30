@@ -17,7 +17,7 @@ do
         eval $HDFS_COPY_HDFS_LOCAL
         HDFS_MERGE="hdfs dfs -appendToFile $localBasePathTxt $hdfsFilePath"
         HDFS_CHECK="hdfs dfs -ls $hdfsFilePath"
-        HDFS_PURGE="hdfs dfs -rmr $filePath;"
+        HDFS_PURGE="hdfs dfs -rmr -skipTrash $filePath;"
         eval $HDFS_CHECK
         if [ $? -gt 0 ]
         then

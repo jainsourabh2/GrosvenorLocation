@@ -1,4 +1,31 @@
 #!/bin/bash
+PIDFILE=/home/GvAdmin/forever.pid
+if [ -f $PIDFILE ]
+then
+PID=$(cat $PIDFILE)
+ps -p $PID > /dev/null 2>&1
+if [ $? -eq 0 ]
+then
+echo "Process already running"
+exit 1
+else
+## Process not found assume not running
+echo $$ > $PIDFILE
+if [ $? -ne 0 ]
+then
+echo "Could not create PID file"
+exit 1
+fi
+fi
+else
+echo $$ > $PIDFILE
+if [ $? -ne 0 ]
+then
+echo "Could not create PID file"
+exit 1
+fi
+fi
+
 basePath="/grosvenor/twitter/newtwittercategoryflume/"
 for filePath in $(hdfs dfs -find /grosvenor/twitter/newtwittercategoryflume/current/*.txt)
 do
@@ -32,3 +59,4 @@ do
         rm -rf $fileName;
         rm -rf $localBasePathTxt;
 done
+rm $PIDFILE
