@@ -38,3 +38,42 @@ columns[7] as MonthPeriod,
 columns[8] as DatePeriod
 from `dfs`.`default`.`liverpoolone/Transactions`
 ---------------
+
+create view `dfs`.`default`.`CommentsView` as 
+SELECT columns[0] as Name,
+columns[1] as Userid,
+columns[2] as Message,
+columns[3] as Postid,
+columns[4] as Commentsid,
+columns[5] as CommentsDate,
+columns[6] as CommentsTime,
+columns[7] as CommentsDay,
+columns[8] as CommentsPeriod,
+columns[9] as CommentsTimeframe,
+columns[10] as Sentiment,
+columns[11] as Abusiveflag
+from `dfs`.`default`.`facebook/fbcommentstopic/liverpoolone`
+
+----------
+
+
+CREATE EXTERNAL TABLE facebookcomments (
+name      string,
+userid     bigint,
+message   string,
+postid  bigint,
+commentsid  string,
+commentsdate  string,
+commentstime  string,
+commentsday   string,
+commentsperiod  string,
+commentstimeframe  string,
+sentiment  int,
+abusiveflag int
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/facebook/fbcommentstopic/liverpoolone';
+
+
+--------------
