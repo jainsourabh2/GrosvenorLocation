@@ -56,7 +56,7 @@ var q = require('q');
 
                       console.log(obj.rows[p]);
 
-                        var created_at = new Date(obj.rows[p].creeated_at);
+                        var created_at = new Date(obj.rows[p].creeated_at).toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
                         var tweet = obj.rows[p].tweet;                        
 

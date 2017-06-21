@@ -160,3 +160,22 @@ row format delimited
 fields terminated by ',' 
 lines terminated by '\n' 
 location '/grosvenor/facebook/DimPostCode';
+
+CREATE EXTERNAL TABLE fbEvents(
+eventid string,
+eventname string,
+eventdescription string,
+eventcreatedate string,
+eventcreatetime string,
+eventstartdate string,
+eventstarttime string,
+eventenddate string,
+eventendtime string,
+placename string,
+city string,
+country string,
+latitude string,
+longitude string,
+street string,
+zip string) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/grosvenor/facebook/fbeventstopic/events'; 

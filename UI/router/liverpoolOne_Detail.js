@@ -173,16 +173,16 @@ if(aggregateby.toLowerCase() == "daily")
 {
 	if(entity == "sales")
 {
-	let outer1 = " SELECT SUM(case when SUBSTR(period,1,4)='" + previousyear + "' then CAST(totalvalue as int) else 0 end ) as pc, SUM(case when SUBSTR(period,1,4)='" + currentyear + "' then CAST(totalvalue as int) else 0 end) as cc,";
-	let outer2 = " storename,zone,MAX(case when SUBSTR(period,1,4) ='" + previousyear + "' then period end) as prevperiod,MAX(case when SUBSTR(period,1,4) ='" + currentyear + "' then period end) as currperiod,MAX(case when SUBSTR(period,1,4) ='" + previousyear + "' then dayperiod end) as prevdayperiod,";
-	let outer3 = " MAX(case when SUBSTR(period,1,4) ='" + currentyear + "' then dayperiod end) as currdayperiod From ";
+	let outer1 = " SELECT SUM(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then CAST(totalvalue as int) else 0 end ) as pc, SUM(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then CAST(totalvalue as int) else 0 end) as cc,";
+	let outer2 = " storename,zone,MAX(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then period end) as prevperiod,MAX(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then period end) as currperiod,MAX(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then dayperiod end) as prevdayperiod,";
+	let outer3 = " MAX(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then dayperiod end) as currdayperiod From ";
 	let query1 = " (SELECT CAST(S.SalesValue as int) as totalvalue,S.StoreName as storename,S.Zone as zone,S.Period as period,S.DayPeriod as dayperiod,MonthPeriod,DatePeriod,YearPeriod from ";
 	let query2 = " (Select * from `dfs`.`default`.`SalesView` V where  V.Period between '" + previousstartdate + "' and '" + previousenddate + "' ";
 	let query3 =  " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ")" ;  // 'Friday','Saturday','Sunday'
 	let query4 = " union " ;
 	let query5 = " Select * from `dfs`.`default`.`SalesView` SV where SV.Period between '" + currentstartdate + "' and '" + currentenddate + "' ";
 	let query6 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
-	let query7 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "') group by storename,zone,MonthPeriod,DatePeriod order by currperiod";
+	let query7 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "') group by storename,zone,MonthPeriod,DatePeriod order by prevperiod,currperiod";
 	let query = "";
 
 	if(weekdays != undefined)
@@ -201,16 +201,16 @@ if(aggregateby.toLowerCase() == "daily")
 if(entity == "transactions")
 {
 
-	let outer1 = " SELECT SUM(case when SUBSTR(period,1,4)='" + previousyear + "' then CAST(totalvalue as int) else 0 end ) as pc, SUM(case when SUBSTR(period,1,4)='" + currentyear + "' then CAST(totalvalue as int) else 0 end) as cc,";
-	let outer2 = " storename,zone,MAX(case when SUBSTR(period,1,4) ='" + previousyear + "' then period end) as prevperiod,MAX(case when SUBSTR(period,1,4) ='" + currentyear + "' then period end) as currperiod,MAX(case when SUBSTR(period,1,4) ='" + previousyear + "' then dayperiod end) as prevdayperiod,";
-	let outer3 = " MAX(case when SUBSTR(period,1,4) ='" + currentyear + "' then dayperiod end) as currdayperiod From ";
+	let outer1 = " SELECT SUM(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then CAST(totalvalue as int) else 0 end ) as pc, SUM(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then CAST(totalvalue as int) else 0 end) as cc,";
+	let outer2 = " storename,zone,MAX(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then period end) as prevperiod,MAX(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then period end) as currperiod,MAX(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then dayperiod end) as prevdayperiod,";
+	let outer3 = " MAX(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then dayperiod end) as currdayperiod From ";
 	let query1 = " (SELECT CAST(S.TransactionsValue as int) as totalvalue,S.StoreName as storename,S.Zone as zone,S.Period as period,S.DayPeriod as dayperiod,MonthPeriod,DatePeriod,YearPeriod from ";
 	let query2 = " (Select * from `dfs`.`default`.`TransactionsView` V where  V.Period between '" + previousstartdate + "' and '" + previousenddate + "' "; 
 	let query3 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 	let query4 = " union ";
 	let query5 = " Select * from `dfs`.`default`.`TransactionsView` SV where SV.Period between '" + currentstartdate + "' and '" + currentenddate + "' "; 
 	let query6 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
-	let query7 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "') group by storename,zone,MonthPeriod,DatePeriod order by currperiod ";
+	let query7 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "') group by storename,zone,MonthPeriod,DatePeriod order by prevperiod,currperiod ";
 	let query = "";
 
 	if(weekdays != undefined)
@@ -229,16 +229,16 @@ if(entity == "transactions")
 
 if(entity == "footfall")
 {
-	let outer1 = " SELECT SUM(case when SUBSTR(period,1,4)='" + previousyear + "' then CAST(totalvalue as int) else 0 end ) as pc, SUM(case when SUBSTR(period,1,4)='" + currentyear + "' then CAST(totalvalue as int) else 0 end) as cc,";
-	let outer2 = " storename,zone,MAX(case when SUBSTR(period,1,4) ='" + previousyear + "' then period end) as prevperiod,MAX(case when SUBSTR(period,1,4) ='" + currentyear + "' then period end) as currperiod,MAX(case when SUBSTR(period,1,4) ='" + previousyear + "' then dayperiod end) as prevdayperiod,";
-	let outer3 = " MAX(case when SUBSTR(period,1,4) ='" + currentyear + "' then dayperiod end) as currdayperiod From ";
+	let outer1 = " SELECT SUM(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then CAST(totalvalue as int) else 0 end ) as pc, SUM(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then CAST(totalvalue as int) else 0 end) as cc,";
+	let outer2 = " storename,zone,MAX(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then period end) as prevperiod,MAX(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then period end) as currperiod,MAX(case when period between '" + previousstartdate + "' and '" + previousenddate + "' then dayperiod end) as prevdayperiod,";
+	let outer3 = " MAX(case when period between '" + currentstartdate + "' and '" + currentenddate + "' then dayperiod end) as currdayperiod From ";
 	let query1 = " (SELECT CAST(S.FootfallValue as int) as totalvalue,S.StoreName as storename,S.Zone as zone,S.Period as period,S.DayPeriod as dayperiod,MonthPeriod,DatePeriod,YearPeriod from ";
 	let query2 = " (Select * from `dfs`.`default`.`StorefootfallView` V where  V.Period between '" + previousstartdate + "' and '" + previousenddate + "' ";
 	let query3 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 	let query4 = " union ";
 	let query5 = " Select * from `dfs`.`default`.`StorefootfallView` SV where SV.Period between '" + currentstartdate + "' and '" + currentenddate + "' ";
 	let query6 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
-	let query7 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "') group by storename,zone,MonthPeriod,DatePeriod order by currperiod ";
+	let query7 = " )  S inner join `dfs`.`default`.`MasterStoreData` M on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id = '" + storeid + "') group by storename,zone,MonthPeriod,DatePeriod order by prevperiod,currperiod ";
 	let query = "";
 
 	if(weekdays != undefined)
@@ -264,16 +264,16 @@ if(entity == "footfall")
 	{
 		 
 		 let query = "";
-		 let query1 = " SELECT SUM(case when YearPeriod='" + previousyear + "' then totalcount else 0 end ) as pc," ;
-		 let query2 = " SUM(case when YearPeriod='" + currentyear + "' then totalcount else 0 end) as cc,storename,Zone,WeekPeriod from ";
-		 let query3 = " (SELECT SUM(CAST(S.SalesValue as int)) as totalcount,S.StoreName as storename,S.Zone,S.YearPeriod,S.WeekPeriod from " ;
+		 let query1 = " SELECT SUM(case when Period between '" + previousstartdate + "' and '" + previousenddate + "' then totalcount else 0 end ) as pc," ;
+		 let query2 = " SUM(case when Period between '" + currentstartdate + "' and '" + currentenddate + "' then totalcount else 0 end) as cc,storename,Zone,WeekPeriod from ";
+		 let query3 = " (SELECT SUM(CAST(S.SalesValue as int)) as totalcount,S.StoreName as storename,S.Zone,S.YearPeriod,S.WeekPeriod,S.Period from " ;
 		 let query4 = " (Select * from `dfs`.`default`.`SalesView` V where  V.Period between '" + previousstartdate + "' and '" + previousenddate + "' "; 
 		 let query5 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 		 let query6 = " union " ;
 		 let query7 = " Select * from `dfs`.`default`.`SalesView` SV where SV.Period between '" + currentstartdate + "' and '" + currentenddate + "' ";
 		 let query8 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 		 let query9 = ")  S inner join `dfs`.`default`.`MasterStoreData` M " ;
-		 let query10 = " on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id ='" + storeid + "' group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,S.WeekPeriod ) group by storename,Zone,WeekPeriod order by CAST(WeekPeriod as int)";
+		 let query10 = " on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id ='" + storeid + "' group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,S.WeekPeriod,S.Period ) group by storename,Zone,WeekPeriod order by CAST(WeekPeriod as int)";
 
 		 if(weekdays != undefined)
 			{
@@ -291,16 +291,16 @@ if(entity == "footfall")
 	if(entity == "transactions")
 	{
 		 let query = "";
-		 let query1 = " SELECT SUM(case when YearPeriod='" + previousyear + "' then totalcount else 0 end ) as pc," ;
-		 let query2 = " SUM(case when YearPeriod='" + currentyear + "' then totalcount else 0 end) as cc,storename,Zone,WeekPeriod from ";
-		 let query3 = " (SELECT SUM(CAST(S.TransactionsValue as int)) as totalcount,S.StoreName as storename,S.Zone,S.YearPeriod,S.WeekPeriod from " ;
+		 let query1 = " SELECT SUM(case when Period between '" + previousstartdate + "' and '" + previousenddate + "' then totalcount else 0 end ) as pc," ;
+		 let query2 = " SUM(case when Period between '" + currentstartdate + "' and '" + currentenddate + "' then totalcount else 0 end) as cc,storename,Zone,WeekPeriod from ";
+		 let query3 = " (SELECT SUM(CAST(S.TransactionsValue as int)) as totalcount,S.StoreName as storename,S.Zone,S.YearPeriod,S.WeekPeriod,S.Period from " ;
 		 let query4 = " (Select * from `dfs`.`default`.`TransactionsView` V where  V.Period between '" + previousstartdate + "' and '" + previousenddate + "' "; 
 		 let query5 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 		 let query6 = " union ";
 		 let query7 = " Select * from `dfs`.`default`.`TransactionsView` SV where SV.Period between '" + currentstartdate + "' and '" + currentenddate + "' "; 
 		 let query8 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 		 let query9 = ")  S inner join `dfs`.`default`.`MasterStoreData` M ";
-		 let query10 = " on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id ='" + storeid + "' group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,S.WeekPeriod ) group by storename,Zone,WeekPeriod order by CAST(WeekPeriod as int)";
+		 let query10 = " on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id ='" + storeid + "' group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,S.WeekPeriod,S.Period ) group by storename,Zone,WeekPeriod order by CAST(WeekPeriod as int)";
 
 		 if(weekdays != undefined)
 			{
@@ -318,16 +318,16 @@ if(entity == "footfall")
 	if(entity == "footfall")
 	{
 		 let query = "";
-		 let query1 = " SELECT SUM(case when YearPeriod='" + previousyear + "' then totalcount else 0 end ) as pc," ;
-		 let query2 = " SUM(case when YearPeriod='" + currentyear + "' then totalcount else 0 end) as cc,storename,Zone,WeekPeriod from ";
-		 let query3 = " (SELECT SUM(CAST(S.FootfallValue as int)) as totalcount,S.StoreName as storename,S.Zone,S.YearPeriod,S.WeekPeriod from " ;
+		 let query1 = " SELECT SUM(case when Period between '" + previousstartdate + "' and '" + previousenddate + "' then totalcount else 0 end ) as pc," ;
+		 let query2 = " SUM(case when Period between '" + currentstartdate + "' and '" + currentenddate + "' then totalcount else 0 end) as cc,storename,Zone,WeekPeriod from ";
+		 let query3 = " (SELECT SUM(CAST(S.FootfallValue as int)) as totalcount,S.StoreName as storename,S.Zone,S.YearPeriod,S.WeekPeriod,S.Period from " ;
 		 let query4 = " (Select * from `dfs`.`default`.`StorefootfallView` V where  V.Period between '" + previousstartdate + "' and '" + previousenddate + "' ";
 		 let query5 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 		 let query6 = " union ";
 		 let query7 = " Select * from `dfs`.`default`.`StorefootfallView` SV where SV.Period between '" + currentstartdate + "' and '" + currentenddate + "' ";
 		 let query8 = " and LOWER(SUBSTR(DayPeriod,1,3)) IN( " + weekdaylist + ") ";
 		 let query9 = ")  S inner join `dfs`.`default`.`MasterStoreData` M ";
-		 let query10 = " on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id ='" + storeid + "' group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,S.WeekPeriod ) group by storename,Zone,WeekPeriod order by CAST(WeekPeriod as int)";
+		 let query10 = " on S.StoreName=M.StoreName and S.Zone=M.Zone and M.Id ='" + storeid + "' group by S.StoreName,S.Zone, M.Latitude,M.Longitude,S.YearPeriod,S.WeekPeriod,S.Period ) group by storename,Zone,WeekPeriod order by CAST(WeekPeriod as int)";
 
 		 if(weekdays != undefined)
 			{

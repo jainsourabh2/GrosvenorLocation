@@ -7,3 +7,4 @@
 0 */1 * * * /opt/nodeprojects/GrosvenorLocation/scripts/startFlickrService.sh >> /var/log/GrosvenorLocation/flickrservice.log
 0 0 * * * /opt/nodeprojects/GrosvenorLocation/scripts/freeMemory.sh >> /var/log/GrosvenorLocation/freeMemory.log
 55 23 * * *  /opt/nodeprojects/GrosvenorLocation/scripts/parquescript.sh >> /var/log/GrosvenorLocation/parquescriptlogs.log
+59 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbEventIngest.sh >> /var/log/GrosvenorLocation/fbEventslogs.log
