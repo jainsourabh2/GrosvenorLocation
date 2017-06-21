@@ -1,0 +1,20 @@
+CREATE EXTERNAL TABLE facebookcomments (
+name      string,
+userid     bigint,
+message   string,
+postid  bigint,
+commentsid  string,
+commentsdate  string,
+commentstime  string,
+commentsday   string,
+commentsperiod  string,
+commentstimeframe  string,
+sentiment  int,
+abusiveflag int
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/facebook/fbcommentstopic/liverpoolone';
+
+
+--------------
