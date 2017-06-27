@@ -179,3 +179,13 @@ longitude string,
 street string,
 zip string) 
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/grosvenor/facebook/fbeventstopic/events'; 
+
+CREATE EXTERNAL TABLE safeLiverpoolAreas(
+areacode string,
+latitude string,
+longitude string,
+safescore string,
+unsafescore string) 
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '|' 
+LOCATION '/grosvenor/liverpoolone/SafeAreas/';
