@@ -28,6 +28,8 @@ const liverpoolOne_getRates = require('./getliverpoolOneRates.js');
 const liverpoolOneAvgTranNConv_agg = require('./getLiverpoolOneAvgTranNConv_agg.js');
 const liverpoolEventDetails = require('./getLiverpoolEventsDetail');
 const events = require('./getEvents.js');
+const storesSummary = require('./getStoresSummary.js');
+const liverpoolArea = require('./getSafescorePrediction.js');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -1101,6 +1103,94 @@ app.get("/api/getLiverpoolEventsDetail",function(req,res){
 app.get("/api/getEvents",function(req,res){
   events.getEvents(req,res,logger);
 });
+
+
+/**
+ * @swagger
+ * definitions:
+ *   GetStoreSummary:
+ *     properties:
+ *       posts:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getStoreSummary?storeid={storeid}&entity={entity}&fromdate={fromdate}&todate={todate}:
+ *   get:
+ *     tags:
+ *       - Get Sales Summary Data
+ *     description: Get Sales Summary Data.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: storeid
+ *         description: Id of the Store 
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: entity
+ *         description: Entity (Sales/Transaction)
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: fromdate
+ *         description: Fromdate
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: todate
+ *         description: Todate
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Get Sales Summary Data
+ *     schema:
+ *           $ref: '#/definitions/GetSalesSummary'
+ */
+app.get("/api/getStoreSummary",function(req,res){
+  storesSummary.getSummaryforStores(req,res,logger);
+});
+
+
+/**
+ * @swagger
+ * definitions:
+ *   GetScorePrediction:
+ *     properties:
+ *       posts:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getSafeScorePrediction:
+ *   get:
+ *     tags:
+ *       - Get Safe Score for liverpool streets
+ *     description: Get safe score percentage for the street.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Get Street Safe Score Data
+ *     schema:
+ *           $ref: '#/definitions/GetScorePrediction'
+ */
+app.get("/api/getSafeScorePrediction",function(req,res){
+  liverpoolArea.getSafeScorePrediction(req,res,logger);
+});
+
+
+
 
 app.get("/api/getstation",function(req,res){  
    var param = req.query.dataset;

@@ -1,10 +1,13 @@
-*/2 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/checkRestartTwitterStream.sh >> /var/log/GrosvenorLocation/shellRestartTwitterStream.log
-*/1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFilesNewData.sh >> /var/log/GrosvenorLocation/shellmoveFilesNewData.log
-*/1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFbDatewise.sh >> /var/log/GrosvenorLocation/moveFbDatewise.log
-30 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/Hive_Partition.sh >> /var/log/GrosvenorLocation/shellhivepartition.log
-*/12 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/mergecmd.sh >> /var/log/GrosvenorLocation/fbmergefiles.log
-0 */4 * * * /opt/nodeprojects/GrosvenorLocation/scripts/daily_fbingest.sh >> /var/log/GrosvenorLocation/fbingestion/fbingestion_`date +20\%y\%m\%d`.log
-0 */1 * * * /opt/nodeprojects/GrosvenorLocation/scripts/startFlickrService.sh >> /var/log/GrosvenorLocation/flickrservice.log
-0 0 * * * /opt/nodeprojects/GrosvenorLocation/scripts/freeMemory.sh >> /var/log/GrosvenorLocation/freeMemory.log
-55 23 * * *  /opt/nodeprojects/GrosvenorLocation/scripts/parquescript.sh >> /var/log/GrosvenorLocation/parquescriptlogs.log
-59 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbEventIngest.sh >> /var/log/GrosvenorLocation/fbEventslogs.log
+*/2 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/checkRestartTwitterStream.sh >> /var/log/GrosvenorLocation/shellRestartTwitterStream.log     
+*/1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFilesNewData.sh >> /var/log/GrosvenorLocation/shellmoveFilesNewData.log                  
+*/1 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/moveFbDatewise.sh >> /var/log/GrosvenorLocation/moveFbDatewise.log                           
+30 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/Hive_Partition.sh >> /var/log/GrosvenorLocation/shellhivepartition.log                       
+*/12 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/mergecmd.sh >> /var/log/GrosvenorLocation/fbmergefiles.log                                  
+0 */4 * * * /opt/nodeprojects/GrosvenorLocation/scripts/daily_fbingest.sh >> /var/log/GrosvenorLocation/fbingestion/fbingestion_`date +20\%y\%m\%d`.l
+og                                                                                                                                                   
+0 */1 * * * /opt/nodeprojects/GrosvenorLocation/scripts/startFlickrService.sh >> /var/log/GrosvenorLocation/flickrservice.log                        
+0 0 * * * /opt/nodeprojects/GrosvenorLocation/scripts/freeMemory.sh >> /var/log/GrosvenorLocation/freeMemory.log                                     
+55 23 * * *  /opt/nodeprojects/GrosvenorLocation/scripts/parquescript.sh >> /var/log/GrosvenorLocation/parquescriptlogs.log                          
+59 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbEventIngest.sh >> /var/log/GrosvenorLocation/fbEventslogs.log                              
+0 5 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbComments.sh >> /var/log/GrosvenorLocation/fbcomments.log                                     
+0 5 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbStoreComments.sh >> /var/log/GrosvenorLocation/fbstorecomments.log

@@ -189,3 +189,73 @@ unsafescore string)
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY '|' 
 LOCATION '/grosvenor/liverpoolone/SafeAreas/';
+
+CREATE EXTERNAL TABLE facebookcomments (
+name      string,
+userid     bigint,
+message   string,
+postid  bigint,
+commentsid  string,
+commentsdate  string,
+commentstime  string,
+commentsday   string,
+commentsperiod  string,
+commentstimeframe  string,
+sentiment  int,
+abusiveflag int
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/facebook/fbcommentstopic/liverpoolone';
+
+
+
+CREATE EXTERNAL TABLE flickrdata (
+id                      string,                                                                                                                       
+owner                   string ,                                                                                                                      
+title                   string ,                                                                                                                      
+photoid                 string ,                                                                                                                      
+dateuploaded            string,                                                                                                                       
+owner_nsid              string,                                                                                                                       
+owner_username          string,                                                                                                                       
+owner_realname          string,                                                                                                                       
+owner_location          string,                                                                                                                       
+description             string,                                                                                                                       
+dateposted              string,                                                                                                                       
+phototaken              string,                                                                                                                       
+photolastupdate         string,                                                                                                                       
+views                   int   ,                                                                                                                       
+latitude                string,                                                                                                                       
+longitude               string,                                                                                                                       
+url                     string,                                                                                                                       
+media                   string,                                                                                                                       
+commentid               string,                                                                                                                       
+author                  string,                                                                                                                       
+authorname              string,                                                                                                                       
+commentlink             string,                                                                                                                       
+authorrealname          string,                                                                                                                       
+content                 string,                                                                                                                       
+create_date             string                                                                                                                       
+)
+PARTITIONED BY (create_date string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/flickr/';
+
+CREATE EXTERNAL TABLE facebookstorecomments (
+name      string,
+userid     bigint,
+message   string,
+postid  bigint,
+commentsid  string,
+commentsdate  string,
+commentstime  string,
+commentsday   string,
+commentsperiod  string,
+commentstimeframe  string,
+sentiment  int,
+abusiveflag int
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/facebook/fbcommentstopic/stores';

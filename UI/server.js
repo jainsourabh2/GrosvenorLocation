@@ -23,7 +23,7 @@ var swaggerDefinition = {
     version: '1.0.0',
     description: 'Demonstrating how to describe a RESTful API with Swagger',
   },
-  host: 'gvpocw01.westeurope.cloudapp.azure.com:3000', //On server this needs to be  gvpocw01.westeurope.cloudapp.azure.com:3000
+  host: 'gvpocw01.westeurope.cloudapp.azure.com:4000', //On server this needs to be  gvpocw01.westeurope.cloudapp.azure.com:4000
   basePath: '/api', 
 };
 
@@ -46,6 +46,6 @@ app.get('/swagger.json', function(req, res) {
 
 router(app);
 
-var server = app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0",function(){
-  console.log("Started server on port 3000 !!!");
+var server = app.listen(process.env.PORT || 4000, process.env.IP || "0.0.0.0",function(){
+  console.log("Started server on port 4000 !!!");
 });

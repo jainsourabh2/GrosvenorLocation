@@ -1,0 +1,127 @@
+Steps :
+1) Extract all files from zip and then search for recommendation.csv and delete all. Or use the script - removefiles.js (provide app path)
+2) This will leave only certificates.csv files in all directories. Now copy this whole directory to server.
+3) Merge all files into one single file using command - 
+cat /resource1/energydataset/all-display-certificates/*/* > /resource1/energydataset/all-display-certificates/displayenergy.csv
+4) Move this file to HDFS temp folder which will be a staging dir - hadoop fs -put /resource1/energydataset/all-display-certificates/displayenergy.csv /tmp/energydataset/display/
+5) This file will have multiple records of headers from csv files we need to remove this records also there are records with double quotes in them which we will remove using OpenCsv serde.
+6) Create external table on top of this data using serde 
+
+	CREATE EXTERNAL TABLE ext_display_energy(
+	LMK_KEY string,
+	ADDRESS1 string,
+	ADDRESS2 string,
+	ADDRESS3 string,
+	POSTCODE string,
+	BUILDING_REFERENCE_NUMBER string,
+	CURRENT_OPERATIONAL_RATING string,
+	YR1_OPERATIONAL_RATING string,
+	YR2_OPERATIONAL_RATING string,
+	OPERATIONAL_RATING_BAND string,
+	ELECTRIC_CO2 string,
+	HEATING_CO2 string,
+	RENEWABLES_CO2 string,
+	PROPERTY_TYPE string,
+	INSPECTION_DATE string,
+	LOCAL_AUTHORITY string,
+	CONSTITUENCY string,
+	COUNTY string,
+	LODGEMENT_DATE string,
+	MAIN_BENCHMARK string,
+	MAIN_HEATING_FUEL string,
+	OTHER_FUEL string,
+	SPECIAL_ENERGY_USES string,
+	RENEWABLE_SOURCES string,
+	TOTAL_FLOOR_AREA string,
+	ANNUAL_THERMAL_FUEL_USAGE string,
+	TYPICAL_THERMAL_FUEL_USAGE string,
+	ANNUAL_ELECTRICAL_FUEL_USAGE string,
+	TYPICAL_ELECTRICAL_FUEL_USAGE string,
+	RENEWABLES_FUEL_THERMAL string,
+	RENEWABLES_ELECTRICAL string,
+	YR1_ELECTRICITY_CO2 string,
+	YR2_ELECTRICITY_CO2 string,
+	YR1_HEATING_CO2 string,
+	YR2_HEATING_CO2 string,
+	YR1_RENEWABLES_CO2 string,
+	YR2_RENEWABLES_CO2 string,
+	AIRCON_PRESENT string,
+	AIRCON_KW_RATING string,
+	ESTIMATED_AIRCON_KW_RATING string,
+	AC_INSPECTION_COMMISSIONED string,
+	BUILDING_ENVIRONMENT string,
+	BUILDING_CATEGORY string,
+	ADDRESS string,
+	LOCAL_AUTHORITY_LABEL string,
+	CONSTITUENCY_LABEL string,
+	CERTIFICATE_HASH string)
+	 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+	WITH SERDEPROPERTIES (
+	   "separatorChar" = ',',
+	   "quoteChar"     = '\"',
+	   "escapeChar"    = '\\'
+	)  
+	STORED AS TEXTFILE
+	LOCATION '/tmp/energydataset/display/displayenergy.csv';
+
+7) Now we will filter the records which we want and store into text file.
+ hive -e "select * from ext_display_energy where lmk_key <> 'LMK_KEY'" > /resource1/energydataset/display.csv;
+
+8) Move this file to HDFS path - /grosvenor/energy/display
+ hadoop fs -put /resource1/energydataset/display.csv /grosvenor/energy/display
+
+9) Now create final External table on top of this data.
+
+CREATE EXTERNAL TABLE display_energy(
+	LMK_KEY string,
+	ADDRESS1 string,
+	ADDRESS2 string,
+	ADDRESS3 string,
+	POSTCODE string,
+	BUILDING_REFERENCE_NUMBER string,
+	CURRENT_OPERATIONAL_RATING string,
+	YR1_OPERATIONAL_RATING string,
+	YR2_OPERATIONAL_RATING string,
+	OPERATIONAL_RATING_BAND string,
+	ELECTRIC_CO2 string,
+	HEATING_CO2 string,
+	RENEWABLES_CO2 string,
+	PROPERTY_TYPE string,
+	INSPECTION_DATE string,
+	LOCAL_AUTHORITY string,
+	CONSTITUENCY string,
+	COUNTY string,
+	LODGEMENT_DATE string,
+	MAIN_BENCHMARK string,
+	MAIN_HEATING_FUEL string,
+	OTHER_FUEL string,
+	SPECIAL_ENERGY_USES string,
+	RENEWABLE_SOURCES string,
+	TOTAL_FLOOR_AREA string,
+	ANNUAL_THERMAL_FUEL_USAGE string,
+	TYPICAL_THERMAL_FUEL_USAGE string,
+	ANNUAL_ELECTRICAL_FUEL_USAGE string,
+	TYPICAL_ELECTRICAL_FUEL_USAGE string,
+	RENEWABLES_FUEL_THERMAL string,
+	RENEWABLES_ELECTRICAL string,
+	YR1_ELECTRICITY_CO2 string,
+	YR2_ELECTRICITY_CO2 string,
+	YR1_HEATING_CO2 string,
+	YR2_HEATING_CO2 string,
+	YR1_RENEWABLES_CO2 string,
+	YR2_RENEWABLES_CO2 string,
+	AIRCON_PRESENT string,
+	AIRCON_KW_RATING string,
+	ESTIMATED_AIRCON_KW_RATING string,
+	AC_INSPECTION_COMMISSIONED string,
+	BUILDING_ENVIRONMENT string,
+	BUILDING_CATEGORY string,
+	ADDRESS string,
+	LOCAL_AUTHORITY_LABEL string,
+	CONSTITUENCY_LABEL string,
+	CERTIFICATE_HASH string)
+	 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+	LOCATION '/grosvenor/energy/display'; 
+
+	10) Delete staging table - ext_display_energy
+	drop table ext_display_energy;
