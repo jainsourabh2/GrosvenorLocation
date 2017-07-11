@@ -234,8 +234,7 @@ author                  string,
 authorname              string,                                                                                                                       
 commentlink             string,                                                                                                                       
 authorrealname          string,                                                                                                                       
-content                 string,                                                                                                                       
-create_date             string                                                                                                                       
+content                 string                                                                                                                       
 )
 PARTITIONED BY (create_date string)
 ROW FORMAT DELIMITED
