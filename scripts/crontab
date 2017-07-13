@@ -11,3 +11,4 @@ og
 59 23 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbEventIngest.sh >> /var/log/GrosvenorLocation/fbEventslogs.log                              
 0 5 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbComments.sh >> /var/log/GrosvenorLocation/fbcomments.log                                     
 0 5 * * * /opt/nodeprojects/GrosvenorLocation/scripts/fbStoreComments.sh >> /var/log/GrosvenorLocation/fbstorecomments.log
+0 2 * * * /opt/nodeprojects/GrosvenorLocation/scripts/cleanLogs.sh >> /var/log/GrosvenorLocation/logcleaner.log
