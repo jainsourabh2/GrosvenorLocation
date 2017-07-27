@@ -38,15 +38,15 @@ Create workflow.xml
 -----------------------------------------------------------------------------------------
 Create job.properties file -
 ------------------------------------------------------------------------------------------
-nameNode=hdfs://10.80.2.4:8020
-jobtracker=10.80.2.4:8050
-sqlserver=10.80.2.5:55413
+nameNode=hdfs://x.x.x.x:8020
+jobtracker=x.x.x.x:8050
+sqlserver=x.x.x.x:55413
 oozie.coord.application.path=${nameNode}/tmp/app/co-ordinator.xml
 oozie.use.system.libpath=true
 queueName=default
 databaseName=BigDataStore
 databaseuser=mastek
-databasepw=M8$tek12
+databasepw=****
 databasetablename=dbo.DimPostCode
 outputdir=/tmp/sqoopdata
 workflowAppUri=${nameNode}/tmp/app/workflow.xml
