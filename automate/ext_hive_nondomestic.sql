@@ -1,0 +1,49 @@
+DROP TABLE IF EXISTS ext_non_domestic_energy;
+
+CREATE EXTERNAL TABLE ext_non_domestic_energy(
+LMK_KEY	string,
+ADDRESS1 string,	
+ADDRESS2 string,	
+ADDRESS3 string,	
+POSTCODE string,	
+BUILDING_REFERENCE_NUMBER string,	
+ASSET_RATING string,	
+ASSET_RATING_BAND string,	
+PROPERTY_TYPE string,	
+INSPECTION_DATE string,	
+LOCAL_AUTHORITY string,	
+CONSTITUENCY string,	
+COUNTY string,	
+LODGEMENT_DATE string,	
+TRANSACTION_TYPE string,	
+NEW_BUILD_BENCHMARK string,	
+EXISTING_STOCK_BENCHMARK string,	
+BUILDING_LEVEL string,	
+MAIN_HEATING_FUEL string,	
+OTHER_FUEL_DESC string,	
+SPECIAL_ENERGY_USES string,	
+RENEWABLE_SOURCES string,	
+FLOOR_AREA string,	
+STANDARD_EMISSIONS string,	
+TARGET_EMISSIONS string,	
+TYPICAL_EMISSIONS string,	
+BUILDING_EMISSIONS	string,
+AIRCON_PRESENT string,	
+AIRCON_KW_RATING string,	
+ESTIMATED_AIRCON_KW_RATING string,	
+AC_INSPECTION_COMMISSIONED string,	
+BUILDING_ENVIRONMENT string,	
+ADDRESS	string,
+LOCAL_AUTHORITY_LABEL string,	
+CONSTITUENCY_LABEL string,	
+CERTIFICATE_HASH string
+) 
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+	WITH SERDEPROPERTIES (
+	   "separatorChar" = ',',
+	   "quoteChar"     = '\"',
+	   "escapeChar"    = '\\'
+	)  
+	STORED AS TEXTFILE
+	LOCATION '/tmp/energy/';
+
