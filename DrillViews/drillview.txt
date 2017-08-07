@@ -1,0 +1,141 @@
+create view `dfs`.`default`.`StorefootfallView` as 
+SELECT columns[0] as StoreName,
+columns[1] as Zone,
+columns[2] as Period,
+columns[3] as FootfallValue,
+columns[4] as DayPeriod,
+columns[5] as WeekPeriod,
+columns[6] as YearPeriod,
+columns[7] as MonthPeriod,
+columns[8] as DatePeriod
+from `dfs`.`default`.`/liverpoolone/Store_Footfall`
+
+---------------
+
+create view `dfs`.`default`.`SalesView` as 
+SELECT columns[0] as StoreName,
+columns[1] as Zone,
+columns[2] as Period,
+columns[3] as SalesValue,
+columns[4] as DayPeriod,
+columns[5] as WeekPeriod,
+columns[6] as YearPeriod,
+columns[7] as MonthPeriod,
+columns[8] as DatePeriod
+from `dfs`.`default`.`/liverpoolone/Sales`
+
+------------
+
+create view `dfs`.`default`.`TransactionsView` as 
+SELECT columns[0] as StoreName,
+columns[1] as Zone,
+columns[2] as Period,
+columns[3] as TransactionsValue,
+columns[4] as DayPeriod,
+columns[5] as WeekPeriod,
+columns[6] as YearPeriod,
+columns[7] as MonthPeriod,
+columns[8] as DatePeriod
+from `dfs`.`default`.`liverpoolone/Transactions`
+---------------
+
+create view `dfs`.`default`.`CommentsView` as 
+SELECT columns[0] as Name,
+columns[1] as Userid,
+columns[2] as Message,
+columns[3] as Postid,
+columns[4] as Commentsid,
+columns[5] as CommentsDate,
+columns[6] as CommentsTime,
+columns[7] as CommentsDay,
+columns[8] as CommentsPeriod,
+columns[9] as CommentsTimeframe,
+columns[10] as Sentiment,
+columns[11] as Abusiveflag
+from `dfs`.`default`.`facebook/fbcommentstopic/liverpoolone`
+
+----------
+
+
+create view `dfs`.`default`.`EventsView` as
+SELECT 
+`columns`[0] AS `watching_count`, 
+`columns`[1] AS `olson_path`, 
+`columns`[2] AS `calendar_count`, 
+`columns`[3] AS `comment_count`, 
+`columns`[4] AS `region_abbr`, 
+`columns`[5] AS `postal_code`, 
+`columns`[6] AS `going_count`, 
+`columns`[7] AS `all_day`, 
+`columns`[8] AS `latitude`, 
+`columns`[9] AS `groups`, 
+`columns`[10] AS `url`, 
+`columns`[11] AS `id`, 
+`columns`[12] AS `privacy`, 
+`columns`[13] AS `city_name`, 
+`columns`[14] AS `link_count`, 
+`columns`[15] AS `longitude`, 
+`columns`[16] AS `country_name`, 
+`columns`[17] AS `country_abbr`, 
+`columns`[18] AS `region_name`, 
+`columns`[19] AS `start_time`, 
+`columns`[20] AS `tz_id`, 
+`columns`[21] AS `description`, 
+`columns`[22] AS `modified`, 
+`columns`[23] AS `venue_display`, 
+`columns`[24] AS `tz_country`, 
+`columns`[25] AS `performers_creator`, 
+`columns`[26] AS `performers_linker`, 
+`columns`[27] AS `performers_name`, 
+`columns`[28] AS `performers_url`, 
+`columns`[29] AS `performers_id`, 
+`columns`[30] AS `performers_shortbio`, 
+`columns`[31] AS `title`, 
+`columns`[32] AS `venue_address`, 
+`columns`[33] AS `geocode_type`, 
+`columns`[34] AS `tz_olson_path`, 
+`columns`[35] AS `recur_string`, 
+`columns`[36] AS `calendars`, 
+`columns`[37] AS `owner`, 
+`columns`[38] AS `going`, 
+`columns`[39] AS `country_abbr2`, 
+`columns`[40] AS `image`, 
+`columns`[41] AS `created`, 
+`columns`[42] AS `venue_id`, 
+`columns`[43] AS `tz_city`, 
+`columns`[44] AS `stop_time`, 
+`columns`[45] AS `venue_name`, 
+`columns`[46] AS `venue_url` FROM `dfs`.`default`.`/liverpoolone/EventFixture/`
+
+----------------------------------------------------------------------------------
+
+create view `dfs`.`default`.`FootballView` as 
+SELECT `columns`[0] AS `FixtureDate`, 
+`columns`[1] AS `FirstTeamName`, 
+`columns`[2] AS `FirstTeamScore`, 
+`columns`[3] AS `SecondTeamName`, 
+`columns`[4] AS `SecondTeamScore`, 
+`columns`[5] AS `RefereeName`, 
+`columns`[6] AS `GameResult`
+FROM `dfs`.`default`.`/liverpoolone/FootballFixture/`
+
+--------------------------------------------------------------------------------------
+
+create view `dfs`.`default`.`MasterStoreData` as
+SELECT `columns`[0] AS `Id`, `columns`[1] AS `StoreName`, `columns`[2] AS `Zone`, `columns`[3] AS `Latitude`, `columns`[4] AS `Longitude`, `columns`[5] AS `FBHandle`, `columns`[6] AS `TwitterHandle`, `columns`[7] AS `StoreUrl`, `columns`[8] AS `LogoImageUrl`, `columns`[9] AS `Website`, `columns`[10] AS `Telephone`, `columns`[11] AS `Summary`, `columns`[12] AS `TenantCode`, `columns`[13] AS `PropertyCode`, `columns`[14] AS `PropertyName`, `columns`[15] AS `District`, `columns`[16] AS `FloorLevel`, `columns`[17] AS `UnitName`, `columns`[18] AS `LeaseStart`, `columns`[19] AS `LeaseExpiry`, `columns`[20] AS `Area`, `columns`[21] AS `Rent` FROM `dfs`.`default`.`/liverpoolone/StoreMasterData`
+
+---------------------------------------------------------------------------------------------
+
+create view `dfs`.`default`.`ptwitterdata` as
+SELECT `dir0` AS `Year`, `dir1` AS `Month`, `tweet_id`, `creeated_at`, `tweet`, `sentiment`, `source`, `inreplytostatusid`, `inreplytouserid`, `inreplytousername`, `userid`, `userfullname`, `userscreenname`, `userlocation`, `userdescription`, `userurl`, `userprotected`, `userverified`, `userfollowercount`, `userfollowingcount`, `userstatuscount`, `userfriendscount`, `userlistedcount`, `userfavouritecount`, `usercreateat`, `usergeoenabled`, `userlanguage`, `userprofileimageurl`, `userdefaultprofile`, `userdefaultprofileimage`, `tweetlongitude`, `tweetlatitude`, `retweetcount`, `favouritecount`, `retweeted`, `favourited`, `filterlevel`, `language`, `placetype`, `placename`, `placefullname`, `placecountrycode`, `placecountry`, `place_coordinate1_lng`, `place_coordinate1_lat`, `place_coordinate2_lng`, `place_coordinate2_lat`, `place_coordinate3_lng`, `place_coordinate3_lat`, `place_coordinate4_lng`, `place_coordinate4_lat`, `hashtags`, `user_mentions`, `urls`, `category`, `geolatitude`, `geolongitude`, `create_date` FROM `dfs`.`default`.`/ParquetTest`
+
+--------------------------------------------------------------------------------------------------
+
+create view `dfs`.`default`.`StoreCommentsView` as
+SELECT `columns`[0] AS `Name`, `columns`[1] AS `Userid`, `columns`[2] AS `Message`, `columns`[3] AS `Postid`, `columns`[4] AS `Commentsid`, `columns`[5] AS `CommentsDate`, `columns`[6] AS `CommentsTime`, `columns`[7] AS `CommentsDay`, `columns`[8] AS `CommentsPeriod`, `columns`[9] AS `CommentsTimeframe`, `columns`[10] AS `Sentiment`, `columns`[11] AS `Abusiveflag` FROM `dfs`.`default`.`facebook/fbcommentstopic/stores`
+
+-------------------------------------------------------------------------------------------------------
+
+create view `dfs`.`default`.`TenancyView` as
+SELECT `columns`[0] AS `Pr`, `columns`[1] AS `PropertyName`, `columns`[2] AS `TenantNo`, `columns`[3] AS `LeaseName`, `columns`[4] AS `UnitDescription`, `columns`[5] AS `LeaseStart`, `columns`[6] AS `LeaseExpiry`, `columns`[7] AS `NextReview`, `columns`[8] AS `EffectiveBreak`, `columns`[9] AS `CurrentRent`, `columns`[10] AS `RentalValue`, `columns`[11] AS `CostDeduction`, `columns`[12] AS `GroundRent`, `columns`[13] AS `LeaseType`, `columns`[14] AS `Sector`, `columns`[15] AS `PrimaryUse`, `columns`[16] AS `Region`, `columns`[17] AS `Covenant`, `columns`[18] AS `Status`, `columns`[19] AS `TenantUse`, `columns`[20] AS `ERVRate`, `columns`[21] AS `RentRate`, `columns`[22] AS `ERVPercent`, `columns`[23] AS `RentPercent`, `columns`[24] AS `Area`, `columns`[25] AS `Froth`, `columns`[26] AS `FrothPercent`, `columns`[27] AS `FrothByERV_Percent`, `columns`[28] AS `ERVUplift`, `columns`[29] AS `ERVUpliftByRent_Percent`, `columns`[30] AS `ERVUpliftByTotalRent_Percent`, `columns`[31] AS `PeriodToExpire`, `columns`[32] AS `BreakType`, `columns`[33] AS `PeriodToBreak`, `columns`[34] AS `EarliestTermination`, `columns`[35] AS `PeriodToTermination`, `columns`[36] AS `Void_ExpByBrk`, `columns`[37] AS `VacantPeriod`, `columns`[38] AS `GrossValue`, `columns`[39] AS `ERV_Vac_Loss`, `columns`[40] AS `ERV_Vac_Loss_Percent`, `columns`[41] AS `ERV_Void_Loss`, `columns`[42] AS `CapitalisationGroup`, `columns`[43] AS `ValnMethod`, `columns`[44] AS `Hardcore_Yield`, `columns`[45] AS `Reversion_Yield`, `columns`[46] AS `Froth_Yield`, `columns`[47] AS `DCF_Exit_Yield`, `columns`[48] AS `RentFreePeriod`, `columns`[49] AS `ContractedRent`\nFROM `dfs`.`default`.`/liverpoolone/Tenancy/2016/Tenancy.txt`
+
