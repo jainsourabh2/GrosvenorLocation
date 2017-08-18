@@ -211,30 +211,30 @@ LOCATION '/grosvenor/facebook/fbcommentstopic/liverpoolone';
 
 
 CREATE EXTERNAL TABLE flickrdata (
-id                      string,                                                                                                                       
-owner                   string ,                                                                                                                      
-title                   string ,                                                                                                                      
-photoid                 string ,                                                                                                                      
-dateuploaded            string,                                                                                                                       
-owner_nsid              string,                                                                                                                       
-owner_username          string,                                                                                                                       
-owner_realname          string,                                                                                                                       
-owner_location          string,                                                                                                                       
-description             string,                                                                                                                       
-dateposted              string,                                                                                                                       
-phototaken              string,                                                                                                                       
-photolastupdate         string,                                                                                                                       
-views                   int   ,                                                                                                                       
-latitude                string,                                                                                                                       
-longitude               string,                                                                                                                       
-url                     string,                                                                                                                       
-media                   string,                                                                                                                       
-commentid               string,                                                                                                                       
-author                  string,                                                                                                                       
-authorname              string,                                                                                                                       
-commentlink             string,                                                                                                                       
-authorrealname          string,                                                                                                                       
-content                 string                                                                                                                       
+id  string,
+owner string,
+title string ,
+photoid string ,
+dateuploaded string,
+owner_nsid string,
+owner_username string,
+owner_realname  string,
+owner_location  string,
+description   string,
+dateposted  string,
+phototaken  string,
+photolastupdate string, 
+views int, 
+latitude string,
+longitude string,
+url string,
+media string,
+commentid string, 
+author string,
+authorname string,
+commentlink  string,
+authorrealname  string,
+content string
 )
 PARTITIONED BY (create_date string)
 ROW FORMAT DELIMITED
@@ -258,3 +258,118 @@ abusiveflag int
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 LOCATION '/grosvenor/facebook/fbcommentstopic/stores';
+
+
+CREATE EXTERNAL TABLE HKEvents(
+watching_count string, 
+olson_path string, 
+calendar_count string, 
+comment_count string, 
+region_abbr string, 
+postal_code string, 
+going_count string, 
+all_day string, 
+latitude string, 
+groups string, 
+url string, 
+id string, 
+privacy string, 
+city_name string, 
+link_count string, 
+longitude string, 
+country_name string, 
+country_abbr string, 
+region_name string, 
+start_time string, 
+tz_id string,  
+description string, 
+modified string, 
+venue_display string, 
+tz_country string, 
+performers_creator string, 
+performers_linker string,  
+performers_name string, 
+performers_url string, 
+performers_id string, 
+performers_shortbio string, 
+title string, 
+venue_address string, 
+geocode_type string, 
+tz_olson_path string, 
+recur_string string, 
+calendars string, 
+owner string, 
+going string, 
+country_abbr2 string, 
+image string, 
+created string, 
+venue_id string, 
+tz_city string,  
+stop_time string, 
+venue_name string, 
+venue_url string
+) ROW FORMAT DELIMITED FIELDS TERMINATED BY "|" LOCATION '/grosvenor/HongKong/Events/';
+
+
+CREATE EXTERNAL TABLE HKPriceFall
+(
+address string,
+building string,	
+color string,	
+info string,	
+caseInfo string,	
+city string,	
+country	string,
+dateFormatted	string,
+date2	string,
+incident_year string,	
+dayNum string,	
+district string,	
+lat_Lon string,
+latitude string,	
+longitude string,	
+month_num string,
+numOfRecords string,	
+record string
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+	WITH SERDEPROPERTIES (
+	   "separatorChar" = ',',
+	   "quoteChar"     = '\"',
+	   "escapeChar"    = '\\'
+	)  
+	STORED AS TEXTFILE
+	LOCATION '/grosvenor/HongKong/HousePriceFalls/' tblproperties ("skip.header.line.count"="1");
+	
+	
+	
+CREATE EXTERNAL TABLE realtimeparkingvacancy (
+parkId string,
+pcVacancyType string,
+pcVacancyEV string,
+pcVacancyDIS string,
+pcVacancy string,
+pcCategory string,
+pcLastUpdated string,
+lgvVacancyType string, 
+lgvVacancyEV string,
+lgvVacancyDIS string,
+lgvVacancy string,
+lgvCategory string,
+lgvLastUpdated string,
+hgvVacancyType string,
+hgvVacancyEV string,
+hgvVacancyDIS string,
+hgvVacancy string,
+hgvCategory string,
+hgvLastUpdated string,
+mcVacancyType string,
+mcVacancyEV string,
+mcVacancyDIS string,
+mcVacancy string,
+mcCategory string,
+mcLastUpdated string
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/HongKong/ParkingInfo/vacancy/';

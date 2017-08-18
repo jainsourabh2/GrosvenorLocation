@@ -9,9 +9,9 @@ module.exports.getliverpoolOneRates = function(req,res,logger){
     var request = require("request");
     
    
-   let detailTransAPI = "http://10.80.1.4:4000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=Transactions" ;
-    let detailFFAPI =     "http://10.80.1.4:4000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=footfall";
-    let detailSalesAPI = "http://10.80.1.4:4000/api/getLiverpoolStoreDetail?fromdate=" + fromdate+ "&todate=" + todate + "&storeid=" + storeid + "&entity=sales";
+   let detailTransAPI = "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=Transactions" ;
+    let detailFFAPI =     "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=footfall";
+    let detailSalesAPI = "http://10.80.1.4:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate+ "&todate=" + todate + "&storeid=" + storeid + "&entity=sales";
     
 /*
     let detailTransAPI = "http://localhost:3000/api/getLiverpoolStoreDetail?fromdate=" + fromdate + "&todate=" + todate + "&storeid=" + storeid + "&entity=Transactions" ;

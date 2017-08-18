@@ -6,11 +6,12 @@ var moment = require('moment');
 
 var startdate = req.query.startdate;
 var enddate = req.query.enddate; 
+var location = req.query.location;
 let error = { errormsg : "" }; 
 
   logger.info("Start of getEvents");
 
-  if(startdate == undefined || enddate == undefined)
+  if(startdate == undefined || enddate == undefined )
     {
       error.errormsg = "StartDate,EndDate parameters are mandatory.  eg : /api/getEvents?startdate=2016-10-01&enddate=2016-12-31";
       res.send(error);
@@ -29,9 +30,17 @@ function getQueryForEvents(robj)
   
   let startdate = robj.startdate;
   let enddate = robj.enddate;
-  
+  let entity = "";
 
-  let query = "select distinct id,latitude,longitude from `dfs`.`default`.`EventsView` where  CAST(start_time as Date) between '" + startdate + "' and '" + enddate + "' ";
+  if(location == "HK")
+  {
+    entity = "`hive_social_media`.`default`.`HKEvents`";
+  }
+  else
+  {
+    entity = "`dfs`.`default`.`EventsView`";
+  }
+  let query = "select distinct id,latitude,longitude from " + entity + "  where  CAST(start_time as Date) between '" + startdate + "' and '" + enddate + "' ";
   
 
   logger.info("Start of getQueryForEvents");

@@ -1,0 +1,28 @@
+CREATE EXTERNAL TABLE ParkingInfo (
+  address struct<buildingno:string, dcdistrict:string, region:string, streetname:string, subdistrict:string>,
+  carpark_type string,
+  coach struct<space:int, spacedis:int, spaceev:int, spaceunl:int>,
+  contactno string,
+  creationdate string,
+  displayaddress string,
+  district string,
+  facilities array<string>,
+  heightlimits array<struct<height:double>>,
+  hgv struct<hourlycharges:array<struct<covered:string, excludepublicholiday:boolean, periodend:string, periodstart:string, price:int, type:string, usageminimum:int, weekdays:array<string>>>, privileges:array<struct<description:string, excludepublicholiday:boolean, periodend:string, periodstart:string, weekdays:array<string>>>, space:int, spacedis:int, spaceev:int, spaceunl:int>,
+  lang string,
+  latitude double,
+  lgv struct<hourlycharges:array<struct<covered:string, excludepublicholiday:boolean, periodend:string, periodstart:string, price:int, type:string, usageminimum:int, weekdays:array<string>>>, monthlycharges:array<struct<covered:string, price:int, reserved:string, type:string>>, privileges:array<struct<description:string, excludepublicholiday:boolean, periodend:string, periodstart:string, weekdays:array<string>>>, space:int, spacedis:int, spaceev:int, spaceunl:int>,
+  longitude double,
+  modifieddate string,
+  motorcycle struct<monthlycharges:array<struct<covered:string, price:int, reserved:string, type:string>>, space:int, spacedis:int, spaceev:int, spaceunl:int>,
+  name string,
+  nature string,
+  opening_status string,
+  openinghours array<struct<excludepublicholiday:boolean, periodend:string, periodstart:string, weekdays:array<string>>>,
+  park_id string,
+  paymentmethods array<string>,
+  privatecar struct<hourlycharges:array<struct<covered:string, excludepublicholiday:boolean, periodend:string, periodstart:string, price:int, remark:string, type:string, usageminimum:int, weekdays:array<string>>>, monthlycharges:array<struct<covered:string, price:int, remark:string, reserved:string, type:string>>, privileges:array<struct<description:string, excludepublicholiday:boolean, periodend:string, periodstart:string, weekdays:array<string>>>, space:int, spacedis:int, spaceev:int, spaceunl:int>,
+  publisheddate string,
+  website string)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+LOCATION '/grosvenor/HongKong/ParkingInfo';

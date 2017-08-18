@@ -30,6 +30,7 @@ const liverpoolEventDetails = require('./getLiverpoolEventsDetail');
 const events = require('./getEvents.js');
 const storesSummary = require('./getStoresSummary.js');
 const liverpoolArea = require('./getSafescorePrediction.js');
+const HKEventDetails = require('./getHKEventsDetail');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -1094,6 +1095,11 @@ app.get("/api/getLiverpoolEventsDetail",function(req,res){
  *         in: path
  *         required: true
  *         type: string
+ *       - name: location
+ *         description: location
+ *         in: path
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Get Events Data
@@ -1188,6 +1194,73 @@ app.get("/api/getStoreSummary",function(req,res){
 app.get("/api/getSafeScorePrediction",function(req,res){
   liverpoolArea.getSafeScorePrediction(req,res,logger);
 });
+
+
+/****************** HongKong APIS *********************************/
+
+
+/**
+ * @swagger
+ * definitions:
+ *   HKEventDetails:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getHKEventsDetail?eventid={eventid}:
+ *   get:
+ *     tags:
+ *       - HK Events Details
+ *     description: Returns Events detail based on id.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: eventid
+ *         description: Event Id 
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Event detail based on id.
+ *     schema:
+ *           $ref: '#/definitions/HKEventDetails'
+ */
+
+app.get("/api/getHKEventsDetail",function(req,res){
+  HKEventDetails.getHKEventsDetail(req,res,logger);
+   
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

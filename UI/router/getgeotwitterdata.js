@@ -30,7 +30,7 @@ module.exports.getGeoTwitterData = function(req,res,logger)
      {
         //console.log("More than 30 days");
         //Calculate month and year ranges to scan.
-        let diffmonth = moment(enddate).diff(moment(startdate),'months');
+       let diffmonth = moment(enddate).diff(moment(startdate),'months');
        
         for(let m = 0; m <= diffmonth; m++)
         {
@@ -44,7 +44,6 @@ module.exports.getGeoTwitterData = function(req,res,logger)
         console.log("Array : " + u_montharr.toString());
         console.log("Array Year : " + u_yeararr.toString()); 
 
-       //entityname = "`hive_social_media`.`default`.`orc_data` where ";
          entityname = "`dfs`.`default`.`ptwitterdata`  where  `Year` IN(" + u_yeararr.toString() + ") and `Month` IN(" + u_montharr.toString() + ") and ";
         //fromarchive = true;
      }

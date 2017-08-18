@@ -5,7 +5,7 @@
       var asyncobj = require("async");
 
       let serverIP="10.80.1.4";
-      let port="4000";
+      let port="3000";
       let fromdate = req.query.startdate;
       let todate = req.query.enddate;
       let days = req.query.days;
