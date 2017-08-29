@@ -373,3 +373,21 @@ mcLastUpdated string
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 LOCATION '/grosvenor/HongKong/ParkingInfo/vacancy/';
+
+CREATE EXTERNAL TABLE propertytransaction (
+trans_date string,
+trans_dt_format string,
+trans_address string,
+trans_price_HKD_in_million string,
+trans_SA string,
+trans_GFA string,
+cost_SA_per_sqft string,
+cost_GFA_per_sqft string,
+status string,
+town string,
+latitude string,
+longitude string
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/HongKong/PropertyTransaction/';
