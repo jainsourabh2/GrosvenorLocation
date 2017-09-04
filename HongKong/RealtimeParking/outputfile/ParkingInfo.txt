@@ -1,0 +1,31 @@
+12|A|5|6|107|null|2017-09-01 16:00:23|A|null|null|null|null|2017-09-01 16:00:23|A|null|null|null|null|2017-09-01 16:00:23|A|null|null|null|null|2017-09-01 16:00:23
+27|A|7|1|null|null|2017-09-01 16:03:19|null|null|null|null|null|null|null|null|null|null|null|null|A|null|null|2|null|2017-09-01 16:03:19
+30|A|null|null|27|null|2017-09-01 16:46:10|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+31|A|null|null|84|null|2017-09-01 16:46:10|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+32|A|null|null|24|null|2017-09-01 16:44:10|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+36|A|4|1|260|null|2017-09-01 16:08:00|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+37|A|null|null|24|null|2017-09-01 16:45:11|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+38|A|5|3|61|null|2017-09-01 16:02:49|null|null|null|null|null|null|A|null|null|15|null|2017-09-01 16:02:49|null|null|null|null|null|null
+39|A|null|null|10|null|2017-09-01 16:00:11|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+44|A|null|null|50|null|2017-09-01 16:46:27|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+50|A|null|null|155|null|2017-09-01 16:45:30|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+51|A|null|null|31|null|2017-09-01 16:46:20|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+52|A|null|null|54|null|2017-09-01 16:39:40|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+53|A|null|null|32|null|2017-09-01 16:46:20|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdc6p1|B|null|null|1|HOURLY|2016-12-05 11:10:23|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdc6p2|B|null|null|1|HOURLY|2016-12-05 11:16:05|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdc6p3|B|null|null|1|HOURLY|2016-11-30 17:09:18|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdc6p4|B|null|null|1|HOURLY|2016-11-30 17:09:26|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdc6p5|B|null|null|1|HOURLY|2016-11-30 17:09:45|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp1|B|null|null|1|HOURLY|2017-09-01 16:22:22|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp10|B|null|null|1|HOURLY|2017-09-01 15:19:38|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp11|A|null|null|18|HOURLY|2017-09-01 16:19:33|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp12|B|null|null|1|HOURLY|2017-09-01 16:00:12|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp13|B|null|null|null|HOURLY|2017-07-27 16:00:25|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp2|B|null|null|1|HOURLY|2017-06-17 22:39:44|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp3|B|null|null|1|HOURLY|2017-09-01 16:29:48|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp5|B|null|null|1|HOURLY|2017-09-01 16:01:31|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp6|B|null|null|1|HOURLY|2017-09-01 16:08:20|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp7|B|null|null|1|HOURLY|2017-09-01 14:31:34|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp8|B|null|null|1|HOURLY|2017-09-01 16:01:09|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null
+tdcp9|B|null|null|1|HOURLY|2017-09-01 16:00:19|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null|null

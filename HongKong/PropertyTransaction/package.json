@@ -11,6 +11,9 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "geocoder": "^0.2.3",
-    "ineed": "^1.0.4"
+    "google-geocoder": "^0.2.1",
+    "ineed": "^1.0.4",
+    "moment": "^2.18.1",
+    "q": "^1.5.0"
   }
 }

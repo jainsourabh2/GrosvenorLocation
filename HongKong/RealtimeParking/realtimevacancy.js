@@ -6,8 +6,9 @@ const sanitizeHtml = require('sanitize-html');
 let fs = require("fs");
 let exec = require('child_process').exec;
 let child;
-let filename = "outputfile/ParkingVacancyInfo.txt";
-
+let basefilepath = "/opt/nodeprojects/GrosvenorLocation/HongKong/RealtimeParking/outputfile/";
+let fname = "ParkingInfo.txt";
+let filename = basefilepath + fname;
 let apiurl = "https://api.data.gov.hk/v1/carpark-info-vacancy?data=vacancy";
 let basefolderpath = "outputfile/";
 var checkHDFS = require("./checkHDFSFolderexists");
@@ -52,9 +53,9 @@ function parseData(data)
 {
     let defered = Q.defer();
     let properies = ["park_Id","privateCar[0].vacancy_type","privateCar[0].vacancyEV","privateCar[0].vacancyDIS","privateCar[0].vacancy","privateCar[0].category",
-    "privateCar[0].lastupdate","LGV[0].vacancy_type","LGV[0].vacancy_type","LGV[0].vacancyEV","LGV[0].vacancyDIS","LGV[0].vacancy","LGV[0].lastupdate",
-    "HGV[0].vacancy_type","HGV[0].vacancy_type","HGV[0].vacancyEV","HGV[0].vacancyDIS","HGV[0].vacancy","HGV[0].lastupdate",
-    "motorCycle[0].vacancy_type","motorCycle[0].vacancy_type","motorCycle[0].vacancyEV","motorCycle[0].vacancyDIS","motorCycle[0].vacancy","motorCycle[0].lastupdate"];
+    "privateCar[0].lastupdate","LGV[0].vacancy_type","LGV[0].vacancyEV","LGV[0].vacancyDIS","LGV[0].vacancy","LGV[0].category","LGV[0].lastupdate",
+    "HGV[0].vacancy_type","HGV[0].vacancyEV","HGV[0].vacancyDIS","HGV[0].vacancy","HGV[0].category","HGV[0].lastupdate",
+    "motorCycle[0].vacancy_type","motorCycle[0].vacancyEV","motorCycle[0].vacancyDIS","motorCycle[0].vacancy","motorCycle[0].category","motorCycle[0].lastupdate"];
       
     
       let res = data.results;
@@ -129,9 +130,8 @@ function parseData(data)
                console.log("File Written");
                // Put the output file into Hadoop path
                  var hdfsfolder = "/grosvenor/HongKong/ParkingInfo/vacancy";
-                 var CheckFolderCommand = "hadoop fs -ls " + hdfsfolder;
-                 let updatedfilename = filename + "_" + new Date().getTime().toString();
-                 let FScommand = "hadoop fs -put " + filename  + " " + hdfsfolder + "; hadoop fs -mv " + hdfsfolder + "/" + filename + " " + hdfsfolder + "/" + updatedfilename;
+                
+                 let FScommand = "hadoop fs -put " + filename  + " " + hdfsfolder;
                  
                  child = exec(FScommand, function (error, stdout, stderr) {
                               

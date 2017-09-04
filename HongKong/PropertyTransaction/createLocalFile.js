@@ -8,7 +8,7 @@ const Q = require("q");
        
           if(fs.existsSync(filename))
           {
-            fs.unlink(filename, function(err) {
+           fs.unlink(filename, function(err) {
                if(err)
                {
                    defer.reject(new Error(err));
@@ -18,7 +18,8 @@ const Q = require("q");
                    defer.resolve(0);
                }
               
-            });
+            }); 
+            defer.resolve(0);
           }
           else
           {

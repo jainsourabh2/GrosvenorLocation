@@ -14,6 +14,16 @@
       "writable": true,
       "defaultInputFormat": null
     },
+    "HK": {
+      "location": "/grosvenor/HongKong/",
+      "writable": true,
+      "defaultInputFormat": null
+    },
+    "HKDrillView": {
+      "location": "/grosvenor/HongKong/DrillViews",
+      "writable": true,
+      "defaultInputFormat": null
+    },
     "tmp": {
       "location": "/tmp",
       "writable": true,

@@ -202,6 +202,8 @@ let moment = require("moment");
                  let updatedfilename = outputfilename + "_" + new Date().getTime().toString();
                  let FScommand = "hadoop fs -put " + outputpath  + " " + hdfsfolder + "; hadoop fs -mv " + hdfsfolder + outputfilename + " " + hdfsfolder + "/" + updatedfilename;
                  
+		if(fs.existsSync(outputpath))
+          	{
                  child = exec(FScommand, function (error, stdout, stderr) {
                               
                               if (error !== null) {
@@ -213,6 +215,7 @@ let moment = require("moment");
                                   process.exit(0);
                               }
                         }); 
+		}
          
       }
   }
