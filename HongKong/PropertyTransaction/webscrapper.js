@@ -9,7 +9,12 @@ let towns = ["Aberdeen","Ap-Lei-Chau","Causeway-Bay","Central-Sheung-Wan","Chai-
 "Fortress-Hill","Happy-Valley","Heng-Fa-Chuen","Jardine-s-Lookout","Kennedy-Town","Mid-Levels-Central",
 "Mid-Levels-East","Mid-Levels-North-Point-Braemar-Hill","Mid-Levels-West","North-Point","Peak","Pokfulam",
 "Quarry-Bay","Red-Hill","Repulse-Bay","Sai-Wan-Ho","Sai-Ying-Pun","Shau-Kei-Wan","Shouson-Hill","Siu-Sai-Wan",
-"Stanley","Tai-Hang","Tai-Koo-Shing-Kornhill","Tai-Tam","Tin-Hau","Wanchai"];
+"Stanley","Tai-Hang","Tai-Koo-Shing-Kornhill","Tai-Tam","Tin-Hau","Wanchai","Beacon-Hill","Cheung-Sha-Wan","Diamond-Hill","Ho-Man-Tin",
+"Hung-Hom","Jordan","Kai-Tak","Kowloon-Bay","Kowloon-City","Kowloon-Station","Kowloon-Tong","Kwun-Tong","Lai-Chi-Kok","Lam-Tin","Lok-Fu","Mei-Foo",
+"Mongkok","Ngau-Chi-Wan","Ngau-Tau-Kok","Olympic-Station","Prince-Edward","San-Po-Kong","Sham-Shui-Po","Shek-Kip-Mei","Tai-Kok-Tsui","To-Kwa-Wan",
+"Tsim-Sha-Tsui","Tsz-Wan-Shan","Whampao","Wong-Tai-Sin","Yau-Ma-Tei","Yau-Tong","Yau-Yat-Chuen","Clearwater-Bay","Fairview","Fanling","Fo-Tan",
+"Gold-Coast","Kwai-Chung","Ma-On-Shan","Sai-Kung","Sha-Tau-Kok","Sham-Tseng","Shatin","Sheung-Shui","Tai-Po","Tai-Wai","Tai-Wo-Hau","Tin-Shui-Wai",
+"Tseung-Kwan-O","Tsing-Yi","Tsuen-Wan","Tuen-Mun","Yuen-Long","Cheung-Chau","Discovery-Bay","Lamma-Island","Ma-Wan","Peng-Chau","South-Lantau-Island","Tai-O","Tung-Chung"];
  
  let url = "http://10.80.2.4:8047/query.json";
 let endpart = "/en/?Page=";
@@ -27,6 +32,7 @@ var checkLocalFile = require('./createLocalFile');
 let exec = require('child_process').exec;
 let child;
 let moment = require("moment");
+let newdataflag = false;
 
   function scrapePropertyTrans(link,town,initialrec)
   {
@@ -144,7 +150,8 @@ let moment = require("moment");
   //Main Function
   function writepropertyTransrecords(i)
   {
-       defer = Q.defer();
+      allres = []; //Flush array content before starting for new town.
+	 defer = Q.defer();
       if(i < towns.length )
       {
           let link = baselink + "/records/" +towns[i] + endpart + "1";  //Call First page of the link
@@ -162,9 +169,10 @@ let moment = require("moment");
                   
                   geocode.getGeoCodeFunction(o).then(function(e){
                       
-                     if(e.length != 0)
-                     {
+                    // if(e.length != 0)
+                    // {
                        //Remove Local file and create new one
+		       console.log("Local file path " + outputpath);
                        checkLocalFile.removeExistingLocalfile(outputpath).then(function(res){
                           
                            if(res == 0)
@@ -173,7 +181,7 @@ let moment = require("moment");
                                   if(r == 0)
                                   {
                                       //When last record is written. Call back for the new town.
-                                     
+			             newdataflag = true;                                     
                                      writepropertyTransrecords(i + 1); 
                                   }
                                 }); 
@@ -181,12 +189,13 @@ let moment = require("moment");
                             
                        });
                        
-                     }
+                    // }
                   });
               }
               else
               {
-                  writepropertyTransrecords(i + 1); //No page from the previous page
+                 
+		 writepropertyTransrecords(i + 1); //No new records from the previous page
                   //process.exit(0);
               }
           });
@@ -202,7 +211,7 @@ let moment = require("moment");
                  let updatedfilename = outputfilename + "_" + new Date().getTime().toString();
                  let FScommand = "hadoop fs -put " + outputpath  + " " + hdfsfolder + "; hadoop fs -mv " + hdfsfolder + outputfilename + " " + hdfsfolder + "/" + updatedfilename;
                  
-		if(fs.existsSync(outputpath))
+		if(fs.existsSync(outputpath) && newdataflag)
           	{
                  child = exec(FScommand, function (error, stdout, stderr) {
                               
@@ -215,6 +224,11 @@ let moment = require("moment");
                                   process.exit(0);
                               }
                         }); 
+		}
+		else
+		{
+		 console.log("No new data to upload to HDFS. Terminating process ...");
+		 process.exit(0);
 		}
          
       }
