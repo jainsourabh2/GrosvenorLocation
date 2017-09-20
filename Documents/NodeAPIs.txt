@@ -1,0 +1,11 @@
+
+Swagger link : 
+
+Dev Env : http://gvpocw01.westeurope.cloudapp.azure.com:4000/resources/ 
+Demo Env : http://gvpocw01.westeurope.cloudapp.azure.com:3000/resources/
+
+Keymetrics : UI to check status of server.
+https://app.keymetrics.io
+
+Username : grosvenor
+Password : User@123
