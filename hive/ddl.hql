@@ -391,3 +391,24 @@ longitude string
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY '|'
 LOCATION '/grosvenor/HongKong/PropertyTransaction/';
+
+
+CREATE EXTERNAL TABLE HKrestaurantdetails (
+scraped_date string,
+rest_id string,
+rest_name string,
+status string,
+image_url string,
+price_range string,
+cuisinetype string,
+no_of_reviews string,
+no_of_ratings string,
+address string,
+smile_face_rating string,
+sad_face_rating string,
+latitude string,
+longitude string
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/HongKong/RestaurantDetails/';
