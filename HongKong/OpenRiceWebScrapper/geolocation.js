@@ -2,7 +2,7 @@
 let geocoder = require("google-geocoder");
 let Q = require("q");
 
-let apikeys = ['AIzaSyBzMxMJyp_lnk5JDW3YbKK_XIYkiFG8w6s' ,'AIzaSyCBAkblsUSpejOjYvNQuhOb2Qrlj9jNsoM','AIzaSyD89uiMrEnbUrc6wj7mMttTIdWBdD6MzgQ'];
+let apikeys = ['AIzaSyD89uiMrEnbUrc6wj7mMttTIdWBdD6MzgQ'];
 
 module.exports.getGeoCodeFunction = function(placearray){
     let updatedarray = [];
