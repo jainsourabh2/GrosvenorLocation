@@ -391,3 +391,79 @@ longitude string
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY '|'
 LOCATION '/grosvenor/HongKong/PropertyTransaction/';
+
+CREATE EXTERNAL TABLE hkrestaurantdetails(
+  scraped_date string,
+  rest_id string,
+  rest_name string,
+  status string,
+  image_url string,
+  price_range string,
+  cuisinetype string,
+  no_of_reviews string,
+  no_of_ratings string,
+  address string,
+  smile_face_rating string,
+  sad_face_rating string,
+  latitude string,
+  longitude string
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/HongKong/RestaurantDetails'
+
+CREATE EXTERNAL TABLE hkPublicEventsDetails (
+event_id string,
+titlec string,
+titlee string,
+cat1 string,
+cat2 string,
+predateC string,
+predateE string,
+progtimec string,
+progtimee string,
+venue_id string,
+agelimitc string,
+agelimite string,
+pricec string,
+pricee string,
+descc string,
+desce string,
+urlc string,
+urle string,
+tagenturlc string,
+tagenturle string,
+remarkc string,
+remarke string,
+enquiry string,
+fax string,
+email string,
+saledate string,
+interbook string,
+presenterorgc string,
+presenterorge string,
+prog_image string,
+detail_image1 string,
+detail_image2 string,
+detail_image3 string,
+detail_image4 string,
+detail_image5 string,
+video_link string,
+video2_link string,
+my_culture_app string,
+submitdate string
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/HongKong/PublicEvents/events';
+
+CREATE EXTERNAL TABLE hkPublicVenuesDetails (
+venue_id string,
+venuee string,
+venuec string,
+latitude string,
+longitude string
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/grosvenor/HongKong/PublicEvents/venues';

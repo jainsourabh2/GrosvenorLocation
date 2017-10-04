@@ -1,0 +1,317 @@
+100|大埔公共圖書館|Tai Po Public Library||
+101|屏山天水圍公共圖書館|Ping Shan Tin Shui Wai Public Library||
+102|土瓜灣公共圖書館|To Kwa Wan Public Library||
+103|將軍澳公共圖書館|Tseung Kwan O Public Library||
+104|尖沙咀公共圖書館|Tsim Sha Tsui Public Library||
+105|青衣公共圖書館|Tsing Yi Public Library||
+106|荃灣公共圖書館|Tsuen Wan Public Library||
+107|慈雲山公共圖書館|Tsz Wan Shan Public Library||
+108|屯門公共圖書館|Tuen Mun Public Library||
+109|元州街公共圖書館|Un Chau Street Public Library||
+110|黃泥涌公共圖書館|Wong Nai Chung Public Library||
+111|油蔴地公共圖書館|Yau Ma Tei Public Library||
+112|耀東公共圖書館|Yiu Tung Public Library||
+113|元朗公共圖書館|Yuen Long Public Library||
+139111644|香港文物探知館 (演講廳)|Hong Kong Heritage Discovery Centre (Lecture Hall)|22.29942|114.16977
+1639|孫中山紀念館|Dr Sun Yat-sen Museum|22.282093|114.150814
+163911841|孫中山紀念館 (二樓活動室)|Dr Sun Yat-sen Museum (2/F, Activity Room)|22.282093|114.150814
+163911842|孫中山紀念館 (專題展覽廳)|Dr Sun Yat-sen Museum (Special Exhibition Gallery)|22.282093|114.150814
+1720|天水圍北公共圖書館|Tin Shui Wai North Public Library||
+225|香港文化博物館|Hong Kong Heritage Museum|22.37737|114.1853
+22517372|香港文化博物館 (展覽廳)|Hong Kong Heritage Museum (Exhibition Gallery)|22.37737|114.1853
+263|香港海防博物館|Hong Kong Museum of Coastal Defence|22.28189|114.23565
+26311825|香港海防博物館 (專題展覽廳)|Hong Kong Museum of Coastal Defence (Thematic Exhibition Gallery)|22.28189|114.23565
+26311828|香港海防博物館 (兒童角)|Hong Kong Museum of Coastal Defence (Children's Corner)|22.28189|114.23565
+26311829|香港海防博物館 (演講廳)|Hong Kong Museum of Coastal Defence (Lecture Hall)|22.28189|114.23565
+2804|大埔中央廣場|Tai Po Central Town Square||
+30017373|香港歷史博物館 (展覽廳)|Hong Kong Museum of History (Exhibition Gallery)|22.30166|114.17711
+3110031|北區大會堂 (演奏廳)|North District Town Hall (Auditorium)|22.501639|114.128911
+3210299|伊利沙伯體育館 (表演場)|Queen Elizabeth Stadium (Arena)||
+35510043|大埔文娛中心 (演奏廳)|Tai Po Civic Centre (Auditorium)|22.45175|114.16815
+357|富山公共圖書館|Fu Shan Public Library||
+36310035|沙田大會堂 (演奏廳)|Sha Tin Town Hall (Auditorium)|22.38136|114.18990
+36310036|沙田大會堂 (文娛廳)|Sha Tin Town Hall (Cultural Activities Hall)|22.38136|114.18990
+36310037|沙田大會堂 (展覽廳)|Sha Tin Town Hall (Exhibition Gallery)|22.38136|114.18990
+36310304|沙田大會堂 (舞蹈室)|Sha Tin Town Hall (Dance Studio)|22.38136|114.18990
+36310566|沙田大會堂 (會議室)|Sha Tin Town Hall (Conference Room)|22.38136|114.18990
+36310593|沙田大會堂 (演講室1)|Sha Tin Town Hall (Lecture Room 1)|22.38136|114.18990
+36310594|沙田大會堂 (演講室2)|Sha Tin Town Hall (Lecture Room 2)|22.38136|114.18990
+36311771|沙田大會堂 (音樂室)|Sha Tin Town Hall (Music Studio)|22.38136|114.18990
+4388|賽馬會創意藝術中心|Jockey Club Creative Arts Centre||
+4421|沙田大會堂廣場|Sha Tin Town Hall Plaza||
+4662|小西灣公共圖書館|Siu Sai Wan Public Library||
+500415306|油麻地戲院 (劇院)|Yau Ma Tei Theatre (Theatre)|22.312441|114.169106
+500417368|油麻地戲院 (活動室一)|Yau Ma Tei Theatre (Function Room 1)|22.312441|114.169106
+50110014|香港文化中心 (音樂廳)|Hong Kong Cultural Centre (Concert Hall)|22.29386|114.17053
+50110015|香港文化中心 (大劇院)|Hong Kong Cultural Centre (Grand Theatre)|22.29386|114.17053
+50110016|香港文化中心 (劇場)|Hong Kong Cultural Centre (Studio Theatre)|22.29386|114.17053
+50110232|香港文化中心 (大堂)|Hong Kong Cultural Centre (Foyer)|22.29386|114.17053
+50110941|香港文化中心 (廣場)|Hong Kong Cultural Centre (Piazza)|22.29386|114.17053
+50110945|香港文化中心 (行政大樓四樓AC1)|Hong Kong Cultural Centre (AC1, 4/F, Administration Building)|22.29386|114.17053
+50110951|香港文化中心 (大劇院後台八樓GR2)|Hong Kong Cultural Centre (GR2, 8/F, Grand Theatre Backstage)|22.29386|114.17053
+50111511|香港文化中心 (音樂廳後台7/F, CR2)|Hong Kong Cultural Centre (CR2 7/F, Concert Hall Backstage)|22.29386|114.17053
+50111766|香港文化中心 (行政大樓四樓AC2)|Hong Kong Cultural Centre (AC2, 4/F, Administration Building)|22.29386|114.17053
+53|香港仔公共圖書館|Aberdeen Public Library||
+54|鴨脷洲公共圖書館|Ap Lei Chau Public Library||
+55|蝴蝶邨公共圖書館|Butterfly Estate Public Library||
+5504|西貢海濱公園|Sai Kung Waterfront Park||
+56|柴灣公共圖書館|Chai Wan Public Library||
+5661|荃灣公園露天劇場|Tsuen Wan Park Amphitheatre||
+57|長洲公共圖書館|Cheung Chau Public Library||
+58|大會堂公共圖書館|City Hall Public Library||
+59|電氣道公共圖書館|Electric Road Public Library||
+596|茶具文物館|Flagstaff House Museum of Tea Ware|22.278551|114.162484
+599|東涌公共圖書館|Tung Chung Public Library||
+60|花園街公共圖書館|Fa Yuen Street Public Library||
+6034|牛頭角上邨天幕廣場|Piazza, Upper Ngau Tau Kok Estate||
+606|香港鐵路博物館|Hong Kong Railway Museum|22.447645|114.164348
+61|粉嶺公共圖書館|Fanling Public Library||
+6188|九龍寨城公園六藝臺|Six Arts Terrace Kowloon Walled City Park||
+62|香港中央圖書館|Hong Kong Central Library||
+6210513|香港中央圖書館 (地下演講廳)|Hong Kong Central Library (G/F Lecture Theatre)||
+6210646|香港中央圖書館 (地下展覽館)|Hong Kong Central Library (G/F Exhibition Gallery)||
+6230|上水花園第一號|Sheung Shui Garden No.1||
+63|紅磡公共圖書館|Hung Hom Public Library||
+64|九龍城公共圖書館|Kowloon City Public Library||
+65|九龍公共圖書館|Kowloon Public Library||
+65910018|香港科學館 (演講廳)|Hong Kong Science Museum (Lecture Hall)|22.30113|114.17761
+65910217|香港科學館 (展覽廳)|Hong Kong Science Museum (Exhibition Hall)|22.30113|114.17761
+66|荔枝角公共圖書館|Lai Chi Kok Public Library||
+6679|沙田大會堂演奏廳|Auditorium, Sha Tin Town Hall||
+67|藍田公共圖書館|Lam Tin Public Library||
+68|瀝源公共圖書館|Lek Yuen Public Library||
+6810|黃大仙上邨小舞台|Amphitheatre, Upper Wong Tai Sin Estate||
+6824|香港體育館(表演場)|Hong Kong Coliseum (Arena)||
+6858|調景嶺公共圖書館|Tiu Keng Leng Public Library||
+6884|小西灣邨圓形廣場|Siu Sai Wan Estate Open Stage||
+69|駱克道公共圖書館|Lockhart Road Public Library||
+6942|尚德廣場地下|G/F, Sheung Tak Plaza||
+70|樂富公共圖書館|Lok Fu Public Library||
+7003|香港文化中心露天廣場|Piazza, Hong Kong Cultural Centre||
+7084|康文署表演場地及音樂事務處音樂中心|LCSD Performing Venues & Music Office Music Centres||
+71|龍興公共圖書館|Lung Hing Public Library||
+7107|將軍澳海濱公園(登岸階梯前地)|Tseung Kwan O Waterfront Park (near landing steps open space)||
+7130|北區大會堂演奏廳|Auditorium, North District Town Hall||
+7131|啟德社區會堂禮堂|Hall, Kai Tak Community Hall||
+7138|沙田公園露天劇場|Amphitheatre, Sha Tin Park||
+7151|高山劇場 (新翼展覽廳)|Ko Shan Theatre (New Wing Exhibition Gallery)||
+7174|愛東商場地下|G/F, Oi Tung Shopping Centre||
+7175|禾輋廣場2樓|2/F, Wo Che Shopping Centre||
+7179|長發廣場2樓|2/F, Cheung Fat Plaza||
+7191|朗屏邨八角廣場|Long Ping Estate Plaza||
+7192|屯門文娛廣場|Tuen Mun Cultural Square||
+7195|賽馬會創意藝術中心中央庭園|Central Courtyard, Jockey Club Creative Arts Centre||
+7199|黎淑英紀念廣場 (東涌逸東(一)邨)|Lai Shuk Ying Memorial Plaza (Yat Tung (I) Estate)||
+72|梅窩公共圖書館|Mui Wo Public Library||
+7201|元州邨圓形廣場|Plaza, Un Chau Estate||
+7212|彩虹道體育館(活動室)|Choi Hung Road Sports Centre (Activity Room)||
+7220|長安邨第二期露天劇場 (近安湄樓)|Cheung On Estate Amphitheatre Phase II (near On Mei House)||
+7230|馬鞍山海濱長廊(南面入口太極場)|Ma On Shan Waterfront Promenade||
+7235|富寶花園籃球場|Saddle Ridge Garden Basketball Court||
+7239|榮福中心廣場|Wing Fok Centre Open Space||
+7241|天恩邨恩樂樓對出空地|Open Area Outside Yan Lok House in Tin Yan Estate||
+7242|翠麗花園籃球場|Tsui Lai Garden Basketball Court||
+7246|鳳群街花園籃球場|Fung Kwan Street Garden Basketball Court||
+7258|香港文化中心露天廣場B區|Hong Kong Cultural Centre Piazza B||
+7269|迷你畿內亞|Mini Guinea||
+7278|青衣海濱公園露天廣場|Tsing Yi Promenade(Amphitheatre)||
+7280|良景廣場2樓|2/F, Leung King Plaza||
+7281|耀東商場|Yiu Tung Shopping Centre||
+7282|禾輋邨順和樓平台|Wo Che Estate, Shun Wo House, Podium||
+7283|觀塘海濱公園表演場地|Kwun Tong Promenade||
+7286|銀座廣場|Ginza Square||
+7292|荔枝角公園體育館(舞蹈室)|Lai Chi Kok Park Sports Centre (Dance Room)||
+7293|卑路乍灣公園|Belcher Bay Park||
+7295|高山劇場新翼演藝廳|Auditorium, Ko Shan Theatre New Wing||
+73|牛池灣公共圖書館|Ngau Chi Wan Public Library||
+7306|荃灣中心平台|Tsuen Wan Centre Podium||
+7324|愛秩序灣社區會堂禮堂|Hall, Aldrich Bay Community Hall||
+7329|鯉魚門公園及度假村|Lei Yue Mun Park and Holiday Village||
+7348|福來邨舞台(近永樂樓)|Fuk Loi Estate Amphitheatre (near Wing Lok House)||
+7363|Hong Kong Cultural Centre Piazza C|Hong Kong Cultural Centre Piazza C|22.29386|114.17053
+7369|大埔海濱公園|Tai Po Waterfront Park|22.451116|114.179253
+7373|屯門公園|Tuen Mun Park|22.390476|113.973069
+7376|工業貿易大樓一樓大堂|1/F Lobby, Trade and Industry Tower||
+738|香港太空館|Hong Kong Space Museum|22.29441|114.17192
+73810020|香港太空館 (演講廳)|Hong Kong Space Museum (Lecture Hall)|22.29441|114.17192
+73810021|香港太空館 (何鴻燊天象廳)|Hong Kong Space Museum (Stanley Ho Space Theatre)|22.29441|114.17192
+73811834|香港太空館 (天台)|Hong Kong Space Museum (Rooftop)|22.29441|114.17192
+74|牛頭角公共圖書館|Ngau Tau Kok Public Library||
+7409|香港公園奧林匹克廣場|Olympic Square, Hong Kong Park||
+7413|屯門公園露天劇場|Amphitheatre, Tuen Mun Park||
+7416|葵涌新區公園露天劇場|Amphitheatre, Kwai Chung San Kui Park||
+7422|維多利亞公園|Victoria Park||
+7434|粉嶺南公共圖書館|Fanling South Public Library||
+7435|石排灣邨碧園樓側露天廣場|Shek Pai Wan Estate Piazza (Beside Pik Yuen House)||
+7448|興華廣場1樓|1/F, Hing Wah Plaza||
+7452|梁顯利油麻地社區中心課室|Classroom, Henry G. Leong Yaumatei Community Centre||
+7472|香港國際機場|Hong Kong International Airport||
+7475|耀安邨羅馬廣場|Roman Plaza, Yiu On Estate||
+7478|長洲新公眾碼頭|New Cheung Chau Public Pier||
+7479|石籬(二)邨石福樓廣場|The Open Area near Shek Fook House, Shek Lei II Estate||
+7480|荔景邨休憩用地(近仰景樓)|Open Space opposite to Yeung King House  Lai King Estate||
+7481|長亨邨廣場(近亨翠樓)|Cheung Hang Estate Open Space (near Hang Tsui House)||
+7483|葵聯邨社區公園|Kwai Luen Estate Community Garden||
+7484|綠楊新邨平台|Luk Yeung Sun Chuen Amphitheatre||
+7488|富善邨廣場|Fu Shin Estate Town Square||
+7490|大埔天后宮風水廣場|Tin Hau Temple Fung Shui Square  Tai Po||
+7492|大明里廣場|Tai Ming Lane Square||
+7494|耀安邨露天劇場|Yiu On Estate Amphitheatre||
+7499|香港公園|Hong Kong Park||
+75|北葵涌公共圖書館|North Kwai Chung Public Library||
+7500|嶺南大學王忠秣演講廳MBG22|MBG22, Lingnan University||
+75010017|香港電影資料館 (電影院)|Hong Kong Film Archive (Cinema)|22.285056|114.222075
+75010293|香港電影資料館 (展覽廳)|Hong Kong Film Archive (Exhibition Hall)|22.285056|114.222075
+7502|天耀廣場地下|G/F, Tin Yiu Plaza||
+7506|石湖墟遊樂場|Shek Wu Hui Playground||
+7508|富泰邨籃球場及羽毛球場|Fu Tai Estate Basketball And Badminton Playground||
+7509|華心邨露天劇場|Wah Sum Estate Amphitheatre||
+7514|柴灣公園一號及二號籃球場|Chai Wan Park Basketball Court Nos. 1 and 2||
+7515|灣仔公園足球場|Wan Chai Park Football Pitch||
+7519|愛民邨廣場|Concourse  Oi Man Estate||
+7520|旺角街坊會陳慶社會服務中心二樓禮堂|Hall  1/F  The Mongkok Kai-fong Association Limited Chan Hing Social Service Centre||
+7523|彩雲社區中心|Choi Wan Estate Community Centre||
+7534|興東商場地下|G/F, Hing Tung Shopping Centre||
+7538|荃灣公園露天廣場|Amphitheatre, Tsuen Wan Park||
+7546|沙角邨廣場舞台|Sha Kok Estate Performance Stage||
+7548|坑口社區會堂|Hang Hau Community Hall||
+7558|湖景邨足球場(近湖月樓)|Wu King Estate Soccer Pitch (near Wu Yuet House)||
+7560|華明邨露天劇場|Wah Ming Estate Amphitheatre||
+7564|天逸邨太極場休憩用地|Tin Yat Estate Open Space||
+7565|良景邨籃球場(近良智樓)|Leung King Estate Basketball Court (near Leung Chi House)||
+7566|景峰花園籃球場|Prime View Garden Basketball Court||
+7568|香港仔海濱公園|Aberdeen Promenade||
+7571|柴灣公園鐘樓前對開地段|Chai Wan Park Clock Tower Area||
+7575|賈炳達道公園4號籃球場|Basketball Court no.4  Carpenter Road Park||
+7584|卑路乍灣公園露天劇場|Amphitheatre, Belcher Bay Park||
+7620|九龍佐治五世紀念公園|King George V Memorial Park  Kowloon||
+7636|美林邨噴水池廣場|Mei Lam Estate Open Area near Fountain||
+7637|天悅邨天悅廣場 (近頌富商場二期)|Tin Yuet Estate Tin Yuet Plaza (near Chung Fu Plaza Phase 2)||
+7638|水邊圍邨羅馬廣場|Shui Pin Wai Estate Roman Square||
+7650|油麻地社區中心休憩花園 (榕樹頭公園)|Yau Ma Tei Community Centre Rest Garden||
+7652|大坑東社區中心|Tai Hang Tung Community Centre||
+7678|竹園社區中心|Chuk Yuen Estate Community Centre||
+76810048|屯門大會堂 (演奏廳)|Tuen Mun Town Hall (Auditorium)|22.391810|113.976771
+76810049|屯門大會堂 (文娛廳)|Tuen Mun Town Hall (Cultural Activities Hall)|22.391810|113.976771
+76810050|屯門大會堂 (展覽廳)|Tuen Mun Town Hall (Exhibition Gallery)|22.391810|113.976771
+76810200|屯門大會堂 (演講室二號)|Tuen Mun Town Hall (Lecture Room 2)|22.391810|113.976771
+76810294|屯門大會堂 (舞蹈室)|Tuen Mun Town Hall (Dance Studio)|22.391810|113.976771
+76810295|屯門大會堂 (音樂室)|Tuen Mun Town Hall (Music Studio)|22.391810|113.976771
+76810312|屯門大會堂 (會議室)|Tuen Mun Town Hall (Conference Room)|22.391810|113.976771
+76810831|屯門大會堂 (演講室一號)|Tuen Mun Town Hall (Lecture Room (1))|22.391810|113.976771
+7685|牛棚12號單位|Unit 12, Cattle Depot||
+77|北角公共圖書館|North Point Public Library||
+7701|西貢萬宜遊樂場|Man Yee Playground||
+7714|啟晴邨中央公園舞台|Podium Landscape Courtyard, Kai Ching Estate||
+7738|李陞街公園籃球場|Li Sing Street Park Basketball Court||
+7744|圓洲角公共圖書館|Yuen Chau Kok Public Library||
+7745|坪石遊樂場|Ping Shek Playground||
+7746|將軍澳游泳池|Tseung Kwan O Swimming Pool||
+7747|將軍澳運動場|Tseung Kwan O Sports Ground||
+7748|香港單車館公園|Tseung Kwan O Velodrome Park||
+7749|沙田婚姻登記處|Shatin Marriage Registry||
+7750|荔枝角公園|Lai Chi Kok Park||
+7751|城門谷公園|Shing Mun Valley Park||
+7752|元朗公園|Yuen Long Park||
+7753|天暉路體育館|Tin Fai Road Sports Centre||
+7761|和興社區會堂|Hall, Wo Hing Community Hall||
+7768|欣安邨籃球場|Yan On Estate Basketball Court||
+7773|臨時南丫島北段公共圖書館服務站|Provisional North Lamma Public Library Service Stop||
+7785|鰂魚涌公園(廣場B入口)|Quarry Bay Park Entrance Plaza Site B||
+7787|順利社區中心|Shun Lee Estate Community Centre||
+7791|賽馬會德華公園|Jockey Club Tak Wah Park||
+7792|赤柱海濱長廊|Stanley Promenade||
+7793|大興體育館活動室|Activity Room, Tai Hing Sports Centre||
+7794|屏山天水圍公共圖書館推廣活動室|Extension Activities Room, Ping Shan Tin Shui Wai Public Library||
+78|石硤尾公共圖書館|Shek Kip Mei Public Library||
+7805|海怡社區中心禮堂|Hall, South Horizons Neighbourhood Community Centre||
+7811|紅磡社區會堂禮堂|Hall, Hung Hom Community Hall||
+7827|白田邨第10座側籃球場|Basketball Court (near Block 10)  Pak Tin Estate||
+7850|德田商場平台 (藍田德田邨)|Podium, Tak Tin Plaza (Tak Tin Estate, Lam Tin)||
+7851|南昌社區中心禮堂|Hall, Nam Cheong Community Centre||
+7852|高山劇場新翼2號排練室|Rehearsal Room 2, Ko Shan Theatre New Wing||
+7854|天瑞社區中心禮堂|Hall, Tin Shui Community Centre||
+7855|石圍角商場平台|Podium, Shek Wai Kok Shopping Centre||
+7856|香港銅鑼灣希慎廣場誠品銅鑼灣店九樓Forum|9/F Forum eslite Hong Kong Causeway Bay Store, Hysan Place, Causeway Bay, Hong Kong||
+7857|沙田公園|Sha Tin Park||
+7859|天水圍銀座廣場旗杆位置 (天水圍天恩路)|Ginza Square (Tin Shui Wai)||
+7860|麗瑤長者鄰舍中心|Lai Yiu Neighborhood Elderly Centre||
+7861|循道衛理聯合教會北角堂|Chinese Methodist Church North Point||
+7862|美林體育館活動室|Multi-purpose Activity Room, Mei Lam Sports Centre||
+7863|香港明愛堅道社區中心|Caritas Community Centre - Caine Road||
+7864|維港灣長者會所|Island Harbouview Elderly Club||
+7865|孫中山紀念館庭園|Courtyard, Dr Sun Yat-sen Museum||
+7866|香港科技大學鄭裕彤樓香港中華廠商聯合會演講廳|CMA Lecture Theatre, Cheng Yu Tung Building, HKUST||
+7868|愉景灣愉景廣場(露天廣場)|Discovery Bay Piazza||
+7869|圍頭村遊樂場|Wai Tau Tsuen Playground||
+7870|調景嶺體育館|Tiu Keng Leng Sports Centre||
+7871|鳳德商場三樓平台|Podium, Fung Tak Shopping Centre||
+7872|平田邨平誠樓對出籃球場|Basketball Court (near Ping Shing House)  Ping Tin Estate||
+7875|美孚社區會堂會議室|Conference Room, Mei Foo Community Hall||
+7876|香港文化中心行政大樓四樓會議室AC2|AC2, Level 4, Administration Building, Hong Kong Cultural Centre||
+7877|嶺南大學天幕廣場|Skylight, Lingnan University||
+7878|中環碼頭8號碼頭|Pier 8, Central Ferry Pier||
+7879|香港城市大學楊建文學術樓四樓藍區|Blue Zone, 4/F, Academic 1, City University of Hong Kong||
+7880|元朗劇院大堂展覽場地|Exhibition Corner, Yuen Long Theatre||
+7881|香港文化中心大堂展覽場地|Exhibition Corner, Hong Kong Cultural Centre||
+79|坪洲公共圖書館|Peng Chau Public Library||
+80|保安道公共圖書館|Po On Road Public Library||
+81|薄扶林公共圖書館|Pok Fu Lam Public Library||
+811|馬鞍山公共圖書館|Ma On Shan Public Library||
+82|鰂魚涌公共圖書館|Quarry Bay Public Library||
+83|西貢公共圖書館|Sai Kung Public Library||
+84|鯉魚門公共圖書館|Lei Yue Mun Public Library||
+85|新蒲崗公共圖書館|San Po Kong Public Library||
+86|秀茂坪公共圖書館|Sau Mau Ping Public Library||
+87|沙頭角公共圖書館|Sha Tau Kok Public Library||
+87110023|葵青劇院 (演藝廳)|Kwai Tsing Theatre (Auditorium)|22.35665|114.12623
+87110024|葵青劇院 (舞蹈室)|Kwai Tsing Theatre (Dance Studio)|22.35665|114.12623
+87110026|葵青劇院 (排演室)|Kwai Tsing Theatre (Rehearsal Room)|22.35665|114.12623
+87110120|葵青劇院 (演講室)|Kwai Tsing Theatre (Lecture Room)|22.35665|114.12623
+87110224|葵青劇院 (廣場)|Kwai Tsing Theatre (Plaza)|22.35665|114.12623
+87112562|葵青劇院 (黑盒劇場)|Kwai Tsing Theatre (Black Box Theatre)|22.35665|114.12623
+87210045|荃灣大會堂 (演奏廳)|Tsuen Wan Town Hall (Auditorium)|22.37109|114.11277
+87210046|荃灣大會堂 (文娛廳)|Tsuen Wan Town Hall (Cultural Activities Hall)|22.37109|114.11277
+87210195|荃灣大會堂 (展覽館)|Tsuen Wan Town Hall (Exhibition Gallery)|22.37109|114.11277
+87210285|荃灣大會堂 (會議室)|Tsuen Wan Town Hall (Conference Room)|22.37109|114.11277
+87210393|荃灣大會堂 (演講室)|Tsuen Wan Town Hall (Lecture Room)|22.37109|114.11277
+87310051|元朗劇院 (演藝廳)|Yuen Long Theatre (Auditorium)|22.44152|114.02289
+87310196|元朗劇院 (演講室)|Yuen Long Theatre (Lecture Room)|22.44152|114.02289
+87310207|元朗劇院 (大堂)|Yuen Long Theatre (Foyer)|22.44152|114.02289
+87310362|元朗劇院 (舞蹈室)|Yuen Long Theatre (Dance Studio)|22.44152|114.02289
+87310544|元朗劇院 (排演室)|Yuen Long Theatre (Rehearsal Room)|22.44152|114.02289
+87311966|元朗劇院 (活動室)|Yuen Long Theatre (Function Room)|22.44152|114.02289
+87315528|元朗劇院 (大堂展覽場地)|Yuen Long Theatre (Exhibition Corner)|22.44152|114.02289
+87410028|牛池灣文娛中心 (文娛廳)|Ngau Chi Wan Civic Centre (Cultural Activities Hall)|22.334583|114.208766
+87410030|牛池灣文娛中心 (劇院)|Ngau Chi Wan Civic Centre (Theatre)|22.334583|114.208766
+87510008|香港大會堂 (音樂廳)|Hong Kong City Hall (Concert Hall)|22.282279|114.161545
+87510009|香港大會堂 (演奏廳)|Hong Kong City Hall (Recital Hall)|22.282279|114.161545
+87510010|香港大會堂 (劇院)|Hong Kong City Hall (Theatre)|22.282279|114.161545
+87510305|香港大會堂 (展覽廳)|Hong Kong City Hall (Exhibition Hall)|22.282279|114.161545
+87510494|香港大會堂 (展覽館)|Hong Kong City Hall (Exhibition Gallery)|22.282279|114.161545
+87610118|高山劇場 (劇院)|Ko Shan Theatre (Theatre)|22.31368|114.18556
+87616551|高山劇場 (新翼演藝廳)|Ko Shan Theatre (New Wing Auditorium)|22.31368|114.18556
+87617333|高山劇場 (新翼一號排唱室)|Ko Shan Theatre (New Wing Singing Practice Room 1)|22.31368|114.18556
+87617335|高山劇場 (新翼一號排演室)|Ko Shan Theatre (New Wing Rehearsal Room 1)|22.31368|114.18556
+87710033|西灣河文娛中心 (文娛廳)|Sai Wan Ho Civic Centre (Cultural Activities Hall)|22.2818|114.222501
+87710034|西灣河文娛中心 (劇院)|Sai Wan Ho Civic Centre (Theatre)|22.2818|114.222501
+87710798|西灣河文娛中心 (美術室(1))|Sai Wan Ho Civic Centre (Art Studio (1))|22.2818|114.222501
+87710799|西灣河文娛中心 (美術室(2))|Sai Wan Ho Civic Centre (Art Studio (2))|22.2818|114.222501
+87710800|西灣河文娛中心 (音樂練習室(1))|Sai Wan Ho Civic Centre (Music Practice Room (1))|22.2818|114.222501
+87710801|西灣河文娛中心 (音樂練習室(2))|Sai Wan Ho Civic Centre (Music Practice Room (2))|22.2818|114.222501
+87810039|上環文娛中心 (展覽廳)|Sheung Wan Civic Centre (Exhibition Hall)|22.28602|114.14967
+87810041|上環文娛中心 (演講廳)|Sheung Wan Civic Centre (Lecture Hall)|22.28602|114.14967
+87810042|上環文娛中心 (劇院)|Sheung Wan Civic Centre (Theatre)|22.28602|114.14967
+88|沙田公共圖書館|Sha Tin Public Library||
+89|石塘咀公共圖書館|Shek Tong Tsui Public Library||
+90|石圍角公共圖書館|Shek Wai Kok Public Library||
+91|上水公共圖書館|Sheung Shui Public Library||
+92|瑞和街公共圖書館|Shui Wo Street Public Library||
+93|順利邨公共圖書館|Shun Lee Estate Public Library||
+94|士美非路公共圖書館|Smithfield Public Library||
+95|南葵涌公共圖書館|South Kwai Chung Public Library||
+96|南丫島南段公共圖書館|South Lamma Public Library||
+969|赤柱公共圖書館|Stanley Public Library||
+97|大興公共圖書館|Tai Hing Public Library||
+98|大角咀公共圖書館|Tai Kok Tsui Public Library||
+99|大澳公共圖書館|Tai O Public Library||

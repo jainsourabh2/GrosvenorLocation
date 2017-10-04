@@ -31,6 +31,9 @@ const events = require('./getEvents.js');
 const storesSummary = require('./getStoresSummary.js');
 const liverpoolArea = require('./getSafescorePrediction.js');
 const HKEventDetails = require('./getHKEventsDetail');
+const restaurantDetails = require('./getRestaurantDetails');
+const restaurantDetails = require('./getHKRestaurants');
+const hkPublicEvents = require('./getHKPublicEvents');
 
  const connection = mysql.createConnection({
   host     : constants.mysql_host,
@@ -1240,7 +1243,153 @@ app.get("/api/getHKEventsDetail",function(req,res){
    
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   GetRestaurantIds:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+        type: string
+        }
+ */
 
+/**
+ * @swagger
+ * /getHKRestaurantIds:
+ *   get:
+ *     tags:
+ *       - Open Rice Restaurant ids
+ *     description: Returns all open rice restaurant ids.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Restaurant IDs
+ *     schema:
+ *           $ref: '#/definitions/GetRestaurantIds'
+ */
+app.get("/api/getHKRestaurantIds",function(req,res){
+    restaurantDetails.getHKRestaurantIds(req,res,logger);
+
+});
+
+/**
+ * @swagger
+ * definitions:
+ *   GetRestaurantDetails:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+        type: string
+        }
+ */
+
+/**
+ * @swagger
+ * /getHKRestaurantDetails?restid={restid}:
+ *   get:
+ *     tags:
+ *       - Open Rice Restaurant details
+ *     description: Returns all open rice restaurant details.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: restid
+ *         description: Id of the Restaurant
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Restaurant Details
+ *     schema:
+ *           $ref: '#/definitions/GetRestaurantDetails'
+ */
+app.get("/api/getHKRestaurantDetails",function(req,res){
+    restaurantDetails.getHKRestaurantDetails(req,res,logger);
+
+});
+
+/**
+ * @swagger
+ * definitions:
+ *   GetPublicEventVenueIds:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+        type: string
+        }
+ */
+
+/**
+ * @swagger
+ * /getHKPublicEventVenueIds:
+ *   get:
+ *     tags:
+ *       - HK Public Events Venue ids
+ *     description: Returns all HK public event venue ids.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Event Venue IDs
+ *     schema:
+ *           $ref: '#/definitions/GetPublicEventVenueIds'
+ */
+app.get("/api/getHKPublicEventVenueIds",function(req,res){
+    hkPublicEvents.getHKPublicEventVenueIds(req,res,logger);
+
+});
+
+/**
+ * @swagger
+ * definitions:
+ *   GetEventDetails:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+        type: string
+        }
+ */
+
+/**
+ * @swagger
+ * /getHKPublicEventDetails?venue_id={venue_id}:
+ *   get:
+ *     tags:
+ *       - HK Public event details
+ *     description: Returns all HK public event details at a venue.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: venue_id
+ *         description: Id of the Venue
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Public Event Details
+ *     schema:
+ *           $ref: '#/definitions/GetEventDetails'
+ */
+app.get("/api/getHKPublicEventDetails",function(req,res){
+    hkPublicEvents.getHKPublicEventDetails(req,res,logger);
+
+});
 
 
 
@@ -1313,6 +1462,41 @@ app.get("/api/getstation",function(req,res){
             }
         }
        });
+   
+});
+
+
+/**
+ * @swagger
+ * definitions:
+ *   RestaurantDetails:
+ *     properties:
+ *       Type:
+ *         type: string
+ *       features:
+ *         type: array
+ *         items: {
+            type: string
+            }
+ */
+
+/**
+ * @swagger
+ * /getRestaurantDetails:
+ *   get:
+ *     tags:
+ *       - Open Rice Restaurant Details
+ *     description: Returns all open rice restaurant details.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Restaurant Details
+ *     schema:
+ *           $ref: '#/definitions/GetRestaurantDetails'
+ */
+app.get("/api/getRestaurantDetails",function(req,res){
+  restaurantDetails.getRestaurantDetails(req,res,logger);
    
 });
 
