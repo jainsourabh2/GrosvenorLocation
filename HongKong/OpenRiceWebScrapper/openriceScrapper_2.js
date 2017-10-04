@@ -18,6 +18,7 @@ let outputfilepath = '/opt/nodeprojects/GrosvenorLocation/HongKong/OpenRiceWebSc
 let outputpath = outputfilepath + "/" + outputfilename;
 let geolocation = require("./geolocation.js");
 let checkLocalFile = require("./createLocalFile");
+let inputfile = "input/areaslist.txt";
 let arealist = [];
 let closedresturl = "https://www.openrice.com/api/pois/closed?&page=";
 let area = "";

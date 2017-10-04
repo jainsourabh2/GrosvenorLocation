@@ -15,3 +15,4 @@ og
 */15 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/realtimeParkingVacancy.sh >> /var/log/GrosvenorLocation/realtmparking.log
 0 * * * * /opt/nodeprojects/GrosvenorLocation/scripts/mergeFiles.sh >> /var/log/GrosvenorLocation/mergingFiles.log
 0 8 * * 0 /opt/nodeprojects/GrosvenorLocation/scripts/propertyTransaction.sh >> /var/log/GrosvenorLocation/propertyTransaction.log
+0 3 * * 1 /opt/nodeprojects/GrosvenorLocation/scripts/openRiceScrapping.sh >> /var/log/GrosvenorLocation/openRiceScrappingTransaction.log 
