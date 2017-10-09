@@ -31,7 +31,6 @@ const events = require('./getEvents.js');
 const storesSummary = require('./getStoresSummary.js');
 const liverpoolArea = require('./getSafescorePrediction.js');
 const HKEventDetails = require('./getHKEventsDetail');
-const restaurantDetails = require('./getRestaurantDetails');
 const restaurantDetails = require('./getHKRestaurants');
 const hkPublicEvents = require('./getHKPublicEvents');
 
