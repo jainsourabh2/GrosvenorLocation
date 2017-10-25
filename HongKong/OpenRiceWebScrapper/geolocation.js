@@ -1,66 +1,61 @@
 'use strict'
 let geocoder = require("google-geocoder");
+let async = require('async');
 let Q = require("q");
 
-let apikeys = ['AIzaSyD89uiMrEnbUrc6wj7mMttTIdWBdD6MzgQ'];
+//let apikeys = ['AIzaSyBzMxMJyp_lnk5JDW3YbKK_XIYkiFG8w6s' ,'AIzaSyCBAkblsUSpejOjYvNQuhOb2Qrlj9jNsoM','AIzaSyD89uiMrEnbUrc6wj7mMttTIdWBdD6MzgQ'];
+let apikeys = ['AIzaSyAheZPsQaGaH4HGps03mEbyu9828DQrLOw'];
 
-module.exports.getGeoCodeFunction = function(placearray){
-    let updatedarray = [];
-   // let placearr = placearray.data;
-    //let town = placearray.town;
-     let defer = Q.defer();
-     function getGeocode(i)
-     {
-       
-         var geo = geocoder({
-          key: apikeys[Math.floor(Math.random() * apikeys.length)]
-        }); 
+module.exports.getGeoCodeFunction = function(placeArray) {
+
+    let updatedArray = [];
+    let defer = Q.defer();
+    
+    async.forEach(placeArray, function(place, callback) {
+        getGeocode(place, callback);
         
-         if(i < placearray.length)
-         {
-           
- 	       let address = placearray[i].split("|")[9];
-  	       if(address != "")
-  	       {
-  	       let place2search =  address + " " + "Hong Kong";
-  	         
-                geo.find( place2search , function ( err, data ) {
-             //   geocoder.geocode( place2search , function ( err, data ) {          
-                     let latitude = "";
-                     let longitude = "";
-                     if(err)
-                     {
-                         console.log("Error in Geocoder response in key : " + geo.queryData.key);
-                     }
-                     
-                     if(data != undefined && data.length > 0 && data[0].location != undefined)
-                     {
-                         
-                          latitude = data[0].location.lat;
-                          longitude = data[0].location.lng;
-                     }
-                     
-                      let newrec = placearray[i] + "|" + latitude + "|" + longitude;
-                      updatedarray.push(newrec);
-                      console.log("Total length : " + placearray.length);
-                      console.log(i + " record  : " + newrec);
-                   
-                     getGeocode(i + 1);
-                    
-                  });
-  	       }
-  	       else
-  	       {
-  	         defer.resolve(updatedarray);
-  	       }
-         }
-         else{
-             
-              defer.resolve(updatedarray);
-         }
-           
-     }
-     
-     getGeocode(0);
-     return defer.promise;
+	}, function(err) {
+        if (err) {
+			defer.reject(err);
+        } else {
+        	defer.resolve(updatedArray);
+        }
+    });
+
+    return defer.promise;
+    
+    function getGeocode(place, callback){
+        let address = place.split("|")[9];
+        
+        if (address != "") {
+            let place2search = address + " " + "Hong Kong";
+    
+            var geo = geocoder({
+                key: apikeys[Math.floor(Math.random() * apikeys.length)]
+            });
+
+            geo.find(place2search, function(err, data) {
+                let latitude = "";
+                let longitude = "";
+                if (err) {
+                    console.log("Error in Geocoder response in key : " + geo.queryData.key);
+                }
+    
+                if (data != undefined && data.length > 0 && data[0].location != undefined) {
+                    latitude = data[0].location.lat;
+                    longitude = data[0].location.lng;
+                }
+    
+                let newRec = place + "|" + latitude + "|" + longitude;
+                updatedArray.push(newRec);
+                
+                // console.log("Total length : " + placeArray.length);
+                console.log("Updated record  : " + newRec);
+                callback();
+            });
+            
+        } else {
+            callback();
+        }
+    }
 }
